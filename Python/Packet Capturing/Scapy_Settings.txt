@@ -1,0 +1,5 @@
+#Scapy Command Line
+#Change Colour Theme to 'Rasta'
+conf.color_theme = RastaTheme()
+#Reveal IP Version
+IP().show()

@@ -1,0 +1,51 @@
+Rules Run On Button
+AD Audit Alerts 1 - Subject 'Failure while collecting event log data' -> ADAuditPlus
+AD Audit Alerts 2 - From adauditplus@wfw.com -> ADAuditPlus
+Backups - NetVault Alerts 1 - From NetVault -> Backup Alerts
+Backups - NetVault Alerts 2 - Subject 'The Time Backup task on' -> Backup Alerts
+Backup Alerts Exchange 1 - From SMEAutoSender -> SME Check Daily
+Backup Alerts Exchange 2 - From SMEAutoSender@dc1smtp.wfw.com -> SME Check Daily
+Backup Alerts Exchange 3 - From SMEAutoSender@WFWDC3EXCH01 -> SME Check Daily
+Backup Alerts Exchange 4 - From SMEAutoSender_WFWDC2EXCH01@dc2smtp.wfw.com or SMEAutoSender_WFWDC2EXCH02@dc2smtp.wfw.com or SMEAutoSender_WFWDC2EXCH03@dc2smtp.wfw.com or SMEAutoSender_WFWDC2EXCH04@dc2smtp.wfw.com -> SME Check Daily
+Backup Alerts Exchange 5 - SMEAutoSender@smtp.wfw.com -> SME Check Daily
+Cisco Phone System Alerts 1 - From WFWLOPH4@wfw.com -> Cisco Phone System Alerts
+Cisco Phone System Alerts 2 - From RTMT Admin -> Cisco Phone System Alerts
+Content Crawler Alerts - Subject quickConnect or contentCrawler -> Content Crawler Alerts
+CounterACT Alerts - Subject 'CounterAct' -> CounterAct
+DPX Alerts - From SYSTEN@WFWDC1DPX01.WFW.com -> DPX
+Exchange Backup Check - From ExchangeBackupCheck@wfw.com -> Exchange Health
+Exchange DB Check - From ExchangeDBCheck@wfw.com -> Exchange Health
+Exchange Health Report - From WFWExchangeReport@wfw.com -> Exchange Health
+Firewall Alerts - Subject [SmartEvent] -> SmartEvent Reports (Firewall)
+InterAction Alerts - From IAS.WFWLOIA9@wfw.com or InterActionSQL@wfw.com or InterActionServer@wfw.com -> InterAction
+NETAPP Unified Manager Alerts 1 - From unifiedmanager -> Unified Manager
+NETAPP Unified Manager Alerts 2 - From UnifiedManager@WFWLOCLUOCM01.wfw.com -> Unified Manager
+ON COMMAND Alerts - From Alerts@WFWDC1CLUOCM01.wfw.com or Alerts@WFWDC2CLUOCM01.wfw.com or Alerts@WFWDC3CLUOCM01.wfw.com to IT V&S Team -> ON COMMAND
+Rackspace Alerts - Sent only to me from alerts@cloudmonitoring.rackspace.com -> Website
+SCOM Alerts - From SCOM@wfw.com -> SCOM
+Sharefile Alerts - From noreply@sf-notifications.com -> Sharefile
+Solarwinds Alerts - From NoReplyOrion@wfw.com -> Solarwinds
+SQL vCheck Alerts - Subject 'SQL vCheck report' -> SQL vCheck Report
+SSIS Alerts 1 - From SSISSystem -> SSIS System Alerts
+SSIS Alerts 2 - To SSISSystemErrors -> SSIS System Alerts
+SSIS Alerts GroupMaker 1 - Subject 'SQL Server Job System: 'GroupMaker' completed on \\WFWLOSQL04' -> SSIS System Alerts
+SSIS Alerts GroupMaker 2 - Subject 'Address Book GroupMaker error' -> SSIS System Alerts
+Talari Alerts - Sent to WFW NOC / Talari Networks APN Appliance -> Talari
+Tintri Alerts - From wfwdc1tintri01.wfw.com -> Tintri Alerts
+UPS Alerts - Subject 'Started a self-test' or 'Passed a self-test' -> UPS Alerts
+UPS Alerts Mlian - From UPS3_Milan@wfw.com -> UPS Alerts
+Varonis Alerts 1 - To IT V&S Team + subject 'Varonis Metadata - Data Loss Notification' -> Varonis Alerts
+Varonis Alerts 2 - Subject 'IDU Configuration changes detected' -> Varonis Alerts
+Varonis Alerts 3 - Subject 'Varonis alert' -> Varonis Alerts
+Varonis Alerts 4 - From varonis@wfw.com -> Varonis Alerts
+vCheck Alerts - Subject 'vCheck Report' -> vCheck Reports
+Verizon Alerts - From no-replies@verizon.com -> Verizon
+VRTX Alerts - Body 'Chassis Model: PowerEdge VRTX' -> VRTX Alerts
+
+Auto Rules
+Bimco - Filing - From ideamail@bimco.org or ideamail@ideamail.org -> Bimco
+Lotus Notes From WFWLONS22 Deleting - From WFWLONS22 -> Deleted Items
+Process Execution Failure Deleting - To IT London + subject '*Process Execution Failure' -> Deleted Items
+
+
+
