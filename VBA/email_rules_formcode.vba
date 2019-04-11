@@ -17,16 +17,16 @@ Private Sub OutputToFile_Click()
     SuggestFileName = ""
     FileName = ""
     
-End Sub
+    End Sub
     
-Private Sub RuleResultsOK_Click()
+    Private Sub RuleResultsOK_Click()
     'Close the RuleResults window!
     Unload Me
     'Tidy up.
     
-End Sub
+    End Sub
     
-Sub WriteFile(FileName)
+    Sub WriteFile(FileName)
     'Dim variables
     Dim WshShell As Object
     Dim DocPath As String
@@ -44,18 +44,18 @@ Sub WriteFile(FileName)
     'A bit of error handing
     On Error Resume Next
     'Delete old copy of the file
-    Kill FileName
+    Kill FileToWrite
     'On error leave
     On Error GoTo 0
     'Open The File
-    Open FileName For Output As #1
+    Open FileToWrite For Output As #1
     'Write out the items in the RuleResults listbox to the file
     'Set last item
     LastItem = RuleResults.ListBox1.ListCount - 1
     'For each item...
     For Item = 0 To LastItem
         'Write a line in the file...
-        Print #1, "'   RunRules """ + RuleResults.ListBox1.List(Item) + """"
+        Print #1, "'   RunRule """ + RuleResults.ListBox1.List(Item) + """"
     Next
     'Close the file
     Close #1
@@ -67,7 +67,4 @@ Sub WriteFile(FileName)
     DocPath = ""
     Set WshShell = Nothing
     FileName = ""
-    
-End Sub
-    
-    
+    End Sub    
