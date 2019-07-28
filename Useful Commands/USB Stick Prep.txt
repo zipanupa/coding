@@ -1,0 +1,7 @@
+list disk
+select disk 2
+clean
+create part pri
+select part 1
+format fs=fat32 quick
+active

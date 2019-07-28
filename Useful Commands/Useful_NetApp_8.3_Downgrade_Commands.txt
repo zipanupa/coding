@@ -1,0 +1,1556 @@
+login as: admin
+Using keyboard-interactive authentication.
+Password:
+HongKong-CLU2::> cluster shwo
+
+Error: "shwo" is not a recognized command
+
+HongKong-CLU2::> cluster show
+Node                  Health  Eligibility
+--------------------- ------- ------------
+HongKong_Node2        true    true
+
+HongKong-CLU2::> set -ptr
+
+Error: invalid argument "-ptr"
+HongKong-CLU2::> set -privilege advanced
+
+Warning: These advanced commands are potentially dangerous; use them only when directed to do so by NetApp personnel.
+Do you want to continue? {y|n}: y
+
+HongKong-CLU2::*> cluster ring show
+Node      UnitName Epoch    DB Epoch DB Trnxs Master    Online
+--------- -------- -------- -------- -------- --------- ---------
+HongKong_Node2
+          mgmt     4        4        6694     HongKong_Node2
+                                                        master
+HongKong_Node2
+          vldb     4        4        1        HongKong_Node2
+                                                        master
+HongKong_Node2
+          vifmgr   4        4        10       HongKong_Node2
+                                                        master
+HongKong_Node2
+          bcomd    4        4        3        HongKong_Node2
+                                                        master
+HongKong_Node2
+          crs      3        3        1        HongKong_Node2
+                                                        master
+5 entries were displayed.
+
+HongKong-CLU2::*> set -privilege admin
+
+HongKong-CLU2::> storage aggregate show
+    show               show-resync-status show-scrub-status
+    show-space         show-spare-disks   show-status
+
+HongKong-CLU2::> storage aggregate show-s
+    show-scrub-status show-space        show-spare-disks  show-status
+
+HongKong-CLU2::> storage aggregate show -st
+    -storage-type -state
+
+HongKong-CLU2::> storage aggregate show -state !online
+There are no entries matching your query.
+
+HongKong-CLU2::> volume show -state !online
+There are no entries matching your query.
+
+HongKong-CLU2::> volume show -state online
+Vserver   Volume       Aggregate    State      Type       Size  Available Used%
+--------- ------------ ------------ ---------- ---- ---------- ---------- -----
+HongKong_Node2
+          vol0         aggr0_HongKong_Node2
+                                    online     RW      44.91GB    38.75GB   13%
+WFWHKFI2  VM_C         aggr1_HongKong_Node2
+                                    online     RW        300GB    264.3GB   11%
+WFWHKFI2  VM_D         aggr1_HongKong_Node2
+                                    online     RW        150GB    141.8GB    5%
+WFWHKFI2  VM_E         aggr1_HongKong_Node2
+                                    online     RW        300GB    284.6GB    5%
+WFWHKFI2  WFWHKFI2_root
+                       aggr1_HongKong_Node2
+                                    online     RW          1GB    972.5MB    5%
+5 entries were displayed.
+
+HongKong-CLU2::> cluster time-service ntp server show
+Server                         Version
+------------------------------ -------
+172.22.47.233                  3
+
+HongKong-CLU2::> system services ntp server show
+
+Error: The node-scoped NTP interface is deprecated. Use the "cluster time-service ntp" family of commands.
+
+HongKong-CLU2::> cluster time-service ntp server show
+Server                         Version
+------------------------------ -------
+172.22.47.233                  3
+
+HongKong-CLU2::> cluster date show
+Node      Date                      Time zone
+--------- ------------------------- -------------------------
+HongKong_Node2
+          11/21/2015 22:34:29       Asia/Hong_Kong
+          +08:00
+
+HongKong-CLU2::> set -privilege advanced
+
+Warning: These advanced commands are potentially dangerous; use them only when directed to do so by NetApp personnel.
+Do you want to continue? {y|n}: y
+
+HongKong-CLU2::*> vserver services netgroup status
+This table is currently empty.
+
+HongKong-CLU2::*> set -privilege admin
+
+HongKong-CLU2::> volume efficiency show -fields vserver,volume,progress
+There are no entries matching your query.
+
+HongKong-CLU2::> volume efficiency show
+This table is currently empty.
+
+HongKong-CLU2::> volume show
+Vserver   Volume       Aggregate    State      Type       Size  Available Used%
+--------- ------------ ------------ ---------- ---- ---------- ---------- -----
+HongKong_Node2
+          vol0         aggr0_HongKong_Node2
+                                    online     RW      44.91GB    38.75GB   13%
+WFWHKFI2  VM_C         aggr1_HongKong_Node2
+                                    online     RW        300GB    264.3GB   11%
+WFWHKFI2  VM_D         aggr1_HongKong_Node2
+                                    online     RW        150GB    141.8GB    5%
+WFWHKFI2  VM_E         aggr1_HongKong_Node2
+                                    online     RW        300GB    284.6GB    5%
+WFWHKFI2  WFWHKFI2_root
+                       aggr1_HongKong_Node2
+                                    online     RW          1GB    972.5MB    5%
+5 entries were displayed.
+
+HongKong-CLU2::> volume efficiency show -op-status !Idle
+There are no entries matching your query.
+
+HongKong-CLU2::> volume efficiency
+
+HongKong-CLU2::volume efficiency> ?
+  modify                      Modify the efficiency configuration of a volume
+  off                         Disables efficiency on a volume
+  on                          Enable efficiency on a volume
+  policy>                     Manage efficiency policies
+  show                        Display a list of volumes with efficiency
+  start                       Starts efficiency operation on a volume
+  stat                        Show volume efficiency statistics
+  stop                        Stop efficiency operation on a volume
+
+HongKong-CLU2::volume efficiency> show
+This table is currently empty.
+
+HongKong-CLU2::volume efficiency> system service-processor network auto-configuration show
+Cluster Name         SP IPv4 Subnet Name          SP IPv6 Subnet Name
+-------------------- ---------------------------- ----------------------------
+HongKong-CLU2        -                            -
+
+HongKong-CLU2::volume efficiency> volume snapshot policy show
+Vserver: HongKong-CLU2
+                         Number of Is
+Policy Name              Schedules Enabled Comment
+------------------------ --------- ------- ----------------------------------
+default                          3 true    Default policy with hourly, daily & weekly schedules.
+    Schedule               Count     Prefix                 SnapMirror Label
+    ---------------------- -----     ---------------------- -------------------
+    hourly                     6     hourly                 -
+    daily                      2     daily                  daily
+    weekly                     2     weekly                 weekly
+
+default-1weekly                  3 true    Default policy with 6 hourly, 2 daily & 1 weekly schedule.
+    Schedule               Count     Prefix                 SnapMirror Label
+    ---------------------- -----     ---------------------- -------------------
+    hourly                     6     hourly                 -
+    daily                      2     daily                  -
+    weekly                     1     weekly                 -
+
+none                             0 false   Policy for no automatic snapshots.
+    Schedule               Count     Prefix                 SnapMirror Label
+    ---------------------- -----     ---------------------- -------------------
+    -                          -     -                      -
+
+Vserver: WFWHKFI2
+                         Number of Is
+Policy Name              Schedules Enabled Comment
+------------------------ --------- ------- ----------------------------------
+default-12weeks                  3 true    -
+    Schedule               Count     Prefix                 SnapMirror Label
+    ---------------------- -----     ---------------------- -------------------
+    weekly                    12     weekly                 -
+    daily                      6     daily                  -
+    hourly                     8     hourly                 -
+
+4 entries were displayed.
+
+HongKong-CLU2::volume efficiency> volume snapshot policy modify -vserver * -enabled false
+4 entries were modified.
+
+HongKong-CLU2::volume efficiency> volume snapshot policy show
+Vserver: HongKong-CLU2
+                         Number of Is
+Policy Name              Schedules Enabled Comment
+------------------------ --------- ------- ----------------------------------
+default                          3 false   Default policy with hourly, daily & weekly schedules.
+    Schedule               Count     Prefix                 SnapMirror Label
+    ---------------------- -----     ---------------------- -------------------
+    hourly                     6     hourly                 -
+    daily                      2     daily                  daily
+    weekly                     2     weekly                 weekly
+
+default-1weekly                  3 false   Default policy with 6 hourly, 2 daily & 1 weekly schedule.
+    Schedule               Count     Prefix                 SnapMirror Label
+    ---------------------- -----     ---------------------- -------------------
+    hourly                     6     hourly                 -
+    daily                      2     daily                  -
+    weekly                     1     weekly                 -
+
+none                             0 false   Policy for no automatic snapshots.
+    Schedule               Count     Prefix                 SnapMirror Label
+    ---------------------- -----     ---------------------- -------------------
+    -                          -     -                      -
+
+Vserver: WFWHKFI2
+                         Number of Is
+Policy Name              Schedules Enabled Comment
+------------------------ --------- ------- ----------------------------------
+default-12weeks                  3 false   -
+    Schedule               Count     Prefix                 SnapMirror Label
+    ---------------------- -----     ---------------------- -------------------
+    weekly                    12     weekly                 -
+    daily                      6     daily                  -
+    hourly                     8     hourly                 -
+
+4 entries were displayed.
+
+HongKong-CLU2::volume efficiency> run -node nodename aggr options aggr_name nosnap on
+
+Error: "nodename" is an invalid value for field "-node <nodename>"
+
+HongKong-CLU2::volume efficiency> run -node ? aggr options aggr_name nosnap on
+  HongKong_Node2
+
+HongKong-CLU2::volume efficiency> run -node HongKong_Node2  aggr options ? nosnap on
+aggr options: Invalid aggregate name ?.
+usage:
+aggr options <aggr-name> <option-name> <option-val>
+The following commands are available; for more information
+type "aggr help options <command>"
+cache_raid_group_size hybrid_enabled      percent_snapshot_space resyncsnaptime
+free_space_realloc  lost_write_protect  raidsize            root
+fs_size_fixed       nosnap              raidtype            snapmirrored
+ha_policy
+
+HongKong-CLU2::volume efficiency> run -node HongKong_Node2 aggr ?  nosnap on
+The following commands are available; for more information
+type "aggr help <command>"
+add                 online              restrict            status
+media_scrub         options             scrub               verify
+offline
+
+HongKong-CLU2::volume efficiency> run -node HongKong_Node2 aggr options ? nosnap on
+aggr options: Invalid aggregate name ?.
+usage:
+aggr options <aggr-name> <option-name> <option-val>
+The following commands are available; for more information
+type "aggr help options <command>"
+cache_raid_group_size hybrid_enabled      percent_snapshot_space resyncsnaptime
+free_space_realloc  lost_write_protect  raidsize            root
+fs_size_fixed       nosnap              raidtype            snapmirrored
+ha_policy
+
+HongKong-CLU2::volume efficiency> run -node HongKong_Node2 ?
+  { [[-command] <text>, ...]  Command to Run
+  | [ -reset [true] ] }       Reset Existing Connection
+
+HongKong-CLU2::volume efficiency> run -node HongKong_Node2 aggr options ?
+aggr options: Invalid aggregate name ?.
+usage:
+aggr options <aggr-name> <option-name> <option-val>
+The following commands are available; for more information
+type "aggr help options <command>"
+cache_raid_group_size hybrid_enabled      percent_snapshot_space resyncsnaptime
+free_space_realloc  lost_write_protect  raidsize            root
+fs_size_fixed       nosnap              raidtype            snapmirrored
+ha_policy
+
+HongKong-CLU2::volume efficiency> aggr show
+
+
+Aggregate     Size Available Used% State   #Vols  Nodes            RAID Status
+--------- -------- --------- ----- ------- ------ ---------------- ------------
+aggr0_HongKong_Node2
+           47.82GB    2.65GB   94% online       1 HongKong_Node2   raid0,
+                                                                   normal
+aggr1_HongKong_Node2
+            1.77TB    1.03TB   42% online       4 HongKong_Node2   raid0,
+                                                                   normal
+2 entries were displayed.
+
+HongKong-CLU2::volume efficiency> aggr show options ?
+  [ -checksum | -disk | -instance | -raid-info | -fields <fieldname>, ... ]
+  [ -storage-type {hdd | hybrid | lun | ssd | vmdisk} ]     Storage Type
+  [ -chksumstyle <checksum style> ]                         Checksum Style
+  [ -diskcount <integer> ]                                  Number Of Disks
+  [ -mirror|-m [true] ]                                     Mirror
+  [ -node <nodename> ]                                      Node
+  [ -disklist|-d <disk path name>, ... ]                    Disks for First Plex
+  [ -mirror-disklist <disk path name>, ... ]                Disks for Mirrored Plex
+  [ -free-space-realloc {on|off|no_redirect} ]              Free Space Reallocation
+  [ -ha-policy {sfo|cfo} ]                                  HA Policy
+  [ -percent-snapshot-space <percent> ]                     Space Reserved for Snapshot Copies
+  [ -space-nearly-full-threshold-percent <percent> ]        Aggregate Nearly Full Threshold Percent
+  [ -space-full-threshold-percent <percent> ]               Aggregate Full Threshold Percent
+  [ -hybrid-enabled {true|false} ]                          Hybrid Enabled
+  [ -availsize {<integer>[KB|MB|GB|TB|PB]} ]                Available Size
+  [ -chksumenabled {true|false} ]                           Checksum Enabled
+  [ -chksumstatus <text> ]                                  Checksum Status
+  [ -cluster <text> ]                                       Cluster
+  [ -cluster-id <UUID> ]                                    Home Cluster ID
+  [ -dr-home-id <integer> ]                                 DR Home ID
+  [ -dr-home-name <text> ]                                  DR Home Name
+  [ -has-mroot {true|false} ]                               Has Mroot Volume
+  [ -has-partner-mroot {true|false} ]                       Has Partner Node Mroot Volume
+  [ -home-id <integer> ]                                    Home ID
+  [ -home-name <text> ]                                     Home Name
+  [ -hybrid-cache-size-total {<integer>[KB|MB|GB|TB|PB]} ]  Total Hybrid Cache Size
+  [ -hybrid {true|false} ]                                  Hybrid
+  [ -inconsistent {true|false} ]                            Inconsistent
+  [ -is-home {true|false} ]                                 Is Aggregate Home
+  [ -maxraidsize|-s <integer> ]                             Max RAID Size
+  [ -cache-raid-group-size <integer> ]                      Flash Pool SSD Tier Maximum RAID Group Size
+  [ -owner-id <integer> ]                                   Owner ID
+  [ -owner-name <text> ]                                    Owner Name
+  [ -percent-used <percent> ]                               Used Percentage
+  [ -plexes <text>, ... ]                                   Plexes
+  [ -raidgroups <text>, ... ]                               RAID Groups
+  [ -raidstatus <text> ]                                    RAID Status
+  [ -raidtype|-t {raid_dp|raid4} ]                          RAID Type
+  [ -resyncsnaptime {1..2147483646} ]                       SyncMirror Resync Snapshot Frequency in Minutes
+  [ -root {true|false} ]                                    Is Root
+  [ -sis-metadata-space-used {<integer>[KB|MB|GB|TB|PB]} ]  Space Used by Metadata for Volume Efficiency
+  [ -size {<integer>[KB|MB|GB|TB|PB]} ]                     Size
+  [ -state <aggregate state> ]                              State
+  [ -usedsize {<integer>[KB|MB|GB|TB|PB]} ]                 Used Size
+  [ -uses-shared-disks {true|false} ]                       Uses Shared Disks
+  [ -volcount <integer> ]                                   Number Of Volumes
+  [ -physical-used {<integer>[KB|MB|GB|TB|PB]} ]            Total Physical Used Size
+  [ -physical-used-percent <percent_no_limit> ]             Physical Used Percentage
+  [ -is-encrypted {true|false} ]                            Is Encrypted
+  [ -encryption-key-id <text> ]                             Encryption Key ID
+
+HongKong-CLU2::volume efficiency> aggr show options aggr0_HongKong_Node2
+
+Error: "aggr0_HongKong_Node2" was not expected. Please specify -fieldname first.
+
+HongKong-CLU2::volume efficiency> aggr show aggr0_HongKong_Node2
+
+                                         Aggregate: aggr0_HongKong_Node2
+                                      Storage Type: vmdisk
+                                    Checksum Style: advanced_zoned
+                                   Number Of Disks: 1
+                                            Mirror: false
+                                              Node: HongKong_Node2
+                              Disks for First Plex: VMw-1.1
+                           Disks for Mirrored Plex: -
+                         Partitions for First Plex: -
+                      Partitions for Mirrored Plex: -
+                           Free Space Reallocation: off
+                                         HA Policy: cfo
+                               Ignore Inconsistent: off
+                Space Reserved for Snapshot Copies: -
+           Aggregate Nearly Full Threshold Percent: 97%
+                  Aggregate Full Threshold Percent: 98%
+                         Block Checksum Protection: on
+                                   RAID Lost Write: off
+                         Zoned Checksum Protection: -
+                             Enable Thorough Scrub: -
+                                    Hybrid Enabled: false
+                                    Available Size: 2.65GB
+                                  Checksum Enabled: true
+                                   Checksum Status: active
+                                           Cluster: HongKong-CLU2
+                                   Home Cluster ID: 43d9c3df-894d-11e5-b7c3-005056881580
+                                        DR Home ID: -
+                                      DR Home Name: -
+                                  Has Mroot Volume: true
+                     Has Partner Node Mroot Volume: false
+                                           Home ID: 2147486735
+                                         Home Name: HongKong_Node2
+                           Total Hybrid Cache Size: 0B
+                                            Hybrid: false
+                                      Inconsistent: false
+                                 Is Aggregate Home: true
+                                     Max RAID Size: 8
+       Flash Pool SSD Tier Maximum RAID Group Size: -
+                                          Owner ID: 2147486735
+                                        Owner Name: HongKong_Node2
+                                   Used Percentage: 94%
+                                            Plexes: /aggr0_HongKong_Node2/plex0
+                                       RAID Groups: /aggr0_HongKong_Node2/plex0/rg0 (advanced_zoned)
+                             RAID Lost Write State: off
+                                       RAID Status: raid0, normal
+                                         RAID Type: raid0
+   SyncMirror Resync Snapshot Frequency in Minutes: 60
+                                           Is Root: true
+      Space Used by Metadata for Volume Efficiency: 0B
+                                              Size: 47.82GB
+                                             State: online
+                                    Aggregate Type: aggr
+                        Maximum Write Alloc Blocks: 0
+                                         Used Size: 45.16GB
+                                 Uses Shared Disks: false
+                                       UUID String: cc495691-07fc-458d-b2ec-d0ebed58a41e
+                                 Number Of Volumes: 1
+                             Is Flash Pool Caching: -
+            Is Eligible for Auto Balance Aggregate: -
+             State of the aggregate being balanced: ineligible
+                          Total Physical Used Size: 6.53GB
+                          Physical Used Percentage: 14%
+            State Change Counter for Auto Balancer: -
+                                      Is Encrypted: false
+                                 Encryption Key ID: -
+
+HongKong-CLU2::volume efficiency> aggr show aggr0_HongKong_Node2 options nosnap
+
+Error: "options" was not expected. Please specify -fieldname first.
+
+HongKong-CLU2::volume efficiency> aggr show aggr0_HongKong_Node2 -fields  nosnap
+
+Error: invalid argument "nosnap"
+
+HongKong-CLU2::volume efficiency> aggr show aggr0_HongKong_Node2 -fields ?  nosnap
+  aggregate                            Aggregate
+  storage-type                         Storage Type
+  chksumstyle                          Checksum Style
+  diskcount                            Number Of Disks
+  mirror                               Mirror
+  node                                 Node
+  disklist                             Disks for First Plex
+  mirror-disklist                      Disks for Mirrored Plex
+  free-space-realloc                   Free Space Reallocation
+  ha-policy                            HA Policy
+  percent-snapshot-space               Space Reserved for Snapshot Copies
+  space-nearly-full-threshold-percent  Aggregate Nearly Full Threshold Percent
+  space-full-threshold-percent         Aggregate Full Threshold Percent
+  hybrid-enabled                       Hybrid Enabled
+  availsize                            Available Size
+  chksumenabled                        Checksum Enabled
+  chksumstatus                         Checksum Status
+  cluster                              Cluster
+  cluster-id                           Home Cluster ID
+  dr-home-id                           DR Home ID
+  dr-home-name                         DR Home Name
+  has-mroot                            Has Mroot Volume
+  has-partner-mroot                    Has Partner Node Mroot Volume
+  home-id                              Home ID
+  home-name                            Home Name
+  hybrid-cache-size-total              Total Hybrid Cache Size
+  hybrid                               Hybrid
+  inconsistent                         Inconsistent
+  is-home                              Is Aggregate Home
+  maxraidsize                          Max RAID Size
+  cache-raid-group-size                Flash Pool SSD Tier Maximum RAID Group Size
+  owner-id                             Owner ID
+  owner-name                           Owner Name
+  percent-used                         Used Percentage
+  plexes                               Plexes
+  raidgroups                           RAID Groups
+  raidstatus                           RAID Status
+  raidtype                             RAID Type
+  resyncsnaptime                       SyncMirror Resync Snapshot Frequency in Minutes
+  root                                 Is Root
+  sis-metadata-space-used              Space Used by Metadata for Volume Efficiency
+  size                                 Size
+  state                                State
+  usedsize                             Used Size
+  uses-shared-disks                    Uses Shared Disks
+  volcount                             Number Of Volumes
+  physical-used                        Total Physical Used Size
+  physical-used-percent                Physical Used Percentage
+  is-encrypted                         Is Encrypted
+  encryption-key-id                    Encryption Key ID
+
+HongKong-CLU2::volume efficiency> aggr show aggr1_HongKong_Node2
+
+                                         Aggregate: aggr1_HongKong_Node2
+                                      Storage Type: vmdisk
+                                    Checksum Style: advanced_zoned
+                                   Number Of Disks: 1
+                                            Mirror: false
+                                              Node: HongKong_Node2
+                              Disks for First Plex: VMw-1.2
+                           Disks for Mirrored Plex: -
+                         Partitions for First Plex: -
+                      Partitions for Mirrored Plex: -
+                           Free Space Reallocation: off
+                                         HA Policy: sfo
+                               Ignore Inconsistent: off
+                Space Reserved for Snapshot Copies: -
+           Aggregate Nearly Full Threshold Percent: 95%
+                  Aggregate Full Threshold Percent: 98%
+                         Block Checksum Protection: on
+                                   RAID Lost Write: off
+                         Zoned Checksum Protection: -
+                             Enable Thorough Scrub: -
+                                    Hybrid Enabled: false
+                                    Available Size: 1.03TB
+                                  Checksum Enabled: true
+                                   Checksum Status: active
+                                           Cluster: HongKong-CLU2
+                                   Home Cluster ID: 43d9c3df-894d-11e5-b7c3-005056881580
+                                        DR Home ID: -
+                                      DR Home Name: -
+                                  Has Mroot Volume: false
+                     Has Partner Node Mroot Volume: false
+                                           Home ID: 2147486735
+                                         Home Name: HongKong_Node2
+                           Total Hybrid Cache Size: 0B
+                                            Hybrid: false
+                                      Inconsistent: false
+                                 Is Aggregate Home: true
+                                     Max RAID Size: 8
+       Flash Pool SSD Tier Maximum RAID Group Size: -
+                                          Owner ID: 2147486735
+                                        Owner Name: HongKong_Node2
+                                   Used Percentage: 42%
+                                            Plexes: /aggr1_HongKong_Node2/plex0
+                                       RAID Groups: /aggr1_HongKong_Node2/plex0/rg0 (advanced_zoned)
+                             RAID Lost Write State: off
+                                       RAID Status: raid0, normal
+                                         RAID Type: raid0
+   SyncMirror Resync Snapshot Frequency in Minutes: 60
+                                           Is Root: false
+      Space Used by Metadata for Volume Efficiency: 0B
+                                              Size: 1.77TB
+                                             State: online
+                                    Aggregate Type: aggr
+                        Maximum Write Alloc Blocks: 0
+                                         Used Size: 755.2GB
+                                 Uses Shared Disks: false
+                                       UUID String: 4c4231ee-7167-4937-9653-cac7c39e2102
+                                 Number Of Volumes: 4
+                             Is Flash Pool Caching: -
+            Is Eligible for Auto Balance Aggregate: -
+             State of the aggregate being balanced: ineligible
+                          Total Physical Used Size: 45.93GB
+                          Physical Used Percentage: 3%
+            State Change Counter for Auto Balancer: -
+                                      Is Encrypted: false
+                                 Encryption Key ID: -
+
+HongKong-CLU2::volume efficiency> run -node ?
+  HongKong_Node2
+
+HongKong-CLU2::volume efficiency> run -node HongKong_Node2 aggr status
+           Aggr State           Status                Options
+aggr0_HongKong_Node2 online          raid0, aggr           root
+                                64-bit
+aggr1_HongKong_Node2 online          raid0, aggr
+                                64-bit
+
+HongKong-CLU2::volume efficiency> vol status
+
+Error: "status" is not a recognized command
+
+HongKong-CLU2::volume efficiency> vol show
+Vserver   Volume       Aggregate    State      Type       Size  Available Used%
+--------- ------------ ------------ ---------- ---- ---------- ---------- -----
+HongKong_Node2
+          vol0         aggr0_HongKong_Node2
+                                    online     RW      44.91GB    38.74GB   13%
+WFWHKFI2  VM_C         aggr1_HongKong_Node2
+                                    online     RW        300GB    264.3GB   11%
+WFWHKFI2  VM_D         aggr1_HongKong_Node2
+                                    online     RW        150GB    141.8GB    5%
+WFWHKFI2  VM_E         aggr1_HongKong_Node2
+                                    online     RW        300GB    284.6GB    5%
+WFWHKFI2  WFWHKFI2_root
+                       aggr1_HongKong_Node2
+                                    online     RW          1GB    972.5MB    5%
+5 entries were displayed.
+
+HongKong-CLU2::volume efficiency> run -node HongKong_Node2 vol status
+         Volume State           Status                Options
+  WFWHKFI2_root online          raid0, flex           create_ucode=on, convert_ucode=on,
+                                cluster               schedsnapname=create_time
+                                64-bit
+           VM_E online          raid0, flex           create_ucode=on, convert_ucode=on,
+                                cluster               schedsnapname=create_time
+                                64-bit
+           VM_D online          raid0, flex           create_ucode=on, convert_ucode=on,
+                                cluster               schedsnapname=create_time
+                                64-bit
+           VM_C online          raid0, flex           create_ucode=on, convert_ucode=on,
+                                cluster               schedsnapname=create_time
+                                64-bit
+           vol0 online          raid0, flex           root, nvfail=on
+                                64-bit
+
+HongKong-CLU2::volume efficiency> run -node HongKong_Node2 vol options vol0 nosnap on
+
+HongKong-CLU2::volume efficiency> run -node HongKong_Node2 vol status
+         Volume State           Status                Options
+  WFWHKFI2_root online          raid0, flex           create_ucode=on, convert_ucode=on,
+                                cluster               schedsnapname=create_time
+                                64-bit
+           VM_E online          raid0, flex           create_ucode=on, convert_ucode=on,
+                                cluster               schedsnapname=create_time
+                                64-bit
+           VM_D online          raid0, flex           create_ucode=on, convert_ucode=on,
+                                cluster               schedsnapname=create_time
+                                64-bit
+           VM_C online          raid0, flex           create_ucode=on, convert_ucode=on,
+                                cluster               schedsnapname=create_time
+                                64-bit
+           vol0 online          raid0, flex           root, nosnap=on, nvfail=on
+                                64-bit
+
+HongKong-CLU2::volume efficiency> run -node HongKong_Node2 aggr options aggr1_HongKong_Node2 nosnap on
+
+HongKong-CLU2::volume efficiency> run -node HongKong_Node2 aggr options aggr0_HongKong_Node2 nosnap on
+
+HongKong-CLU2::volume efficiency> run -node HongKong_Node2 aggr options
+aggr options: No aggregate name supplied.
+usage:
+aggr options <aggr-name> <option-name> <option-val>
+The following commands are available; for more information
+type "aggr help options <command>"
+cache_raid_group_size hybrid_enabled      percent_snapshot_space resyncsnaptime
+free_space_realloc  lost_write_protect  raidsize            root
+fs_size_fixed       nosnap              raidtype            snapmirrored
+ha_policy
+
+HongKong-CLU2::volume efficiency> run -node HongKong_Node2 show aggr
+show not found.  Type '?' for a list of commands
+
+HongKong-CLU2::volume efficiency> run -node HongKong_Node2 aggr show
+aggr: no such command "show"
+for more information type "aggr help".
+
+HongKong-CLU2::volume efficiency> run -node HongKong_Node2 aggr ?
+The following commands are available; for more information
+type "aggr help <command>"
+add                 online              restrict            status
+media_scrub         options             scrub               verify
+offline
+
+HongKong-CLU2::volume efficiency> run -node HongKong_Node2 aggr status
+           Aggr State           Status                Options
+aggr0_HongKong_Node2 online          raid0, aggr           root, nosnap=on
+                                64-bit
+aggr1_HongKong_Node2 online          raid0, aggr           nosnap=on
+                                64-bit
+
+HongKong-CLU2::volume efficiency> set -privilege advanced
+
+Warning: These advanced commands are potentially dangerous; use them only when directed to do so by NetApp personnel.
+Do you want to continue? {y|n}: y
+
+HongKong-CLU2::volume efficiency*> volume snapshot prepare-for-revert -node HongKong_Node2
+
+Warning: This command will delete all Snapshot copies that have the format used by the current version of Data ONTAP. It will fail if any Snapshot copy
+         polices are enabled, or if any Snapshot copies have an owner. Continue? {y|n}: y
+All Snapshot copies that have the format used by the current version of Data ONTAP have been deleted.
+
+HongKong-CLU2::volume efficiency*> volume snapshot show -node HongKong_Node2
+There are no entries matching your query.
+
+HongKong-CLU2::volume efficiency*> set -privilege admin
+
+HongKong-CLU2::volume efficiency> system image show
+                 Is      Is                                Install
+Node     Image   Default Current Version                   Date
+-------- ------- ------- ------- ------------------------- -------------------
+HongKong_Node2
+         image1  false   false   8.3.1                     11/14/2015 16:30:08
+         image2  true    true    8.3.1                     11/13/2015 13:02:10
+2 entries were displayed.
+
+HongKong-CLU2::volume efficiency> cd /
+
+Error: "/" is not a recognized directory
+
+HongKong-CLU2::volume efficiency> cd ..
+
+HongKong-CLU2::volume> cd..
+
+Error: "cd.." is not a recognized command
+
+HongKong-CLU2::volume> system image show
+                 Is      Is                                Install
+Node     Image   Default Current Version                   Date
+-------- ------- ------- ------- ------------------------- ----------------
+HongKong_Node2
+         image1  false   false   8.3.1                     11/14/2015 16:30
+         image2  true    true    8.3.1                     11/13/2015 13:02
+2 entries were displayed.
+
+HongKong-CLU2::volume> ..
+
+HongKong-CLU2::> network interface show
+            Logical    Status     Network            Current       Current
+Vserver     Interface  Admin/Oper Address/Mask       Node          Port
+----------- ---------- ---------- ------------------ ------------- -------
+HongKong-CLU2
+            HongKong_Node2_LIF_SNAPMIRROR
+                         up/up    172.22.47.28/24    HongKong_Node2
+                                                                   e0d
+            HongKong_Node2_mgmt1
+                         up/up    172.22.47.24/24    HongKong_Node2
+                                                                   e0a
+            cluster_mgmt up/up    172.22.47.23/24    HongKong_Node2
+                                                                   e0a
+WFWHKFI2
+            WFWHKFI2_admin_lif1
+                         up/up    172.22.47.27/24    HongKong_Node2
+                                                                   e0b
+            WFWHKFI2_cifs_nfs_lif1
+                         up/up    172.22.47.21/24    HongKong_Node2
+                                                                   e0c
+5 entries were displayed.
+
+HongKong-CLU2::> network interface show -role data
+            Logical    Status     Network            Current       Current
+Vserver     Interface  Admin/Oper Address/Mask       Node          Port
+----------- ---------- ---------- ------------------ ------------- -------
+WFWHKFI2
+            WFWHKFI2_admin_lif1
+                         up/up    172.22.47.27/24    HongKong_Node2
+                                                                   e0b
+            WFWHKFI2_cifs_nfs_lif1
+                         up/up    172.22.47.21/24    HongKong_Node2
+                                                                   e0c
+2 entries were displayed.
+
+HongKong-CLU2::> system node i
+    image           internal-switch
+
+HongKong-CLU2::> system node image get -package http://172.2ode/FullImage/_
+
+Error: command failed: Invalid package URL
+       http://172.22.10.226:81:/c_mode/FullImage/
+
+HongKong-CLU2::> system node image get -package http://172.22.10.226:81:/c_                                                                                  mode/FullImage/823P3_q_image.tgz
+
+Error: command failed: Invalid package URL
+       http://172.22.10.226:81:/c_mode/FullImage/823P3_q_image.tgz
+
+HongKong-CLU2::> ping 172.22.10.226
+172.22.10.226 is alive
+
+HongKong-CLU2::> system node image get -package http://172.22.10.226:81:/c_                                                                                  mode/FullImage/823P3_q_image.tgz
+
+Error: command failed: Invalid package URL
+       http://172.22.10.226:81:/c_mode/FullImage/823P3_q_image.tgz
+
+HongKong-CLU2::> system node image get -package https://172.22.10.226:81:/c                                                                                  _mode/FullImage/823P3_q_image.tgz
+
+Error: command failed: Invalid package URL
+       https://172.22.10.226:81:/c_mode/FullImage/823P3_q_image.tgz
+
+HongKong-CLU2::> system node
+
+HongKong-CLU2::system node> ?
+  autosupport>                Manage AutoSupport service
+  coredump>                   Manage coredumps
+  environment>                Display fan and temperature information
+  halt                        Shut down a node
+  hardware>                   The hardware directory
+  image>                      Manage software images
+  internal-switch>            Manage onboard switches
+  modify                      Modify node attributes
+  power>                      The power directory
+  reboot                      Reboot a node
+  rename                      Rename a node
+  root-mount>                 The root-mount directory
+  run                         Run interactive or non-interactive commands
+                              in the nodeshell
+  run-console                 Access the console of a node
+  show                        Display the list of nodes in the cluster
+  virtual-machine>            Configure Data ONTAP virtual machine
+                              settings
+
+HongKong-CLU2::system node> image
+
+HongKong-CLU2::system node image> ?
+  abort-operation             Abort software image 'update' or 'get'
+                              operation
+  get                         Fetch a file from a URL
+  modify                      Modify software image configuration
+  package>                    The package directory
+  show                        Display software image information
+  show-update-progress        Show progress information for a currently
+                              running update
+  update                      Perform software image upgrade/downgrade
+
+HongKong-CLU2::system node image> package
+
+HongKong-CLU2::system node image package> ?
+  delete                      Delete a software package
+  show                        Display software package information
+
+HongKong-CLU2::system node image package> show
+             Package
+Node         Repository     Package File Name
+------------ -------------- -----------------
+HongKong_Node2
+             mroot
+                            831_v_image.tgz
+
+HongKong-CLU2::system node image package> ..
+
+HongKong-CLU2::system node image> get
+Usage:
+  [ -node <nodename> ]         Node (default: HongKong_Node2)
+   [-package] <text>           Package URL
+  [ -replace-package [true] ]  Replace the Local File
+  [ -rename-package <text> ]   Rename the File
+  [ -background [true] ]       Run in the background
+
+HongKong-CLU2::system node image> system node image get -package http://172                                                                                  .22.10.226:81:/c_mode/FullImage/823P3_q_image.tgz
+
+Error: command failed: Invalid package URL
+       http://172.22.10.226:81:/c_mode/FullImage/823P3_q_image.tgz
+
+HongKong-CLU2::system node image> system node image get -package http://172                                                                                  .22.10.226:81:/c_mode/FullImage/823P3_q_image.tgz
+
+Error: command failed: Invalid package URL
+       http://172.22.10.226:81:/c_mode/FullImage/823P3_q_image.tgz
+
+HongKong-CLU2::system node image> system node image get -package http://172                                                                                  .22.10.226:81:/c_mode/FullImage/823P3_q_image.tgz ?
+  [ -node <nodename> ]         Node (default: HongKong_Node2)
+  [ -replace-package [true] ]  Replace the Local File
+  [ -rename-package <text> ]   Rename the File
+  [ -background [true] ]       Run in the background
+
+HongKong-CLU2::system node image> system node image get -package http://172                                                                                  .22.10.226:81:/c_mode/FullImage/823_v_image.tgz
+
+Error: command failed: Invalid package URL
+       http://172.22.10.226:81:/c_mode/FullImage/823_v_image.tgz
+
+HongKong-CLU2::system node image> system node image get -package http://172                                                                                  .22.10.226:81/c_mode/FullImage/823_v_image.tgz
+
+Software get http://172.22.10.226:81/c_mode/FullImage/823_v_image.tgz start                                                                                  ed on node HongKong_Node2
+Downloading package. This may take up to 10 minutes.
+99% downloaded
+Download complete.
+Software get http://172.22.10.226:81/c_mode/FullImage/823_v_image.tgz compl                                                                                  eted
+on node HongKong_Node2.
+HongKong-CLU2::system node image> show
+                 Is      Is                                Install
+Node     Image   Default Current Version                   Date
+-------- ------- ------- ------- ------------------------- ----------------                                                                                  ---
+HongKong_Node2
+         image1  false   false   8.3.1                     11/14/2015 16:30                                                                                  :08
+         image2  true    true    8.3.1                     11/13/2015 13:02                                                                                  :10
+2 entries were displayed.
+
+HongKong-CLU2::system node image> ?
+  abort-operation             Abort software image 'update' or 'get'
+                              operation
+  get                         Fetch a file from a URL
+  modify                      Modify software image configuration
+  package>                    The package directory
+  show                        Display software image information
+  show-update-progress        Show progress information for a currently
+                              running update
+  update                      Perform software image upgrade/downgrade
+
+HongKong-CLU2::system node image> package ?
+  delete                      Delete a software package
+  show                        Display software package information
+
+HongKong-CLU2::system node image> package show
+             Package
+Node         Repository     Package File Name
+------------ -------------- -----------------
+HongKong_Node2
+             mroot
+                            823_v_image.tgz
+                            831_v_image.tgz
+2 entries were displayed.
+
+HongKong-CLU2::system node image> ..
+
+HongKong-CLU2::system node> ?
+  autosupport>                Manage AutoSupport service
+  coredump>                   Manage coredumps
+  environment>                Display fan and temperature information
+  halt                        Shut down a node
+  hardware>                   The hardware directory
+  image>                      Manage software images
+  internal-switch>            Manage onboard switches
+  modify                      Modify node attributes
+  power>                      The power directory
+  reboot                      Reboot a node
+  rename                      Rename a node
+  root-mount>                 The root-mount directory
+  run                         Run interactive or non-interactive commands
+                              in the nodeshell
+  run-console                 Access the console of a node
+  show                        Display the list of nodes in the cluster
+  virtual-machine>            Configure Data ONTAP virtual machine
+                              settings
+
+HongKong-CLU2::system node> image
+
+HongKong-CLU2::system node image> ?
+  abort-operation             Abort software image 'update' or 'get'
+                              operation
+  get                         Fetch a file from a URL
+  modify                      Modify software image configuration
+  package>                    The package directory
+  show                        Display software image information
+  show-update-progress        Show progress information for a currently
+                              running update
+  update                      Perform software image upgrade/downgrade
+
+HongKong-CLU2::system node image> update ?
+  [[-node] <nodename>]          Node (default: HongKong_Node2)
+   [-package] <text>            Package URL
+  [[-replace] {image1|image2}]  Image to Replace
+  [ -setdefault [true] ]        Set Newly Updated Image as Default
+  [ -replace-package [true] ]   Replace the Local File
+  [ -rename-package <text> ]    Rename the File
+  [ -background [true] ]        Run in the Background
+  [ -validate-only [true] ]     Validate the Package before Installation
+
+HongKong-CLU2::system node image> update -node HongKong_Node2 ?
+   [-package] <text>            Package URL
+  [[-replace] {image1|image2}]  Image to Replace
+  [ -setdefault [true] ]        Set Newly Updated Image as Default
+  [ -replace-package [true] ]   Replace the Local File
+  [ -rename-package <text> ]    Rename the File
+  [ -background [true] ]        Run in the Background
+  [ -validate-only [true] ]     Validate the Package before Installation
+
+HongKong-CLU2::system node image> update -node HongKong_Node2 -package ?
+  <text>                      Package URL
+
+HongKong-CLU2::system node image> update -node HongKong_Node2 -package 823_                                                                                  v_image.tgz -re
+    -replace         -replace-package -rename-package
+HongKong-CLU2::system node image> update -node HongKong_Node2 -package 823_                                                                                  v_image.tgz -replace
+    -replace         -replace-package
+HongKong-CLU2::system node image> update -node HongKong_Node2 -package 823_                                                                                  v_image.tgz -replace ?
+  image1                      Image1
+  image2                      Image2
+
+HongKong-CLU2::system node image> update -node HongKong_Node2 -package 823_                                                                                  v_image.tgz -replace image1 ?
+  [ -setdefault [true] ]       Set Newly Updated Image as Default
+  [ -replace-package [true] ]  Replace the Local File
+  [ -rename-package <text> ]   Rename the File
+  [ -background [true] ]       Run in the Background
+  [ -validate-only [true] ]    Validate the Package before Installation
+
+HongKong-CLU2::system node image> update -node HongKong_Node2 -package 823_                                                                                  v_image.tgz -replace image1
+
+Software update started on node HongKong_Node2. Updating image1 with packag                                                                                  e 823_v_image.tgz.
+Listing package contents.
+Decompressing package contents.
+The default boot image has been reset to image1.
+Invoking script (install phase). This may take up to 60 minutes.
+Mode of operation is UPDATE
+Current image is image2
+Alternate image is image1
+Package MD5 checksums pass
+Versions are compatible
+Available space on boot device is 669 MB
+Required  space on boot device is 312 MB
+Kernel binary matches install machine type
+Getting ready to install image
+Syncing device...
+Extracting to /cfcard/x86_64/freebsd/image1...
+x BUILD
+x CHECKSUM
+x COMPAT.TXT
+x INSTALL
+x VERSION
+x cap.xml
+x fw.tgz
+x kernel
+x metadata.xml
+x platform.ko
+x platfs.img
+x rootfs.img
+Installed MD5 checksums pass
+Installing diagnostic and firmware files
+Firmware MD5 checksums pass
+Installation complete. image1 updated on node HongKong_Node2.
+HongKong-CLU2::system node image> show
+                 Is      Is                                Install
+Node     Image   Default Current Version                   Date
+-------- ------- ------- ------- ------------------------- ----------------                                                                                  ---
+HongKong_Node2
+         image1  true    false   8.2.3                     11/21/2015 23:40                                                                                  :12
+         image2  false   true    8.3.1                     11/13/2015 13:02                                                                                  :10
+2 entries were displayed.
+
+HongKong-CLU2::system node image> network interface modify {-role data} -st                                                                                  atus-admin down
+2 entries were modified.
+
+HongKong-CLU2::system node image>
+HongKong-CLU2::system node image> cluster ha modify -configured false
+
+Notice: HA is disabled.
+
+HongKong-CLU2::system node image> storage failover modify -node nodename -e                                                                                  nabled false
+
+Error: "nodename" is an invalid value for field "-node <nodename>"
+                                                                          H                                                                                  ongKong-CLU2::system node image> storage failover modify -node HongKong_Nod                                                                                  e2  -enabled false
+
+HongKong-CLU2::system node image> ..
+
+HongKong-CLU2::system node> ..
+
+HongKong-CLU2::system> image
+
+HongKong-CLU2::system node image> modify -node HongKong_Node2 -i
+    -image     -isdefault
+
+HongKong-CLU2::system node image> modify -node HongKong_Node2 -image image1                                                                                   -isdefault true
+
+HongKong-CLU2::system node image> system image show
+                 Is      Is                                Install
+Node     Image   Default Current Version                   Date
+-------- ------- ------- ------- ------------------------- ----------------                                                                                  ---
+HongKong_Node2
+         image1  true    false   8.2.3                     11/21/2015 23:40                                                                                  :12
+         image2  false   true    8.3.1                     11/13/2015 13:02                                                                                  :10
+2 entries were displayed.
+
+HongKong-CLU2::system node image> set -privilege advanced
+
+Warning: These advanced commands are potentially dangerous; use them only
+         when directed to do so by NetApp personnel.
+Do you want to continue? {y|n}: y
+
+HongKong-CLU2::system node image*> cluster show -node HongKong_Node2
+
+          Node: HongKong_Node2
+          UUID: 062cb931-894d-11e5-85f4-23979eaec1e4
+       Epsilon: true
+   Eligibility: true
+        Health: true
+
+HongKong-CLU2::system node image*> system node revert-to -node h -check-onl                                                                                  y true -version 8.2
+
+Error: the value "h" is invalid for type <nodename>
+HongKong-CLU2::system node image*> system node revert-to -node HongKong_Nod                                                                                  e2  -check-only true -version 8.2
+
+
+Error: command failed: The revert check phase failed. The following issues
+       must be resolved before revert can be completed.
+       Disable the following capabilities:
+
+       cifs.directCopy: You must disable the CIFS Direct-Copy feature on
+       all Vservers using the following command: "vserver cifs options
+       modify -vserver * -is-copy-offload-direct-copy-enabled false".
+
+       cifs.fake.open:  You must disable the CIFS fake open option on all
+       Vservers. To disable this feature on all Vservers use the
+       (privilege: advanced) "vserver cifs options modify -vserver *
+       -is-fake-open-enabled false" command.
+
+       dense_adaptive_compression_cluster:  Before downgrading, run the
+       "volume efficiency prepare-to-downgrade" command. This command also
+       needs to be executed on any peer clusters being used for
+       MetroCluster or Vserver DR.
+
+       nameservices.ddns: You must disable the Dynamic DNS Update feature
+       in the cluster before downgrading using the (privilege: advanced)
+       "vserver services name-service dns dynamic-update
+       prepare-to-downgrade" command.
+
+       remote.admin.authentication: Disable the remote admin
+       authentication feature before downgrading by using the (privilege:
+       advanced) "vserver services name-service remote-admin-auth
+       prepare-to-downgrade" command.
+
+       security.login.password.enhancements: Disable the MOTD feature that
+       prints unsuccessful login attempts using the (privilege: advanced)
+       "security login password-prepare-to-downgrade -disable-feature-set
+       8.3.1" command.
+
+
+
+
+
+HongKong-CLU2::system node image*> system node revert-to -node HongKong_Node2  -check-only true -version 8.2
+
+
+Error: command failed: The revert check phase failed. The following issues must be resolved before revert can be completed.
+       Disable the following capabilities:
+
+       cifs.directCopy: You must disable the CIFS Direct-Copy feature on all Vservers using the following command: "vserver cifs options modify -vserver *
+       -is-copy-offload-direct-copy-enabled false".
+
+       cifs.fake.open:  You must disable the CIFS fake open option on all Vservers. To disable this feature on all Vservers use the (privilege: advanced)
+       "vserver cifs options modify -vserver * -is-fake-open-enabled false" command.
+
+       dense_adaptive_compression_cluster:  Before downgrading, run the "volume efficiency prepare-to-downgrade" command. This command also needs to be
+       executed on any peer clusters being used for MetroCluster or Vserver DR.
+
+       nameservices.ddns: You must disable the Dynamic DNS Update feature in the cluster before downgrading using the (privilege: advanced) "vserver
+       services name-service dns dynamic-update prepare-to-downgrade" command.
+
+       remote.admin.authentication: Disable the remote admin authentication feature before downgrading by using the (privilege: advanced) "vserver services
+       name-service remote-admin-auth prepare-to-downgrade" command.
+
+       security.login.password.enhancements: Disable the MOTD feature that prints unsuccessful login attempts using the (privilege: advanced) "security
+       login password-prepare-to-downgrade -disable-feature-set 8.3.1" command.
+
+
+
+
+
+HongKong-CLU2::system node image*> vserver cifs options modify -vserver *
+
+Error: You need to provide some values to apply.
+
+HongKong-CLU2::system node image*>        -is-copy-offload-direct-copy-enabled false
+
+Error: "-is-copy-offload-direct-copy-enabled" is not a recognized command
+
+HongKong-CLU2::system node image*> "vserver cifs options modify -vserver * -is-copy-offload-direct-copy-enabled false
+HongKong-CLU2::system node image*> "vserver cifs options modify -vserver * -is-copy-offload-direct-copy-enabled false
+HongKong-CLU2::system node image*> "vserver cifs options modify -vserver * -is-copy-offload-direct-copy-enabled false!
+HongKong-CLU2::system node image*> "vserver cifs options modify -vserver * -is-copy-offload-direct-copy-enabled false"
+1 entry was modified.
+
+HongKong-CLU2::system node image*>  "volume efficiency prepare-to-downgrade"
+
+Error: "volume efficiency prepare-to-downgrade" is not a recognized command
+
+HongKong-CLU2::system node image*> volume efficiency prepare-to-downgrad
+Downgrade for the Adaptive Compression feature has completed.  To ensure that there are not any Snapshot copies with Adaptive Compression on any of the peering clusters, run the "volume efficiency prepare-to-downgrade" command on each of the peering clusters.
+
+HongKong-CLU2::system node image*> volume efficiency prepare-to-downgrade
+Downgrade for the Adaptive Compression feature has completed.  To ensure that there are not any Snapshot copies with Adaptive Compression on any of the peering clusters, run the "volume efficiency prepare-to-downgrade" command on each of the peering clusters.
+
+HongKong-CLU2::system node image*> vserver services name-service dns dynamic-update prepare-to-downgrade
+
+Warning: This command will disable Dynamic DNS updates on all Vservers, remove all related configurations, and disable the Dynamic DNS update feature. Use
+         this command to prepare for downgrading the system to a release earlier than Data ONTAP 8.3.1 only.
+Do you want to continue? {y|n}: y
+
+HongKong-CLU2::system node image*> vserver services name-service remote-admin-auth prepare-to-downgrade
+
+Warning: This command will remove all LDAP and NIS configurations for the admin Vserver and disable the remote admin authentication feature. Use this
+         command to prepare for downgrading the system to a release earlier than Data ONTAP 8.3.1.
+Do you want to continue? {y|n}: y
+
+HongKong-CLU2::system node image*> security login password-prepare-to-downgrade -disable-feature-set 8.3.1
+
+Warning: This command will disable the MOTD feature that prints unsuccessful login attempts on each cluster or at each site in a MetroCluster configuration.
+Do you want to continue? {y|n}: y
+
+HongKong-CLU2::system node image*>  system node revert-to -node HongKong_Node2  -check-only true -version 8.2
+                                                                                                                                                             
+Error: command failed: The revert check phase failed. The following issues must be resolved before revert can be completed.
+       Disable the following capabilities:
+
+       cifs.fake.open:  You must disable the CIFS fake open option on all Vservers. To disable this feature on all Vservers use the (privilege: advanced)
+       "vserver cifs options modify -vserver * -is-fake-open-enabled false" command.
+
+
+
+
+
+HongKong-CLU2::system node image*> vserver cifs options modify -vserver * -is-fake-open-enabled false
+1 entry was modified.
+
+HongKong-CLU2::system node image*> system node revert-to -node HongKong_Node2  -check-only true -version 8.2
+System node revert-to check successful
+
+HongKong-CLU2::system node image*> system node revert-to -node HongKong_Node2  -version 8.2
+
+Warning: This command reverts cluster configuration ONLY. The File system on every controller in the cluster must be reverted by running "revert_to" from
+         the Nodeshell on every controller. Example: run local revert_to 8.2
+Do you want to continue? {y|n}: y
+The management application is restarting as part of the revert process. Log in again to complete the revert task.
+The management gateway server restarted. Waiting to see if the connection can be reestablished.
+
+The connection with the management gateway server has been reestablished.
+***********************
+**  SYSTEM MESSAGES  **
+***********************
+
+The cluster configuration has been successfully reverted. The file system must
+be reverted by running the "revert_to" command from the Nodeshell. Example: run
+local revert_to 8.2
+
+
+HongKong-CLU2::> run -node no
+
+Error: the value "no" is invalid for type <nodename>
+HongKong-CLU2::> run -node node
+
+Error: the value "node" is invalid for type <nodename>
+HongKong-CLU2::> run -node HongKong_Node2
+Type 'exit' or 'Ctrl-D' to return to the CLI
+HongKong_Node2> revert_to 8.2
+
+You are about to revert the system to work with Data ONTAP 8.2
+The system will be halted immediately after the conversion
+process completes. Make sure that you have installed Data ONTAP
+8.2 onto the boot device, or you will have to run "revert_to" again.
+
+Are you sure you want to proceed? [yes/no]? y
+Stopping rdb apps
+debug.nodewatchdog.level: 2 -> 2
+rmdir: /mroot/etc/cluster_config/rdb/Crs: No such file or directory
+rmdir: /mroot/etc/cluster_config/mdb/crs: No such file or directory
+root: mroot unmounted
+
+
+
+****************************************************
+
+login as: netapp
+netapp@172.22.45.64's password:
+
+NetApp Data ONTAP-v Installer v8.2.3.122.
+Last login: Sat Nov 14 08:15:36 2015 from wfwlon-lap5.wfw.com
+
+
+Welcome to NetApp Data ONTAP-v Installer v8.2.3.122.
+The IP address of Data ONTAP-v Installer is: 172.22.45.64
+Type 'Ctrl-\' to end the SSH session.
+The following prompts define the connection to the vCenter server or ESX host.
+
+
+Do you want to use saved login information ("wfw\adm_vmware"@"172.22.10.58")? [y                                                                             ]: n
+Is the ESX host managed by a vCenter server? [y]:
+Enter vCenter server name or IP address: 172.22.10.58
+Enter ESX host name or IP address (optional): wfwhkvm02
+Enter vCenter server username: wfw\adm_vmware
+Enter vCenter server password:
+Do you want to save this vCenter server login information [y]:
+
+
+NetApp Data ONTAP-v Administration Tool 1.2.2
+Copyright (C) 1992-2015 NetApp.
+All rights reserved.
+Logging in wfw\adm_vmware@172.22.10.58
+VMware SDK version: 5.0
+Console escape key: ^]
+Installer Version: 8.2.3.122
+ESX License: VMware vSphere 5 Enterprise
+dvadmin host wfwhkvm02> vm console connect HongKong-CLU2
+Connecting to console on HongKong-CLU2.  Use ^]-x to exit or ^]-h for help.
+[cannot connect]
+[connected]
+/
+Hit [Enter] to boot immediately, or any other key for command prompt.
+Booting...
+x86_64/freebsd/image1/kernel data=0x921710+0x3db888 syms=[0x8+0x45300+0x8+0x2e834]
+x86_64/freebsd/image1/platform.ko size 0x2b0a48 at 0xe71000
+NetApp Data ONTAP 8.2.3 Cluster-Mode
+Copyright (C) 1992-2015 NetApp.
+All rights reserved.
+md1.uzip: 39168 x 16384 blocks
+md2.uzip: 5760 x 16384 blocks
+*******************************
+*                             *
+* Press Ctrl-C for Boot Menu. *
+*                             *
+*******************************
+Running the upgrade system
+bootarg.upgrade="true"
+bootarg.from.version="8.3.1"
+bootarg.to.version="8.2.3"
+Nov 21 23:58:37 [HongKong_Node2:kern.version.change:notice]: Data ONTAP kernel version was changed from 8.3.1 to 8.2.3.
+Nov 21 23:58:39 [HongKong_Node2:snmp.link.up:info]: Interface 6 is up
+Nov 21 23:58:39 [HongKong_Node2:netif.linkUp:info]: Ethernet e0f: Link up.
+Nov 21 23:58:39 [HongKong_Node2:snmp.link.up:info]: Interface 5 is up
+Nov 21 23:58:39 [HongKong_Node2:netif.linkUp:info]: Ethernet e0e: Link up.
+Nov 21 23:58:39 [HongKong_Node2:snmp.link.up:info]: Interface 4 is up
+Nov 21 23:58:39 [HongKong_Node2:netif.linkUp:info]: Ethernet e0d: Link up.
+Nov 21 23:58:39 [HongKong_Node2:snmp.link.up:info]: Interface 3 is up
+Nov 21 23:58:39 [HongKong_Node2:netif.linkUp:info]: Ethernet e0c: Link up.
+Nov 21 23:58:39 [HongKong_Node2:snmp.link.up:info]: Interface 2 is up
+Nov 21 23:58:39 [HongKong_Node2:netif.linkUp:info]: Ethernet e0b: Link up.
+Nov 21 23:58:39 [HongKong_Node2:snmp.link.up:info]: Interface 1 is up
+Nov 21 23:58:39 [HongKong_Node2:netif.linkUp:info]: Ethernet e0a: Link up.
+Nov 21 23:58:39 [HongKong_Node2:diskown.isEnabled:info]: software ownership has been enabled for this system
+route add: bad address: gw 127.0.20.1 equal to destination 127.0.20.1.
+add host 127.0.10.1: gateway 127.0.20.1
+WAFL CPLEDGER is enabled. Checklist = 0x7ff841ff
+Nov 21 23:58:40 [HongKong_Node2:wafl.memory.status:info]: 5170MB of memory is currently available for the WAFL file system.
+Nov 21 23:58:40 [HongKong_Node2:dcs.framework.enabled:info]: The DCS framework is enabled on this node.
+Nov 21 23:58:40 [HongKong_Node2:raid.mirror.vote.versionZero:debug]: raid: mirror info empty
+Nov 21 23:58:40 [HongKong_Node2:raid.mirror.vote.versionZero:debug]: raid: mirror info empty
+Nov 21 23:58:40 [HongKong_Node2:coredump.host.spare.none:info]: No sparecore disk was found for host 0.
+
+
+nv_init: UNEXPECTED magic state: 0xfefd000, discardPartner 0x1
+Nov 21 23:58:40 [HongKong_Node2:raid.cksum.replay.summary:info]: Replayed 0 checksum blocks.
+Nov 21 23:58:40 [HongKong_Node2:raid.stripe.replay.summary:info]: Replayed 0 stripes.
+Nov 21 23:58:40 [HongKong_Node2:wafl.aggr.btiddb.build:info]: Buftreeid database for aggregate 'aggr1_HongKong_Node2' UUID '4c4231ee-7167-4937-9653-cac7c39e2102' was built in 0 msec, after scanning 0 inodes and restarting -1 times with a final result of starting.
+Nov 21 23:58:40 [HongKong_Node2:wafl.aggr.btiddb.build:info]: Buftreeid database for aggregate 'aggr0_HongKong_Node2' UUID 'cc495691-07fc-458d-b2ec-d0ebed58a41e' was built in 0 msec, after scanning 0 inodes and restarting -1 times with a final result of starting.
+Nov 21 23:58:40 [HongKong_Node2:wafl.aggr.btiddb.build:info]: Buftreeid database for aggregate 'aggr0_HongKong_Node2' UUID 'cc495691-07fc-458d-b2ec-d0ebed58a41e' was built in 38 msec, after scanning 12 inodes and restarting 9 times with a final result of success.
+Nov 21 23:58:40 [HongKong_Node2:wafl.aggr.btiddb.build:info]: Buftreeid database for aggregate 'aggr1_HongKong_Node2' UUID '4c4231ee-7167-4937-9653-cac7c39e2102' was built in 55 msec, after scanning 56 inodes and restarting 8 times with a final result of success.
+Nov 21 23:58:40 [HongKong_Node2:kern.syslog.msg:notice]: The system was down for 215 seconds
+Nov 21 23:58:40 [HongKong_Node2:tar.csum.notFound:notice]: Stored checksum file does not exist, extracting local://mnt/prestage/mroot.tgz.
+Nov 21 23:58:40 [HongKong_Node2:tar.csum.mismatch:notice]: Stored checksum 0 does not match calculated checksum 1985536373, extracting local://mnt/prestage/mroot.tgz.
+Nov 21 23:58:42 [HongKong_Node2:tar.extract.success:info]: Completed extracting local://mnt/prestage/mroot.tgz.
+Nov 21 23:58:42 [HongKong_Node2:tar.csum.notFound:notice]: Stored checksum file does not exist, extracting local://mnt/prestage/pmroot.tgz.
+Nov 21 23:58:42 [HongKong_Node2:tar.csum.mismatch:notice]: Stored checksum 0 does not match calculated checksum 1090387053, extracting local://mnt/prestage/pmroot.tgz.
+Nov 21 23:58:42 [HongKong_Node2:tar.extract.success:info]: Completed extracting local://mnt/prestage/pmroot.tgz.
+Nov 21 23:58:42 [HongKong_Node2:vFiler.smb0.init.begin:info]: About to begin SMB initialization for vFiler0.
+Nov 21 23:58:42 [HongKong_Node2:vFiler.basic.setting.done:info]: vFiler basic operations such as SMB and pseudo-root initialization for vFiler0 are complete.
+Nov 21 23:58:42 [HongKong_Node2:dfu.firmwareUpToDate:info]: Firmware is up-to-date on all disks.
+HongKong_Node2
+Nov 21 23:58:42 [HongKong_Node2:snmp.agent.msg.access.denied:warning]: Permission denied for SNMPv3 requests from root. Reason: Password is too short (SNMPv3 requires at least 8 characters).
+Nov 21 23:58:42 [HongKong_Node2:mgr.boot.disk_done:info]: NetApp Release 8.2.3 Cluster-Mode boot complete. Last disk update written at Sat Nov 21 15:55:07 GMT 2015
+
+Nov 21 23:58:42 [HongKong_Node2:snmp.link.up:info]: Interface 7 is up
+Nov 21 23:58:42 [HongKong_Node2:snmp.link.up:info]: Interface 8 is up
+Nov 21 23:58:42 [HongKong_Node2:replication.upgrade.complete:info]: Post-upgrade operations for SnapMirror and SnapVault are complete.
+Nov 21 23:58:42 [HongKong_Node2:mgr.boot.reason_ok:notice]: System rebooted after a reboot command.
+Nov 21 23:58:42 [HongKong_Node2:callhome.reboot.reboot:info]: Call home for REBOOT (reboot command)
+Nov 21 23:58:42 [HongKong_Node2:clam.enable:info]: CLAM functionality is enabled.
+Ipspace "acp-ipspace" created
+
+
+
+
+
+
+
+
+Sat Nov 21 23:58:57 HKT 2015
+login: admin
+Password:
+HongKong-CLU2::> sys node show
+  (system node show)
+Node      Health Eligibility Uptime        Model       Owner    Location
+--------- ------ ----------- ------------- ----------- -------- ---------------
+HongKong_Node2
+          true   true         00:01:30.011 FDvM200              wfwhkvm02
+
+HongKong-CLU2::> sys ima nod show
+  (system image)
+
+Error: "nod" is not a recognized command
+
+HongKong-CLU2::> sys node ima show
+  (system node image show)
+                 Is      Is                                Install
+Node     Image   Default Current Version                   Date
+-------- ------- ------- ------- ------------------------- -------------------
+HongKong_Node2
+         image1  true    true    8.2.3                     11/21/2015 23:40:12
+         image2  false   false   8.3.1                     11/13/2015 13:02:10
+2 entries were displayed.
+
+HongKong-CLU2::> network interface modify {-role data} -status-admin up
+2 entries were modified.
+
+HongKong-CLU2::> cluster show
+Node                  Health  Eligibility
+--------------------- ------- ------------
+HongKong_Node2        true    true
+
+HongKong-CLU2::> set -privilege advanced
+
+Warning: These advanced commands are potentially dangerous; use them only when
+         directed to do so by NetApp personnel.
+Do you want to continue? {y|n}: y
+
+HongKong-CLU2::*> cluster ring show
+Node      UnitName Epoch    DB Epoch DB Trnxs Master    Online
+--------- -------- -------- -------- -------- --------- ---------
+HongKong_Node2
+          mgmt     5        5        169      HongKong_Node2
+                                                        master
+HongKong_Node2
+          vldb     5        5        6        HongKong_Node2
+                                                        master
+HongKong_Node2
+          vifmgr   5        5        12       HongKong_Node2
+                                                        master
+HongKong_Node2
+          bcomd    5        5        1        HongKong_Node2
+                                                        master
+4 entries were displayed.
+
+HongKong-CLU2::*> storage disk show -state broken
+There are no entries matching your query.
+
+HongKong-CLU2::*> storage aggregate show -state !online
+There are no entries matching your query.
+
+HongKong-CLU2::*> volume show -state !online
+There are no entries matching your query.
+
+HongKong-CLU2::*> network interface show
+            Logical    Status     Network            Current       Current Is
+Vserver     Interface  Admin/Oper Address/Mask       Node          Port    Home
+----------- ---------- ---------- ------------------ ------------- ------- ----
+HongKong-CLU2
+            cluster_mgmt up/up    172.22.47.23/24    HongKong_Node2
+                                                                   e0a     true
+HongKong_Node2
+            HongKong_Node2_LIF_SNAPMIRROR
+                         up/up    172.22.47.28/24    HongKong_Node2
+                                                                   e0d     true
+            HongKong_Node2_mgmt1
+                         up/up    172.22.47.24/24    HongKong_Node2
+                                                                   e0a     true
+WFWHKFI2
+            WFWHKFI2_admin_lif1
+                         up/up    172.22.47.27/24    HongKong_Node2
+                                                                   e0b     true
+            WFWHKFI2_cifs_nfs_lif1
+                         up/up    172.22.47.21/24    HongKong_Node2
+                                                                   e0c     true
+5 entries were displayed.
+
+HongKong-CLU2::*> volume snapshot policy modify -vserver * -enabled true
+
+Error: command failed on vserver "HongKong-CLU2" policy "none": Cannot modify
+       built-in policy.
+
+Warning: Do you want to continue running this command? {y|n}: y
+3 entries were modified.
+
+HongKong-CLU2::*> run -node HongKong_Node2 vol op
+
+Error: Unexpected argument "op".
+HongKong-CLU2::*> run -node HongKong_Node2 vol options nosnap off
+vol options: 'off' is not a legal volume option.
+usage:
+vol options <vol-name> <option-name> <option-val>
+The following commands are available; for more information
+type "vol help options <command>"
+acdirmax            flexcache_min_reserve nosnapdir           snaplock_maximum_period
+acdisconnected      fractional_reserve  nvfail              snaplock_minimum_period
+acregmax            fs_size_fixed       raidsize            snapmirrored
+acsymmax            guarantee           raidtype            snapshot_clone_dependency
+actimeo             maxdirsize          read_realloc        svo_allow_rman
+convert_ucode       minra               resyncsnaptime      svo_checksum
+create_ucode        nbu_archival_snap   root                svo_enable
+disconnected_mode   no_atime_update     schedsnapname       svo_reject_errors
+dlog_hole_reserve   no_i2p              snaplock_autocommit_period try_first
+extent              nosnap              snaplock_default_period writeback_mode
+flexcache_autogrow
+
+HongKong-CLU2::*> run -node HongKong_Node2 vol vol0  options nosnap off
+
+vol: no such command "vol0"
+for more information type "vol help".
+
+HongKong-CLU2::*> run -node HongKong_Node2 vol options
+
+vol options: No volume name supplied.
+usage:
+vol options <vol-name> <option-name> <option-val>
+The following commands are available; for more information
+type "vol help options <command>"
+acdirmax            flexcache_min_reserve nosnapdir           snaplock_maximum_period
+acdisconnected      fractional_reserve  nvfail              snaplock_minimum_period
+acregmax            fs_size_fixed       raidsize            snapmirrored
+acsymmax            guarantee           raidtype            snapshot_clone_dependency
+actimeo             maxdirsize          read_realloc        svo_allow_rman
+convert_ucode       minra               resyncsnaptime      svo_checksum
+create_ucode        nbu_archival_snap   root                svo_enable
+disconnected_mode   no_atime_update     schedsnapname       svo_reject_errors
+dlog_hole_reserve   no_i2p              snaplock_autocommit_period try_first
+extent              nosnap              snaplock_default_period writeback_mode
+flexcache_autogrow
+
+HongKong-CLU2::*> run -node HongKong_Node2 vol status
+
+         Volume State           Status                Options
+           vol0 online          raid0, flex           root, nosnap=on, nvfail=on
+                                64-bit
+  WFWHKFI2_root online          raid0, flex           create_ucode=on, convert_ucode=on,
+                                cluster               schedsnapname=create_time
+                                64-bit
+           VM_E online          raid0, flex           create_ucode=on, convert_ucode=on,
+                                cluster               schedsnapname=create_time
+                                64-bit
+           VM_D online          raid0, flex           create_ucode=on, convert_ucode=on,
+                                cluster               schedsnapname=create_time
+                                64-bit
+           VM_C online          raid0, flex           create_ucode=on, convert_ucode=on,
+                                cluster               schedsnapname=create_time
+                                64-bit
+
+HongKong-CLU2::*> run -node HongKong_Node2 vol options vol0 nosnap off
+
+
+HongKong-CLU2::*> run -node HongKong_Node2 vol status
+
+         Volume State           Status                Options
+           vol0 online          raid0, flex           root, nvfail=on
+                                64-bit
+  WFWHKFI2_root online          raid0, flex           create_ucode=on, convert_ucode=on,
+                                cluster               schedsnapname=create_time
+                                64-bit
+           VM_E online          raid0, flex           create_ucode=on, convert_ucode=on,
+                                cluster               schedsnapname=create_time
+                                64-bit
+           VM_D online          raid0, flex           create_ucode=on, convert_ucode=on,
+                                cluster               schedsnapname=create_time
+                                64-bit
+           VM_C online          raid0, flex           create_ucode=on, convert_ucode=on,
+                                cluster               schedsnapname=create_time
+                                64-bit
+
+HongKong-CLU2::*> run -node HongKong_Node2 aggr options vol0 no
+
+Error: Unexpected argument "options".
+HongKong-CLU2::*> run -node HongKong_Node2 aggr stauts
+
+aggr: no such command "stauts"
+for more information type "aggr help".
+
+HongKong-CLU2::*> run -node HongKong_Node2 aggr stat
+
+aggr: no such command "stat"
+for more information type "aggr help".
+
+HongKong-CLU2::*> run -node HongKong_Node2 aggr status
+
+           Aggr State           Status                Options
+aggr0_HongKong_Node2 online          raid0, aggr           root, nosnap=on
+                                64-bit
+aggr1_HongKong_Node2 online          raid0, aggr           nosnap=on
+                                64-bit
+
+HongKong-CLU2::*> run -node HongKong_Node2 aggr options aggr0_HongKong_Node2 nosnap off
+
+
+HongKong-CLU2::*> run -node HongKong_Node2 aggr options aggr1_HongKong_Node2 nosnap off
+
+
+HongKong-CLU2::*> run -node HongKong_Node2 aggr status
+
+           Aggr State           Status                Options
+aggr0_HongKong_Node2 online          raid0, aggr           root
+                                64-bit
+aggr1_HongKong_Node2 online          raid0, aggr
+                                64-bit
+
+HongKong-CLU2::*> vserver show
+                    Admin     Root                  Name    Name
+Vserver     Type    State     Volume     Aggregate  Service Mapping
+----------- ------- --------- ---------- ---------- ------- -------
+HongKong-CLU2
+            admin   -         -          -          -       -
+HongKong_Node2
+            node    -         -          -          -       -
+WFWHKFI2    data    running   WFWHKFI2_  aggr1_     file,   file
+                              root       HongKong_  nis
+                                         Node2
+3 entries were displayed.
+
+HongKong-CLU2::*>
+

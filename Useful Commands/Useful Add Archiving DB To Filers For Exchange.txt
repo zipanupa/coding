@@ -1,0 +1,54 @@
+WFWDC2EXCH03 To Do
+
+1. Remove mapping for WFWDC2EXCH03 using VSphere Client to /vol/DC2_EXCH03_LOG1/QT_EXCH03_LOG1_OLD/LUN_EXCH03_LOG1_OLD
+	(Serial (hex)#: 0x37534562325d434545464572 - 7SEb2]CEEFEr).
+			  37534562325d434545464572
+2. Unmap / Offline / Remove from VM WFWDC2EXCH03 old LOG LUNS/QTREE (QTree /vol/DC2_EXCH03_LOG1/QT_EXCH03_LOG1_OLD/LUN_EXCH03_LOG1_OLD).
+3. Delete unmapped LUN/QTREE /vol/DC2_EXCH03_DB5/QT_EXCH03_DB5/LUN_EXCH03_DB5 From WFWLOFI1.
+4. Rename /vol/DC2_EXCH03_DB5 to /vol/DC2_EXCH03_ARC1 and resize to 1TB with 2TB overhead (same as the others) then do the commands marked *** below.
+5. Map LUN to VM.
+6. Set up new Exchange DB called DC1ARC1 inside that LUN.
+
+WFWDC2EXCH04 To Do
+
+1. Remove mapping for WFWDC2EXCH04 using VSphere Client to /vol/DC2_EXCH04_LOG2/QT_EXCH04_LOG2/LUN_EXCH04_LOG2
+	(Serial (hex)#: 0x37534561555d442d62747449 - 7SEaU]D-bttI).
+			  37534561555d442d62747449
+2. Do the commands marked *** below creating vol DC2_EXCH04_ARC1, qtree QT_EXCH04_ARC1 and LUN LUN_EXCH04_ARC1.
+3. Map LUN to VM.
+4. Set up a DBcopy of the new Exchange DB inside that LUN.
+
+WFWDC1EXCH01 To Do
+
+1. Do the commands marked *** below creating vol DC1_EXCH02_ARC1, qtree QT_EXCH01_ARC1 and LUN LUN_EXCH01_ARC1.
+2. Map LUN to VM.
+3. Set up a DBcopy of the new Exchange DB inside that LUN.
+
+WFWDC1EXCH02 To Do
+
+1. Do the commands marked *** below creating vol DC1_EXCH02_ARC1, qtree QT_EXCH02_ARC1 and LUN LUN_EXCH02_ARC1.
+2. Map LUN to VM.
+3. Set up a DBcopy of the new Exchange DB inside that LUN.
+
+Backups To Do
+1. Add DC1ARC1 To SnapManager Backups.
+
+
+***
+#create volume (already created on WFWDC2EXCH03) 
+vol create DC1_EXCH02_ARC1 -l en -s volume aggr0 1t
+vol options DC1_EXCH02_ARC1 fractional_reserve 0
+vol autosize DC1_EXCH02_ARC1 on
+vol options DC1_EXCH02_ARC1 fs_size_fixed off
+vol autosize DC1_EXCH02_ARC1 -m 2t -i 100g
+snap reserve DC1_EXCH02_ARC1 0
+snap autodelete DC1_EXCH02_ARC1 off
+snap autodelete DC1_EXCH02_ARC1
+sis on /vol/DC1_EXCH02_ARC1
+sis config -s sun-sat@7 /vol/DC1_EXCH02_ARC1
+sis config -C true -I true /vol/DC1_EXCH02_ARC1
+sis status
+sis config
+qtree create /vol/DC1_EXCH02_ARC1/QT_EXCH02_ARC1
+qtree security /vol/DC1_EXCH02_ARC1/QT_EXCH02_ARC1 ntfs
+lun create -s 600g -t windows_2008 -o noreserve /vol/DC1_EXCH02_ARC1/QT_EXCH02_ARC1/LUN_EXCH02_ARC1

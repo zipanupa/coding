@@ -1,0 +1,10 @@
+snap restore -t file /vol/VM_C_64/VM_C_QT/WFWDC1EXCH03/WFWDC1EXCH03.vmx
+snap restore -t file /vol/VM_C_64/VM_C_QT/WFWDC1EXCH03/WFWDC1EXCH03.vmdk
+snap restore -t file /vol/VM_C_64/VM_C_QT/WFWDC1EXCH03/WFWDC1EXCH03-flat.vmdk
+snap restore -t file /vol/VM_C_64/VM_C_QT/WFWDC1EXCH03/WFWDC1EXCH03.nvram
+snap restore -t file /vol/VM_C_64/VM_C_QT/WFWDC1EXCH03/WFWDC1EXCH03.vmsd
+snap restore -t file /vol/VM_C_64/VM_C_QT/WFWDC1EXCH03/WFWDC1EXCH03.vmxf
+snap restore -t file /vol/VM_C_64/VM_C_QT/WFWDC1EXCH03/WFWDC1EXCH03_1.vmdk
+snap restore -t file /vol/VM_C_64/VM_C_QT/WFWDC1EXCH03/WFWDC1EXCH03_1-flat.vmdk
+snap restore -t file /vol/VM_E_64/VM_E_QT/WFWDC1EXCH03/WFWDC1EXCH03.vmdk
+snap restore -t file /vol/VM_E_64/VM_E_QT/WFWDC1EXCH03/WFWDC1EXCH03-flat.vmdk

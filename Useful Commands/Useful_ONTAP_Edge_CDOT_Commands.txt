@@ -1,0 +1,1938 @@
+
+netapp@172.22.45.103's password:
+
+NetApp Data ONTAP-v Installer v8.2.3.122.
+Last login: Thu Jan 28 17:58:02 2016
+
+
+Welcome to NetApp Data ONTAP-v Installer v8.2.3.122.
+The IP address of Data ONTAP-v Installer is: 172.22.45.103
+Type 'Ctrl-\' to end the SSH session.
+The following prompts define the connection to the vCenter server or ESX host.
+
+
+Do you want to use saved login information ("wfw\adm_vmware"@"172.22.10.58")? [y]:
+
+
+NetApp Data ONTAP-v Administration Tool 1.2.2
+Copyright (C) 1992-2015 NetApp.
+All rights reserved.
+Logging in wfw\adm_vmware@172.22.10.58
+VMware SDK version: 5.0
+Console escape key: ^]
+Installer Version: 8.2.3.122
+ESX License: VMware vSphere 5 Enterprise
+dvadmin host wfwhkvm04.wfw.com> exit
+Logging out wfw\adm_vmware@172.22.10.58
+
+
+Do you want to use saved login information ("wfw\adm_vmware"@"172.22.10.58")? [y]: n
+Is the ESX host managed by a vCenter server? [y]:
+Enter vCenter server name or IP address: 172.22.10.58
+Enter ESX host name or IP address (optional): wfwhkvm02.wfw.com
+Enter vCenter server username: wfw\adm_vmware
+Enter vCenter server password:
+Do you want to save this vCenter server login information [y]: n
+
+
+NetApp Data ONTAP-v Administration Tool 1.2.2
+Copyright (C) 1992-2015 NetApp.
+All rights reserved.
+Logging in wfw\adm_vmware@172.22.10.58
+VMware SDK version: 5.0
+Console escape key: ^]
+Installer Version: 8.2.3.122
+ESX License: VMware vSphere 5 Enterprise
+dvadmin host wfwhkvm02.wfw.com> vm prop show HongKong-CLU2
+dvadmin host wfwhkvm02.wfw.com> vm console connect HongKong-CLU2
+Connecting to console on HongKong-CLU2.  Use ^]-x to exit or ^]-h for help.
+[connecting]
+[connected]
+
+login: admin
+Password:
+HongKong-CLU2::> set -privilegeADV
+
+Error: invalid argument "-privilegeADV"
+HongKong-CLU2::> set -privilege adv
+
+Warning: These advanced commands are potentially dangerous; use them only when
+         directed to do so by NetApp personnel.
+Do you want to continue? {y|n}: y
+
+HongKong-CLU2::*> ?
+  up                          Go up one directory
+  cluster>                    Manage clusters
+  dashboard>                  Display dashboards
+  event>                      Manage system events
+  exit                        Quit the CLI session
+  history                     Show the history of commands for this CLI session
+  job>                        Manage jobs and job schedules
+  lun>                        Manage LUNs
+  man                         Display the on-line manual pages
+  network>                    Manage physical and virtual network connections
+  qos>                        QoS settings
+  redo                        Execute a previous command
+  rows                        Show/Set the rows for this CLI session
+  run                         Run interactive or non-interactive commands in
+                              the node shell
+  security>                   The security directory
+  set                         Display/Set CLI session settings
+  sis                         Manage volume efficiency
+  snapmirror>                 Manage SnapMirror
+  statistics>                 Display operational statistics
+  storage>                    Manage physical storage, including disks,
+                              aggregates, and failover
+  system>                     The system directory
+  top                         Go to the top-level directory
+  volume>                     Manage virtual storage, including volumes,
+                              snapshots, and mirrors
+  vserver>                    Manage Vservers
+
+HongKong-CLU2::*> system
+
+HongKong-CLU2::system*> >?
+
+Error: ">" is not a recognized command
+
+HongKong-CLU2::system*> ?
+  configuration>              *Manage configuration backup and recovery
+  health>                     System Health Management and Diagnosis commands
+  license>                    Manage licenses
+  node>                       The node directory
+  script>                     Capture CLI session to a file for later upload.
+                              Analogous to the unix 'script' command
+  services>                   Manage system services
+  smtape>                     Manage SMTape operations
+  snmp>                       The snmp directory
+  timeout>                    Manage the timeout value for CLI sessions
+
+HongKong-CLU2::system*> configuration
+
+HongKong-CLU2::system configuration*> ?
+  backup>                     *Configuration Backup
+  recovery>                   *Configuration Recovery
+
+HongKong-CLU2::system configuration*> backup ?
+  copy                        *Copy a configuration backup
+  create                      *Create a configuration backup
+  delete                      *Delete a configuration backup
+  download                    *Download a configuration backup
+  rename                      *Rename a configuration backup
+  settings>                   *The settings directory
+  show                        *Show configuration backup information
+  upload                      *Upload a configuration backup
+
+HongKong-CLU2::system configuration*> backup
+
+HongKong-CLU2::system configuration backup*> create ?
+   [-node] <nodename>              *Node
+  [[-backup-name] <text>]          *Backup Name
+  [ -backup-type {node|cluster} ]  *Backup Type (default: cluster)
+
+HongKong-CLU2::system configuration backup*> create -node ?
+  HongKong_Node2
+
+HongKong-CLU2::system configuration backup*> create -node HongKong_Node2 -Backup-
+    -backup-name -backup-type
+HongKong-CLU2::system configuration backup*> create -node HongKong_Node2 -Backup-Name Before_HeadSwap
+[Job 365] Job is queued: Cluster Backup OnDemand Job.
+
+HongKong-CLU2::system configuration backup*> show
+Node       Backup Name                               Time               Size
+---------  ----------------------------------------- ------------------ -----
+HongKong_Node2
+           HongKong-CLU2.8hour.2016-01-28.18_15_00.7z
+                                                     01/28 18:15:00     17.95MB
+HongKong_Node2
+           HongKong-CLU2.8hour.2016-01-29.02_15_00.7z
+                                                     01/29 02:15:00     18.20MB
+HongKong_Node2
+           HongKong-CLU2.daily.2016-01-28.00_10_00.7z
+                                                     01/28 00:10:00     18.36MB
+HongKong_Node2
+           HongKong-CLU2.daily.2016-01-29.00_10_07.7z
+                                                     01/29 00:10:07     18.13MB
+HongKong_Node2
+           HongKong-CLU2.weekly.2016-01-17.00_15_00.7z
+                                                     01/17 00:15:00     15.94MB
+HongKong_Node2
+           HongKong-CLU2.weekly.2016-01-24.00_15_00.7z
+                                                     01/24 00:15:00     17.20MB
+HongKong_Node2
+           test.7z                                   01/27 20:54:34     17.85MB
+7 entries were displayed.
+
+HongKong-CLU2::system configuration backup*> ?
+  copy                        *Copy a configuration backup
+  create                      *Create a configuration backup
+  delete                      *Delete a configuration backup
+  download                    *Download a configuration backup
+  rename                      *Rename a configuration backup
+  settings>                   *The settings directory
+  show                        *Show configuration backup information
+  upload                      *Upload a configuration backup
+
+HongKong-CLU2::system configuration backup*> show
+Node       Backup Name                               Time               Size
+---------  ----------------------------------------- ------------------ -----
+HongKong_Node2
+           HongKong-CLU2.8hour.2016-01-28.18_15_00.7z
+                                                     01/28 18:15:00     17.95MB
+HongKong_Node2
+           HongKong-CLU2.8hour.2016-01-29.02_15_00.7z
+                                                     01/29 02:15:00     18.20MB
+HongKong_Node2
+           HongKong-CLU2.daily.2016-01-28.00_10_00.7z
+                                                     01/28 00:10:00     18.36MB
+HongKong_Node2
+           HongKong-CLU2.daily.2016-01-29.00_10_07.7z
+                                                     01/29 00:10:07     18.13MB
+HongKong_Node2
+           HongKong-CLU2.weekly.2016-01-17.00_15_00.7z
+                                                     01/17 00:15:00     15.94MB
+HongKong_Node2
+           HongKong-CLU2.weekly.2016-01-24.00_15_00.7z
+                                                     01/24 00:15:00     17.20MB
+HongKong_Node2
+           test.7z                                   01/27 20:54:34     17.85MB
+7 entries were displayed.
+
+HongKong-CLU2::system configuration backup*> show
+Node       Backup Name                               Time               Size
+---------  ----------------------------------------- ------------------ -----
+HongKong_Node2
+           HongKong-CLU2.8hour.2016-01-28.18_15_00.7z
+                                                     01/28 18:15:00     17.95MB
+HongKong_Node2
+           HongKong-CLU2.8hour.2016-01-29.02_15_00.7z
+                                                     01/29 02:15:00     18.20MB
+HongKong_Node2
+           HongKong-CLU2.daily.2016-01-28.00_10_00.7z
+                                                     01/28 00:10:00     18.36MB
+HongKong_Node2
+           HongKong-CLU2.daily.2016-01-29.00_10_07.7z
+                                                     01/29 00:10:07     18.13MB
+HongKong_Node2
+           HongKong-CLU2.weekly.2016-01-17.00_15_00.7z
+                                                     01/17 00:15:00     15.94MB
+HongKong_Node2
+           HongKong-CLU2.weekly.2016-01-24.00_15_00.7z
+                                                     01/24 00:15:00     17.20MB
+HongKong_Node2
+           test.7z                                   01/27 20:54:34     17.85MB
+7 entries were displayed.
+
+HongKong-CLU2::system configuration backup*> show
+Node       Backup Name                               Time               Size
+---------  ----------------------------------------- ------------------ -----
+HongKong_Node2
+           HongKong-CLU2.8hour.2016-01-28.18_15_00.7z
+                                                     01/28 18:15:00     17.95MB
+HongKong_Node2
+           HongKong-CLU2.8hour.2016-01-29.02_15_00.7z
+                                                     01/29 02:15:00     18.20MB
+HongKong_Node2
+           HongKong-CLU2.daily.2016-01-28.00_10_00.7z
+                                                     01/28 00:10:00     18.36MB
+HongKong_Node2
+           HongKong-CLU2.daily.2016-01-29.00_10_07.7z
+                                                     01/29 00:10:07     18.13MB
+HongKong_Node2
+           HongKong-CLU2.weekly.2016-01-17.00_15_00.7z
+                                                     01/17 00:15:00     15.94MB
+HongKong_Node2
+           HongKong-CLU2.weekly.2016-01-24.00_15_00.7z
+                                                     01/24 00:15:00     17.20MB
+HongKong_Node2
+           test.7z                                   01/27 20:54:34     17.85MB
+7 entries were displayed.
+
+HongKong-CLU2::system configuration backup*>
+HongKong-CLU2::system configuration backup*> show
+Node       Backup Name                               Time               Size
+---------  ----------------------------------------- ------------------ -----
+HongKong_Node2
+           Before_HeadSwap.7z                        01/29 02:35:37     18.21MB
+HongKong_Node2
+           HongKong-CLU2.8hour.2016-01-28.18_15_00.7z
+                                                     01/28 18:15:00     17.95MB
+HongKong_Node2
+           HongKong-CLU2.8hour.2016-01-29.02_15_00.7z
+                                                     01/29 02:15:00     18.20MB
+HongKong_Node2
+           HongKong-CLU2.daily.2016-01-28.00_10_00.7z
+                                                     01/28 00:10:00     18.36MB
+HongKong_Node2
+           HongKong-CLU2.daily.2016-01-29.00_10_07.7z
+                                                     01/29 00:10:07     18.13MB
+HongKong_Node2
+           HongKong-CLU2.weekly.2016-01-17.00_15_00.7z
+                                                     01/17 00:15:00     15.94MB
+HongKong_Node2
+           HongKong-CLU2.weekly.2016-01-24.00_15_00.7z
+                                                     01/24 00:15:00     17.20MB
+HongKong_Node2
+           test.7z                                   01/27 20:54:34     17.85MB
+8 entries were displayed.
+
+HongKong-CLU2::system configuration backup*> upload ?
+   [-node] <nodename>         *Node
+   [-backup] <text>           *Backup Name
+   [-destination] <text>      *Destination URL
+
+HongKong-CLU2::system configuration backup*> upload -node ?
+  HongKong_Node2
+
+HongKong-CLU2::system configuration backup*> upload -node HongKong_Node2 -backup ?
+  <text>                      Backup Name
+
+HongKong-CLU2::system configuration backup*> upload -node HongKong_Node2 -backup Before_HeadSwap.7z -destination ftp://172.22.45.71
+
+Enter the username: ftp
+Enter the password:
+Uploading the configuration backup file.
+100% uploaded
+Configuration backup file uploaded successfully.
+
+
+HongKong-CLU2::system configuration backup*> exit
+Goodbye
+
+
+login:
+dvadmin host wfwhkvm02.wfw.com> vm stop HongKong-CLU2
+stop VM HongKong-CLU2
+dvadmin host wfwhkvm02.wfw.com> exit
+Logging out wfw\adm_vmware@172.22.10.58
+
+
+Do you want to use saved login information ("wfw\adm_vmware"@"172.22.10.58")? [y]: n
+Is the ESX host managed by a vCenter server? [y]:
+Enter vCenter server name or IP address: 172.22.10.58
+Enter ESX host name or IP address (optional): wfwhkvm04.wfw.com
+Enter vCenter server username: wfw\adm_vmware
+Enter vCenter server password:
+Do you want to save this vCenter server login information [y]:
+
+
+NetApp Data ONTAP-v Administration Tool 1.2.2
+Copyright (C) 1992-2015 NetApp.
+All rights reserved.
+Logging in wfw\adm_vmware@172.22.10.58
+VMware SDK version: 5.0
+Console escape key: ^]
+Installer Version: 8.2.3.122
+ESX License: VMware vSphere 5 Enterprise
+dvadmin host wfwhkvm04.wfw.com> show pool
+Error: [12] UsageErr
+Usage: show [hostname]
+Show host information
+dvadmin host wfwhkvm04.wfw.com> pool show
+Pool Name                       Type   Access    Capacity (MB)   Available (MB)  Backing Store
+OLDFILER_HK_VM_C                NFS    Online           294912           116011  datastore-3996
+OLDFILER_HK_VM_D                NFS    Online           153600            52834  datastore-3997
+OLDFILER_HK_VM_E                NFS    Online           294912           165923  datastore-3998
+BACKUP                          VMFS   Online          2566400           404038  DELL Serial Attached SCSI Disk (naa.644a84200a9294001dd7bd70bed9e827)
+ONTAP_EDGE_VM_C                 NFS    Offline           291840           281680  datastore-4235
+ONTAP_EDGE_VM_D                 NFS    Offline           145920           145917  datastore-4261
+ONTAP_EDGE_VM_E                 NFS    Offline           291840           291837  datastore-4262
+NFS_VM_C                        NFS    Online           164864            72132  datastore-478
+NFS_VM_E                        NFS    Online           188416           188335  datastore-479
+NFS_VM_D                        NFS    Online            28672            28654  datastore-481
+wfwhkvm04:storage1              VMFS   Online           277760           276787  Local DELL Disk (naa.61418770318b82001e06c94b1016733c)
+dvadmin host wfwhkvm04.wfw.com> network show
+Network Name               Virtual Switch
+ONTAP Edge Network         vSwitch0 (47)
+VM Network                 vSwitch0 (45)
+dvadmin host wfwhkvm04.wfw.com> vm create HongKong-CLU02 --headswap BACKUP BACKUP "ONTAP Edge Network" license=5F05-YZDH-0MJ0-54G8-J7FC
+
+Error: [13] InvalidArg: <pool_name> invalid - no storage pool named '--headswap'
+Usage: create [--headswap] <vm_name> <pool_name> <nv_pool_name> <root_aggr_pool_name>* <network_name> <props>
+        * - Valid for clustered Data ONTAP-v VM only
+Create Data ONTAP-v virtual machine.
+dvadmin host wfwhkvm04.wfw.com>
+dvadmin host wfwhkvm04.wfw.com> vm create --headswap HongKong-CLU02 BACKUP BACKUP BACKUP "ONTAP Edge Network" license=5F05-YZDH-0MJ0-54G8-J7FC
+Error: [13] InvalidArg: <network_name> invalid - no network named 'BACKUP'
+Usage: create [--headswap] <vm_name> <pool_name> <nv_pool_name> <root_aggr_pool_name>* <network_name> <props>
+        * - Valid for clustered Data ONTAP-v VM only
+Create Data ONTAP-v virtual machine.
+dvadmin host wfwhkvm04.wfw.com> vm create --headswap HongKong-CLU02 BACKUP BACKUP "ONTAP Edge Network" license=5F05-YZDH-0MJ0-54G8-J7FC
+Extracting and validating OVF package contents.
+Creating VM HongKong-CLU02 on wfwhkvm04.wfw.com.
+Uploading disks to VM HongKong-CLU02
+Marked VM disks independent-persistent
+Added serial console and gdb ports
+Created VM HongKong-CLU02 on host wfwhkvm04.wfw.com.
+dvadmin host wfwhkvm04.wfw.com> vm prop show HongKong-CLU02
+license = 5F05-YZDH-0MJ0-54G8-J7FC
+nodemgmt_interface = 1
+systemconfigbackup_destination = ftp://172.22.45.103
+systemconfigbackup_password = ***
+systemconfigbackup_username = ftp
+vsphere_hostname = 172.22.45.222
+dvadmin host wfwhkvm04.wfw.com> vm disk show HongKong-CLU02
+Disk Name              Ctrl:Unit  Size (MB)   UUID                                     Backing
+Hard disk 1            ide0:0     1057        -                                        BACKUP
+Hard disk 2            ide0:1     1542        -                                        BACKUP
+Hard disk 3            ide1:0     5121        -                                        BACKUP
+dvadmin host wfwhkvm04.wfw.com> vm prop set HongKong-CLU02 checksum_type = zoned
+Error: [13] InvalidArg: property 'checksum_type' invalid - bad definition
+Usage: set <vm_name> [prop_name=val]+
+Set virtual machine properties.
+dvadmin host wfwhkvm04.wfw.com> vm prop set HongKong-CLU02 checksum_type=zoned
+Set checksum_type = zoned
+dvadmin host wfwhkvm04.wfw.com> vm prop set HongKong-CLU02 clustermgmt_gateway=172.22.47.248
+vm prop set HongKong-CLU02 clustermgmt_interface=1
+vm prop set HongKong-CLU02 clustermgmt_ipaddr=172.22.47.23
+vm prop set HongKong-CLU02 clustermgmt_netmask=255.255.255.0
+vm prop set HongKong-CLU02 clustername=HongKong-CLU2
+vm prop set HongKong-CLU02 dns_domainname=wfw.com
+vm prop set HongKong-CLU02 dns_ipaddr=172.22.45.233,10.103.1.1,10.102.1.1
+vm prop set HongKong-CLU02 nodemgmt_gateway=172.22.47.248
+vm prop set HongKong-CLU02 nodename=HongKong_Node2
+vm prop set HongKong-CLU02 nodemgmt_ipaddr=172.22.47.24
+vm prop set HongKong-CLU02 nodemgmt_netmask=255.255.255.0
+vm prop set HongKong-CLU02 nodemgmt_interface=1
+Set clustermgmt_gateway = 172.22.47.248
+dvadmin host wfwhkvm04.wfw.com> vm prop set HongKong-CLU02 clustermgmt_interface=1
+Set clustermgmt_interface = 1
+dvadmin host wfwhkvm04.wfw.com> vm prop set HongKong-CLU02 clustermgmt_ipaddr=172.22.47.23
+Set clustermgmt_ipaddr = 172.22.47.23
+dvadmin host wfwhkvm04.wfw.com> vm prop set HongKong-CLU02 clustermgmt_netmask=255.255.255.0
+Set clustermgmt_netmask = 255.255.255.0
+dvadmin host wfwhkvm04.wfw.com> vm prop set HongKong-CLU02 clustername=HongKong-CLU2
+Set clustername = HongKong-CLU2
+dvadmin host wfwhkvm04.wfw.com> vm prop set HongKong-CLU02 dns_domainname=wfw.com
+Set dns_domainname = wfw.com
+Warning: dns_ipaddr property not set.
+dvadmin host wfwhkvm04.wfw.com> vm prop set HongKong-CLU02 dns_ipaddr=172.22.45.233,10.103.1.1,10.102.1.1
+Set dns_ipaddr = 172.22.45.233,10.103.1.1,10.102.1.1
+dvadmin host wfwhkvm04.wfw.com> vm prop set HongKong-CLU02 nodemgmt_gateway=172.22.47.248
+Set nodemgmt_gateway = 172.22.47.248
+dvadmin host wfwhkvm04.wfw.com> vm prop set HongKong-CLU02 nodename=HongKong_Node2
+Error: [13] InvalidArg: property 'nodename' invalid - bad value
+Usage: set <vm_name> [prop_name=val]+
+Set virtual machine properties.
+dvadmin host wfwhkvm04.wfw.com> vm prop set HongKong-CLU02 nodemgmt_ipaddr=172.22.47.24
+Set nodemgmt_ipaddr = 172.22.47.24
+dvadmin host wfwhkvm04.wfw.com> vm prop set HongKong-CLU02 nodemgmt_netmask=255.255.255.0
+Set nodemgmt_netmask = 255.255.255.0
+dvadmin host wfwhkvm04.wfw.com> vm prop set HongKong-CLU02 nodemgmt_interface=1
+Set nodemgmt_interface = 1 (1)
+dvadmin host wfwhkvm04.wfw.com> vm prop show HongKong-CLU02
+checksum_type = zoned
+clustermgmt_gateway = 172.22.47.248
+clustermgmt_interface = 1
+clustermgmt_ipaddr = 172.22.47.23
+clustermgmt_netmask = 255.255.255.0
+clustername = HongKong-CLU2
+dns_domainname = wfw.com
+dns_ipaddr = 172.22.45.233,10.103.1.1,10.102.1.1
+nodemgmt_gateway = 172.22.47.248
+nodemgmt_ipaddr = 172.22.47.24
+license = 5F05-YZDH-0MJ0-54G8-J7FC
+nodemgmt_netmask = 255.255.255.0
+nodemgmt_interface = 1
+systemconfigbackup_destination = ftp://172.22.45.103
+systemconfigbackup_password = ***
+systemconfigbackup_username = ftp
+vsphere_hostname = 172.22.45.222
+dvadmin host wfwhkvm04.wfw.com> vm prop set HongKong-CLU02 clustermgmt_gateway=172.22.47.254
+Set clustermgmt_gateway = 172.22.47.254 (172.22.47.248)
+dvadmin host wfwhkvm04.wfw.com> vm prop set HongKong-CLU02 nodemgmt_gateway=172.22.47.254
+Set nodemgmt_gateway = 172.22.47.254 (172.22.47.248)
+dvadmin host wfwhkvm04.wfw.com> vm prop show HongKong-CLU02
+checksum_type = zoned
+clustermgmt_gateway = 172.22.47.254
+clustermgmt_interface = 1
+clustermgmt_ipaddr = 172.22.47.23
+clustermgmt_netmask = 255.255.255.0
+clustername = HongKong-CLU2
+dns_domainname = wfw.com
+dns_ipaddr = 172.22.45.233,10.103.1.1,10.102.1.1
+nodemgmt_gateway = 172.22.47.254
+nodemgmt_ipaddr = 172.22.47.24
+license = 5F05-YZDH-0MJ0-54G8-J7FC
+nodemgmt_netmask = 255.255.255.0
+nodemgmt_interface = 1
+systemconfigbackup_destination = ftp://172.22.45.103
+systemconfigbackup_password = ***
+systemconfigbackup_username = ftp
+vsphere_hostname = 172.22.45.222
+dvadmin host wfwhkvm04.wfw.com> vm disk
+dvadmin host wfwhkvm04.wfw.com vm disk> ?
+create                  Create virtual machine disk
+destroy                 Destroy virtual machine disk
+exit                    Exit interpreter
+help                    Show possible commands and usage details
+history                 Show command history
+show                    Display virtual machine disks
+source                  Execute commands from a file
+status                  Display dvadmin status info
+up                      Go up one level
+dvadmin host wfwhkvm04.wfw.com vm disk> reassign
+Error: [14] CmdNotFound: no command starting with 'vm disk reassign'
+dvadmin host wfwhkvm04.wfw.com vm disk> priv
+Error: [14] CmdNotFound: no command starting with 'vm disk priv'
+dvadmin host wfwhkvm04.wfw.com vm disk> set ?
+Error: [14] CmdNotFound: no command starting with 'vm disk set'
+dvadmin host wfwhkvm04.wfw.com vm disk> ..
+dvadmin host wfwhkvm04.wfw.com> ?
+exit                    Exit interpreter
+help                    Show possible commands and usage details
+history                 Show command history
+network                 Commands for managing networks
+    show                Show available networks
+pdisk                   Commands for managing physical storage
+    show                Show available physical disks
+pool                    Commands for managing storage pools
+    create              Create a VMFS storage pool
+    destroy             Destroy a VMFS storage pool
+    show                Show available storage pools
+show                    Show host information
+source                  Execute commands from a file
+ssh                     Commands for managing ESX host SSH connection for fast vm coredumps
+    setup               Setup non-interactive SSH to ESX host
+    status              Test non-interactive SSH to ESX host
+status                  Display dvadmin status info
+support                 Support commands
+    show                Show system support information
+up                      Go up one level
+vm [vm_name]            Commands for managing virtual machines
+    config              Manipulate a Data ONTAP-v VM's ONTAP configuration
+        backup          Backup the VM's Data ONTAP configuration
+        remove          Remove the named backup configuration
+        restore         Restore the VM's Data ONTAP configuration
+        show            Display backed up Data ONTAP configurations for VM
+    console             Interact with the Data ONTAP-v system console
+        connect         Connect to the Data ONTAP-v system console
+        disconnect      Disconnect another session from the Data ONTAP-v system console
+        log             Manipulate Data ONTAP-v system console log file(s)
+            clear       Clear the current console log and rotate old logs
+            show        Print the Data ONTAP-v system console log
+    coredump            Cause Data ONTAP to dump core
+    create              Create Data ONTAP-v virtual machine.
+    destroy             Delete virtual machine
+    disk                Manipulate virtual machine disks
+        create          Create virtual machine disk
+        destroy         Destroy virtual machine disk
+        show            Display virtual machine disks
+    headswap            Reassign configuration from one VM to another for HeadSwap.
+    log                 Access Data ONTAP-v system log file
+        save            Save the Data ONTAP-v system log to a file
+        show            Print the Data ONTAP-v system log
+    monitor             Control virtual machine monitor monitors
+        log             Manipulate VM monitor logs
+            clear       Clear the current monitor log and rotate old logs
+            show        Display the log for a VM monitor
+        show            Show information about VM monitor(s)
+        start           Start a VM monitor
+        stop            Stop a VM monitor
+    network             Virtual machine network command(s)
+        connect         Connect virtual machine network interface
+        show            Display virtual machine network interfaces
+    prop                Manipulate virtual machine properties
+        set             Set virtual machine properties.
+        show            Display virtual machine properties
+        unset           Unset virtual machine properties
+    restart             Restart a running virtual machine
+    savecore            Save a crash dump of Data ONTAP
+    serial              Manipulate virtual machine serial ports
+        destroy         Destroy virtual machine serial port
+        show            Display virtual machine serial ports
+    setup               Start the VM create wizard
+    show                Display virtual machine details
+    start               Start running a virtual machine
+    state               Virtual machine state command(s)
+        show            Display virtual machine state
+    stop                Stop a running virtual machine
+    uuid                Manage VM UUID
+        show            Display VM UUID
+    wizard              Start the VM create wizard
+dvadmin host wfwhkvm04.wfw.com> vm disk
+dvadmin host wfwhkvm04.wfw.com vm disk> ?
+create                  Create virtual machine disk
+destroy                 Destroy virtual machine disk
+exit                    Exit interpreter
+help                    Show possible commands and usage details
+history                 Show command history
+show                    Display virtual machine disks
+source                  Execute commands from a file
+status                  Display dvadmin status info
+up                      Go up one level
+dvadmin host wfwhkvm04.wfw.com vm disk> help
+create                  Create virtual machine disk
+destroy                 Destroy virtual machine disk
+exit                    Exit interpreter
+help                    Show possible commands and usage details
+history                 Show command history
+show                    Display virtual machine disks
+source                  Execute commands from a file
+status                  Display dvadmin status info
+up                      Go up one level
+dvadmin host wfwhkvm04.wfw.com vm disk> vm headswap HongKong-CLU2 HongKong-CLU02
+Error: [14] CmdNotFound: no command starting with 'vm disk vm'
+dvadmin host wfwhkvm04.wfw.com vm disk> ..
+^[[Advadmin host wfwhkvm04.wfw.com> vm headswap HongKong-CLU2 HongKong-CLU02
+Reassigning data disks from 'HongKong-CLU2' to 'HongKong-CLU02'.
+Error: [89] VmDiskReassignErr: Failed to reassign disks
+dvadmin host wfwhkvm04.wfw.com> vm show
+VM Name                    Power  CfgState  Heartbeat  Hostname              IP Address
+WFWHKDM02_leave_off        off    -         -          WFWHKDM02.WFW.com     -
+WFWHKFS01                  on     -         green      WFWHKFS01.WFW.com     172.22.45.193
+WFWHKAPP02                 on     -         green      WFWHKAPP02.WFW.com    172.22.45.192
+WFWHKTRENDMG01             on     -         green      WFWHKTRENDMG01.WFW.com  172.22.45.191
+WFWHKPRX01                 on     -         green      WFWHKPRX01.WFW.com    172.22.45.190
+WFWHKIP01                  on     -         green      WFWHKIP01.WFW.COM     172.22.45.249
+WFWHKDC01                  on     -         green      WFWHKDC01.WFW.COM     172.22.45.233
+WFWHKAPP01                 on     -         green      WFWHKAPP01.WFW.com    172.22.45.235
+WFWHKRD01                  on     -         green      WFWHKRD01.WFW.com     172.22.45.220
+WFWHKONTAPV04              on     -         green      dataontapv-installer  172.22.45.103
+HongKong-CLU02             off    new       -          -                     -
+dvadmin host wfwhkvm04.wfw.com> vm show
+VM Name                    Power  CfgState  Heartbeat  Hostname              IP Address
+WFWHKDM02_leave_off        off    -         -          WFWHKDM02.WFW.com     -
+WFWHKFS01                  on     -         green      WFWHKFS01.WFW.com     172.22.45.193
+WFWHKAPP02                 on     -         green      WFWHKAPP02.WFW.com    172.22.45.192
+WFWHKTRENDMG01             on     -         green      WFWHKTRENDMG01.WFW.com  172.22.45.191
+WFWHKPRX01                 on     -         green      WFWHKPRX01.WFW.com    172.22.45.190
+HongKong-CLU2              off    ready     -          -                     -
+WFWHKIP01                  on     -         green      WFWHKIP01.WFW.COM     172.22.45.249
+WFWHKDC01                  on     -         green      WFWHKDC01.WFW.COM     172.22.45.233
+WFWHKAPP01                 on     -         green      WFWHKAPP01.WFW.com    172.22.45.235
+WFWHKRD01                  on     -         green      WFWHKRD01.WFW.com     172.22.45.220
+WFWHKONTAPV04              on     -         green      dataontapv-installer  172.22.45.103
+HongKong-CLU02             off    new       -          -                     -
+dvadmin host wfwhkvm04.wfw.com> vm headswap HongKong-CLU2 HongKong-CLU02
+Reassigning data disks from 'HongKong-CLU2' to 'HongKong-CLU02'.
+Error: [89] VmDiskReassignErr: Failed to reassign disks
+dvadmin host wfwhkvm04.wfw.com> vm headswap HongKong-CLU2 HongKong-CLU02
+Reassigning data disks from 'HongKong-CLU2' to 'HongKong-CLU02'.
+Error: [89] VmDiskReassignErr: Failed to reassign disks
+dvadmin host wfwhkvm04.wfw.com> vm headswap HongKong-CLU2 HongKong-CLU02
+Reassigning data disks from 'HongKong-CLU2' to 'HongKong-CLU02'.
+Done HeadSwap setup.
+dvadmin host wfwhkvm04.wfw.com> vm start HongKong-CLU02
+start VM HongKong-CLU02
+
+dvadmin host wfwhkvm04.wfw.com>
+dvadmin host wfwhkvm04.wfw.com> vm console connect HongKong-CLU02
+Connecting to console on HongKong-CLU02.  Use ^]-x to exit or ^]-h for help.
+[cannot connect]
+
+dvadmin host wfwhkvm04.wfw.com> vm console connect HongKong-CLU02
+Connecting to console on HongKong-CLU02.  Use ^]-x to exit or ^]-h for help.
+[cannot connect]
+
+dvadmin host wfwhkvm04.wfw.com> vm console connect HongKong-CLU02
+Connecting to console on HongKong-CLU02.  Use ^]-x to exit or ^]-h for help.
+[cannot connect]
+
+    x or X            exit console
+    h or H or ?       display this help text
+    ^] again          send ^] to console
+    anything else     sent to console
+
+dvadmin host wfwhkvm04.wfw.com> vm console connect HongKong-CLU02
+
+Connecting to console on HongKong-CLU02.  Use ^]-x to exit or ^]-h for help.
+[cannot connect]
+
+dvadmin host wfwhkvm04.wfw.com> vm console connect HongKong-CLU02
+Connecting to console on HongKong-CLU02.  Use ^]-x to exit or ^]-h for help.
+[cannot connect]
+
+dvadmin host wfwhkvm04.wfw.com> vm prop show HongKong-CLU)2
+^CError: [13] InvalidArg: <vm_name> invalid - no VM named 'HongKong-CLU)2'
+Usage: show <vm_name>
+Display virtual machine properties
+dvadmin host wfwhkvm04.wfw.com> vm prop show HongKong-CLU02
+checksum_type = zoned
+clustermgmt_gateway = 172.22.47.254
+clustermgmt_interface = 1
+clustermgmt_ipaddr = 172.22.47.23
+clustermgmt_netmask = 255.255.255.0
+clustername = HongKong-CLU2
+dns_domainname = wfw.com
+dns_ipaddr = 172.22.45.233,10.103.1.1,10.102.1.1
+nodemgmt_gateway = 172.22.47.254
+nodemgmt_ipaddr = 172.22.47.24
+license = 5F05-YZDH-0MJ0-54G8-J7FC
+nodemgmt_netmask = 255.255.255.0
+nodemgmt_interface = 1
+systemconfigbackup_destination = ftp://172.22.45.103
+systemconfigbackup_password = ***
+systemconfigbackup_username = ftp
+vsphere_hostname = 172.22.45.222
+dvadmin host wfwhkvm04.wfw.com> vm stop HongKong-CLU02
+stop VM HongKong-CLU02
+Error: [102] VmPowerErr: Cannot 'stop' VM 'HongKong-CLU02'.
+Error: VM is not responding, and could be (re)booting or shutting down.
+Error: Please try again later, or use '--force' to forcibly 'stop' the VM.
+dvadmin host wfwhkvm04.wfw.com> vm stop --force HongKong-CLU02
+forcibly stop VM HongKong-CLU02
+dvadmin host wfwhkvm04.wfw.com> vm start HongKong-CLU02
+start VM HongKong-CLU02
+dvadmin host wfwhkvm04.wfw.com> vm console connect HongKong-CLU02
+Connecting to console on HongKong-CLU02.  Use ^]-x to exit or ^]-h for help.
+[cannot connect]
+
+dvadmin host wfwhkvm04.wfw.com> vm stop --force HongKong-CLU02
+forcibly stop VM HongKong-CLU02
+dvadmin host wfwhkvm04.wfw.com>
+dvadmin host wfwhkvm04.wfw.com> vm prop set HongKong-CLU02 checksum_type=
+vm prop set HongKong-CLU02 clustermgmt_gateway=
+vm prop set HongKong-CLU02 clustermgmt_interface=
+vm prop set HongKong-CLU02 clustermgmt_ipaddr=
+vm prop set HongKong-CLU02 clustermgmt_netmask=
+vm prop set HongKong-CLU02 clustername=
+vm prop set HongKong-CLU02 dns_domainname=
+vm prop set HongKong-CLU02 dns_ipaddr=
+vm prop set HongKong-CLU02 nodemgmt_gateway=
+vm prop set HongKong-CLU02 nodename=
+vm prop set HongKong-CLU02 nodemgmt_ipaddr=
+vm prop set HongKong-CLU02 nodemgmt_netmask=
+vm prop set HongKong-CLU02 nodemgmt_interface=
+
+Error: [13] InvalidArg: property 'checksum_type=' invalid - bad definition
+Usage: set <vm_name> [prop_name=val]+
+Set virtual machine properties.
+dvadmin host wfwhkvm04.wfw.com> vm prop set HongKong-CLU02 clustermgmt_gateway=
+Error: [13] InvalidArg: property 'clustermgmt_gateway=' invalid - bad definition
+Usage: set <vm_name> [prop_name=val]+
+Set virtual machine properties.
+dvadmin host wfwhkvm04.wfw.com> vm prop set HongKong-CLU02 clustermgmt_interface=
+Error: [13] InvalidArg: property 'clustermgmt_interface=' invalid - bad definition
+Usage: set <vm_name> [prop_name=val]+
+Set virtual machine properties.
+dvadmin host wfwhkvm04.wfw.com> vm prop set HongKong-CLU02 clustermgmt_ipaddr=
+Error: [13] InvalidArg: property 'clustermgmt_ipaddr=' invalid - bad definition
+Usage: set <vm_name> [prop_name=val]+
+Set virtual machine properties.
+dvadmin host wfwhkvm04.wfw.com> vm prop set HongKong-CLU02 clustermgmt_netmask=
+^CError: [13] InvalidArg: property 'clustermgmt_netmask=' invalid - bad definition
+Usage: set <vm_name> [prop_name=val]+
+Set virtual machine properties.
+dvadmin host wfwhkvm04.wfw.com>
+dvadmin host wfwhkvm04.wfw.com> vm ]
+Error: [13] InvalidArg: <vm_name> invalid - no VM named ']'
+Usage: vm [vm_name]
+Commands for managing virtual machines
+dvadmin host wfwhkvm04.wfw.com> vm
+dvadmin host wfwhkvm04.wfw.com vm> prop
+dvadmin host wfwhkvm04.wfw.com vm prop> ?
+exit                    Exit interpreter
+help                    Show possible commands and usage details
+history                 Show command history
+set                     Set virtual machine properties.
+show                    Display virtual machine properties
+source                  Execute commands from a file
+status                  Display dvadmin status info
+unset                   Unset virtual machine properties
+up                      Go up one level
+dvadmin host wfwhkvm04.wfw.com vm prop> vm prop unset HongKong-CLU02 checksum_type
+Error: [14] CmdNotFound: no command starting with 'vm prop vm'
+dvadmin host wfwhkvm04.wfw.com vm prop> vm prop unset HongKong-CLU02 clustermgmt_gateway
+Error: [14] CmdNotFound: no command starting with 'vm prop vm'
+dvadmin host wfwhkvm04.wfw.com vm prop> vm prop unset HongKong-CLU02 clustermgmt_interface
+Error: [14] CmdNotFound: no command starting with 'vm prop vm'
+dvadmin host wfwhkvm04.wfw.com vm prop> vm prop unset HongKong-CLU02 clustermgmt_ipaddr
+Error: [14] CmdNotFound: no command starting with 'vm prop vm'
+dvadmin host wfwhkvm04.wfw.com vm prop> vm prop unset HongKong-CLU02 clustermgmt_netmask
+Error: [14] CmdNotFound: no command starting with 'vm prop vm'
+dvadmin host wfwhkvm04.wfw.com vm prop> vm prop unset HongKong-CLU02 clustername
+Error: [14] CmdNotFound: no command starting with 'vm prop vm'
+dvadmin host wfwhkvm04.wfw.com vm prop> vm prop unset HongKong-CLU02 dns_domainname
+Error: [14] CmdNotFound: no command starting with 'vm prop vm'
+dvadmin host wfwhkvm04.wfw.com vm prop> vm prop unset HongKong-CLU02 dns_ipaddr
+Error: [14] CmdNotFound: no command starting with 'vm prop vm'
+dvadmin host wfwhkvm04.wfw.com vm prop> vm prop unset HongKong-CLU02 nodemgmt_gateway
+Error: [14] CmdNotFound: no command starting with 'vm prop vm'
+dvadmin host wfwhkvm04.wfw.com vm prop> vm prop unset HongKong-CLU02 nodename
+Error: [14] CmdNotFound: no command starting with 'vm prop vm'
+dvadmin host wfwhkvm04.wfw.com vm prop> vm prop unset HongKong-CLU02 nodemgmt_ipaddr
+Error: [14] CmdNotFound: no command starting with 'vm prop vm'
+dvadmin host wfwhkvm04.wfw.com vm prop> vm prop unset HongKong-CLU02 nodemgmt_netmask
+Error: [14] CmdNotFound: no command starting with 'vm prop vm'
+dvadmin host wfwhkvm04.wfw.com vm prop> vm prop unset HongKong-CLU02 nodemgmt_interface
+Error: [14] CmdNotFound: no command starting with 'vm prop vm'
+dvadmin host wfwhkvm04.wfw.com vm prop> show HongKong-CLU02
+checksum_type = zoned
+clustermgmt_gateway = 172.22.47.254
+clustermgmt_interface = 1
+clustermgmt_ipaddr = 172.22.47.23
+clustermgmt_netmask = 255.255.255.0
+clustername = HongKong-CLU2
+dns_domainname = wfw.com
+dns_ipaddr = 172.22.45.233,10.103.1.1,10.102.1.1
+nodemgmt_gateway = 172.22.47.254
+nodemgmt_ipaddr = 172.22.47.24
+license = 5F05-YZDH-0MJ0-54G8-J7FC
+nodemgmt_netmask = 255.255.255.0
+nodemgmt_interface = 1
+systemconfigbackup_destination = ftp://172.22.45.103
+systemconfigbackup_password = ***
+systemconfigbackup_username = ftp
+vsphere_hostname = 172.22.45.222
+dvadmin host wfwhkvm04.wfw.com vm prop> set vsphere_username=wfw\adm_vmware
+Error: [12] UsageErr
+Usage: set <vm_name> [prop_name=val]+
+Set virtual machine properties.
+dvadmin host wfwhkvm04.wfw.com vm prop> set HongKong-CLU02 vsphere_username=wfw\adm_vmware
+Error: [15] CmdFailed: Cannot set/change property, VM 'HongKong-CLU02' is in 'ready' state
+dvadmin host wfwhkvm04.wfw.com vm prop> ..
+dvadmin host wfwhkvm04.wfw.com vm> show
+VM Name                    Power  CfgState  Heartbeat  Hostname              IP Address
+WFWHKDM02_leave_off        off    -         -          WFWHKDM02.WFW.com     -
+WFWHKFS01                  on     -         green      WFWHKFS01.WFW.com     172.22.45.193
+WFWHKAPP02                 on     -         green      WFWHKAPP02.WFW.com    172.22.45.192
+WFWHKTRENDMG01             on     -         green      WFWHKTRENDMG01.WFW.com  172.22.45.191
+WFWHKPRX01                 on     -         green      WFWHKPRX01.WFW.com    172.22.45.190
+HongKong-CLU2              off    ready     -          -                     -
+WFWHKIP01                  on     -         green      WFWHKIP01.WFW.COM     172.22.45.249
+WFWHKDC01                  on     -         green      WFWHKDC01.WFW.COM     172.22.45.233
+WFWHKAPP01                 on     -         green      WFWHKAPP01.WFW.com    172.22.45.235
+WFWHKRD01                  on     -         green      WFWHKRD01.WFW.com     172.22.45.220
+WFWHKONTAPV04              on     -         green      dataontapv-installer  172.22.45.103
+dvadmin host wfwhkvm04.wfw.com vm> show
+VM Name                    Power  CfgState  Heartbeat  Hostname              IP Address
+WFWHKDM02_leave_off        off    -         -          WFWHKDM02.WFW.com     -
+WFWHKFS01                  on     -         green      WFWHKFS01.WFW.com     172.22.45.193
+WFWHKAPP02                 on     -         green      WFWHKAPP02.WFW.com    172.22.45.192
+WFWHKTRENDMG01             on     -         green      WFWHKTRENDMG01.WFW.com  172.22.45.191
+WFWHKPRX01                 on     -         green      WFWHKPRX01.WFW.com    172.22.45.190
+HongKong-CLU2              off    ready     -          -                     -
+WFWHKIP01                  on     -         green      WFWHKIP01.WFW.COM     172.22.45.249
+WFWHKDC01                  on     -         green      WFWHKDC01.WFW.COM     172.22.45.233
+WFWHKAPP01                 on     -         green      WFWHKAPP01.WFW.com    172.22.45.235
+WFWHKRD01                  on     -         green      WFWHKRD01.WFW.com     172.22.45.220
+WFWHKONTAPV04              on     -         green      dataontapv-installer  172.22.45.103
+HongKong-CLU02             off    ready     -          -                     -
+dvadmin host wfwhkvm04.wfw.com vm> vm start HongKong-CLU02
+Error: [14] CmdNotFound: no command starting with 'vm vm'
+dvadmin host wfwhkvm04.wfw.com vm> start HongKong-CLU02
+start VM HongKong-CLU02
+dvadmin host wfwhkvm04.wfw.com vm> console connect HongKong-CLU02
+Connecting to console on HongKong-CLU02.  Use ^]-x to exit or ^]-h for help.
+[connecting]
+[connected]
+Jan 28 20:58:01 [localhost:snmp.link.up:info]: Interface 6 is up
+Jan 28 20:58:01 [localhost:netif.linkUp:info]: Ethernet e0f: Link up.
+Jan 28 20:58:01 [localhost:snmp.link.up:info]: Interface 5 is up
+Jan 28 20:58:01 [localhost:netif.linkUp:info]: Ethernet e0e: Link up.
+Jan 28 20:58:01 [localhost:snmp.link.up:info]: Interface 4 is up
+Jan 28 20:58:01 [localhost:netif.linkUp:info]: Ethernet e0d: Link up.
+Jan 28 20:58:01 [localhost:snmp.link.up:info]: Interface 3 is up
+Jan 28 20:58:01 [localhost:netif.linkUp:info]: Ethernet e0c: Link up.
+Jan 28 20:58:01 [localhost:snmp.link.up:info]: Interface 2 is up
+Jan 28 20:58:01 [localhost:netif.linkUp:info]: Ethernet e0b: Link up.
+Jan 28 20:58:01 [localhost:snmp.link.up:info]: Interface 1 is up
+Jan 28 20:58:01 [localhost:netif.linkUp:info]: Ethernet e0a: Link up.
+Jan 28 20:58:01 [localhost:diskown.isEnabled:info]: software ownership has been enabled for this system
+route add: bad address: gw 127.0.20.1 equal to destination 127.0.20.1.
+add host 127.0.10.1: gateway 127.0.20.1
+WAFL CPLEDGER is enabled. Checklist = 0x7ff841ff
+
+Jan 28 20:58:01 [localhost:wafl.memory.status:info]: 5170MB of memory is currently available for the WAFL file system.
+Jan 28 20:58:01 [localhost:dcs.framework.enabled:info]: The DCS framework is enabled on this node.
+WARNING: 0 disks found!
+
+Storage Adapters found:
+0 Fibre Channel Storage Adapters found!
+4 SAS Adapters found!
+0 Parallel SCSI Storage Adapters found!
+0 ATA Adapters found!
+
+Target Adapters found:
+0 Fibre Channel Target Adapters found!
+1 iSCSI Target Adapters found!
+1 Unknown Target Adapters found!
+
+Check that disks have been assigned ownership to this system (ID 2147486734) using the 'disk show' and 'disk assign'
+commands from maintenance mode.
+
+WARNING: there do not appear to be any disks attached to the system.
+No root volume found.
+Rebooting... (press ctrl-c during boot to break reboot loop)
+Uptime: 27s
+System rebooting...
+/
+Hit [Enter] to boot immediately, or any other key for command prompt.
+Booting in 1 second...
+
+Type '?' for a list of commands, 'help' for more detailed help.
+VLOADER> boot_ontap
+x86_64/freebsd/image1/kernel data=0x921710+0x3db888 syms=[0x8+0x45300+0x8+0x2e834]
+x86_64/freebsd/image1/platform.ko size 0x2b0a48 at 0xe71000
+NetApp Data ONTAP 8.2.3 Cluster-Mode
+Copyright (C) 1992-2015 NetApp.
+All rights reserved.
+Checking boot device filesystem
+** /dev/ad0s2
+** Phase 1 - Read and Compare FATs
+** Phase 2 - Check Cluster Chains
+** Phase 3 - Checking Directories
+** Phase 4 - Checking for Lost Files
+42 files, 511536 free (31971 clusters)
+MARK FILE SYSTEM CLEAN? yes
+MARKING FILE SYSTEM CLEAN
+Retry #1 of 5: /sbin/fsck_msdosfs /dev/ad0s2
+Retry #2 of 5: /sbin/fsck_msdosfs /dev/ad0s2
+Repaired boot device filesystem
+md1.uzip: 39168 x 16384 blocks
+md2.uzip: 5760 x 16384 blocks
+*******************************
+*                             *
+* Press Ctrl-C for Boot Menu. *
+*                             *
+*******************************
+/dev/ad1s1: LINK COUNT FILE I=13  OWNER=0 MODE=100644
+/dev/ad1s1: SIZE=965 MTIME=Jan 28 20:58 2016  COUNT 2 SHOULD BE 1 (ADJUSTED)
+/dev/ad1s1: LINK COUNT DIR I=579  OWNER=0 MODE=40755
+/dev/ad1s1: SIZE=512 MTIME=Jan 16 05:24 2015  COUNT 3 SHOULD BE 6
+/dev/ad1s1: LINK COUNT INCREASING
+/dev/ad1s1: UNEXPECTED INCONSISTENCY; RUN fsck MANUALLY.
+ERROR: /var filesystem device(/dev/ad1s1) failed fsck
+
+dump_nvram_varfs: dumping /dev/ad1s1 varfs to /cfcard/cores/var_M57c...
+^C11024+0 records in
+11024+0 records out
+5644288 bytes transferred in 1.298210 secs (4347746 bytes/sec)
+Boot Menu will be available.
+
+Please choose one of the following:
+
+(1) Normal Boot.
+(2) Boot without /etc/rc.
+(3) Change password.
+(4) Clean configuration and initialize all disks.
+(5) Maintenance mode boot.
+(6) Update flash from backup config.
+(7) Install new software first.
+(8) Reboot node.
+Selection (1-8)? 5
+Jan 28 20:59:43 [localhost:diskown.isEnabled:info]: software ownership has been enabled for this system
+route add: bad address: gw 127.0.20.1 equal to destination 127.0.20.1.
+add host 127.0.10.1: gateway 127.0.20.1
+Jan 28 20:59:43 [localhost:snmp.link.up:info]: Interface 6 is up
+Jan 28 20:59:43 [localhost:netif.linkUp:info]: Ethernet e0f: Link up.
+Jan 28 20:59:43 [localhost:snmp.link.up:info]: Interface 5 is up
+Jan 28 20:59:43 [localhost:netif.linkUp:info]: Ethernet e0e: Link up.
+Jan 28 20:59:43 [localhost:snmp.link.up:info]: Interface 4 is up
+Jan 28 20:59:43 [localhost:netif.linkUp:info]: Ethernet e0d: Link up.
+Jan 28 20:59:43 [localhost:snmp.link.up:info]: Interface 3 is up
+Jan 28 20:59:43 [localhost:netif.linkUp:info]: Ethernet e0c: Link up.
+Jan 28 20:59:43 [localhost:snmp.link.up:info]: Interface 2 is up
+Jan 28 20:59:43 [localhost:netif.linkUp:info]: Ethernet e0b: Link up.
+Jan 28 20:59:43 [localhost:snmp.link.up:info]: Interface 1 is up
+Jan 28 20:59:43 [localhost:netif.linkUp:info]: Ethernet e0a: Link up.
+WAFL CPLEDGER is enabled. Checklist = 0x7ff841ff
+Jan 28 20:59:43 [localhost:wafl.memory.status:info]: 5190MB of memory is currently available for the WAFL file system.
+Jan 28 20:59:43 [localhost:dcs.framework.enabled:info]: The DCS framework is enabled on this node.
+5
+
+
+
+        You have selected the maintenance boot option:
+        the system has booted in maintenance mode allowing the
+Jan 28 20:59:43 [localhost:snmp.link.up:info]: Interface 7 is up
+Jan 28 20:59:43 [localhost:snmp.link.up:info]: Interface 8 is up
+Jan 28 20:59:43 [localhost:mgr.boot.reason_ok:notice]: System rebooted after a reboot command.
+Jan 28 20:59:43 [localhost:callhome.reboot.reboot:info]: Call home for REBOOT (reboot command)
+        following operations to be performed:
+
+        ?                       acorn
+        acpadmin                aggr
+        cna_flash               disk
+        disk_list               disk_mung
+        disk_qual               disk_shelf
+        diskcopy                disktest
+        dumpblock               environment
+        fcadmin                 fcstat
+        fctest                  fru_led
+        ha-config               halt
+        help                    ifconfig
+        key_manager             led_off
+        led_on                  nv8
+        raid_config             sasadmin
+        sasstat                 scsi
+        sesdiag                 sldiag
+        storage                 stsb
+        sysconfig               systemshell
+        ucadmin                 version
+        vmservices              vol
+        vol_db                  vsa
+        xortest
+
+        Type "help <command>" for more details.
+Jan 28 20:59:50 [localhost:acp.configWarn:debug]: Could not configure ACP administrator due to invalid Ethernet port in maintenance mode.
+WARNING: Giving up waiting for mroot
+
+
+
+
+
+Operation not allowed.
+
+Thu Jan 28 21:00:02 UTC 2016
+*> disk show -a
+Local System ID: 2147486734
+
+  DISK       OWNER                    POOL   SERIAL NUMBER         HOME                    DR HOME
+------------ -------------            -----  -------------         -------------           -------------
+0b.1         HongKong_Node2(2147486735)    Pool0  6000c29aae992f12978e8d65a83f9129  HongKong_Node2(2147486735)
+0b.0         HongKong_Node2(2147486735)    Pool0  6000c290ca337fed7affca5e618808ee  HongKong_Node2(2147486735)
+*> sysconfig
+Jan 28 21:02:55 [localhost:shelf.config.single:info]: System is using single path attached storage only.
+        NetApp Release 8.2.3 Cluster-Mode: Thu Jan 15 21:30:45 PST 2015
+        System ID: 2147486734 ()
+        System Serial Number: 2010000000192 ()
+        System Storage Configuration: Single Path
+        System ACP Connectivity: NA
+        slot 0: System Board
+                Model Name:         FDvM200
+                Processors:         2
+                Memory Size:        8192 MB
+                Memory Attributes:  None
+        slot 0: 10/100/1000 Ethernet Controller V
+                e0a MAC Address:    00:50:56:88:4e:6a (auto-1000t-fd-up)
+                e0b MAC Address:    00:50:56:88:33:89 (auto-1000t-fd-up)
+                e0c MAC Address:    00:50:56:88:0e:ff (auto-1000t-fd-up)
+                e0d MAC Address:    00:50:56:88:0f:78 (auto-1000t-fd-up)
+                e0e MAC Address:    00:50:56:88:75:2f (auto-1000t-fd-up)
+                e0f MAC Address:    00:50:56:88:4c:7e (auto-1000t-fd-up)
+        slot 0: ATA/IDE Adapter 0a (0x000001f0)
+                0a.2 VMware Virtual IDE Hard Drive   00000001 5121MB  512B/sect (10000000000000000001)
+                0a.1 VMware Virtual IDE Hard Drive   00000001 1542MB  512B/sect (01000000000000000001)
+                0a.0 VMware Virtual IDE Hard Drive   00000001 1057MB  512B/sect (00000000000000000001)
+        slot 0: SAS Host Adapter 0b
+                2 Disks:             2152.4GB
+        slot 0: SAS Host Adapter 0c
+        slot 0: SAS Host Adapter 0d
+        slot 0: SAS Host Adapter 0e
+*> disk reassign -s 2147486735 -d 2147486734
+Disk ownership will be updated on all disks previously belonging to Filer with sysid 2147486735.
+Do you want to continue (y/n)? y
+Jan 28 21:04:04 [localhost:sas.device.resetting:debug]: Resetting Disk device 0b.1 from adapter 0b.
+Jan 28 21:04:04 [localhost:sas.device.resetting:debug]: Resetting Disk device 0b.0 from adapter 0b.
+Jan 28 21:04:04 [localhost:diskown.changingOwner:info]: changing ownership for disk 0b.1 (S/N 6000c29aae992f12978e8d65a83f9129) from HongKong_Node2 (ID 2147486735) to HongKong_Node2 (ID 2147486734)
+*> Jan 28 21:04:04 [localhost:diskown.changingOwner:info]: changing ownership for disk 0b.0 (S/N 6000c290ca337fed7affca5e618808ee) from HongKong_Node2 (ID 2147486735) to HongKong_Node2 (ID 2147486734)
+
+*> disk show -a
+Local System ID: 2147486734
+
+  DISK       OWNER                    POOL   SERIAL NUMBER         HOME                    DR HOME
+------------ -------------            -----  -------------         -------------           -------------
+0b.1         HongKong_Node2(2147486734)    Pool0  6000c29aae992f12978e8d65a83f9129  HongKong_Node2(2147486734)
+0b.0         HongKong_Node2(2147486734)    Pool0  6000c290ca337fed7affca5e618808ee  HongKong_Node2(2147486734)
+*> halt
+
+Here are the permissions on /mroot directory:
+drwxr-xr-x  3 root  wheel  512 Jan 16  2015 /mroot
+/mroot directory doesn't exist or is it not writeable... aborting coverage dump
+
+
+Terminated
+.
+Uptime: 5m36s
+
+The operating system has halted.
+Please press any key to reboot.
+
+System halting...
+/
+Hit [Enter] to boot immediately, or any other key for command prompt.
+Booting...
+x86_64/freebsd/image1/kernel data=0x921710+0x3db888 syms=[0x8+0x45300+0x8+0x2e834]
+x86_64/freebsd/image1/platform.ko size 0x2b0a48 at 0xe71000
+NetApp Data ONTAP 8.2.3 Cluster-Mode
+Copyright (C) 1992-2015 NetApp.
+All rights reserved.
+md1.uzip: 39168 x 16384 blocks
+md2.uzip: 5760 x 16384 blocks
+*******************************
+*                             *
+* Press Ctrl-C for Boot Menu. *
+*                             *
+*******************************
+Jan 28 21:05:35 [localhost:snmp.link.up:info]: Interface 6 is up
+Jan 28 21:05:35 [localhost:netif.linkUp:info]: Ethernet e0f: Link up.
+Jan 28 21:05:35 [localhost:snmp.link.up:info]: Interface 5 is up
+Jan 28 21:05:35 [localhost:netif.linkUp:info]: Ethernet e0e: Link up.
+Jan 28 21:05:35 [localhost:snmp.link.up:info]: Interface 4 is up
+Jan 28 21:05:35 [localhost:netif.linkUp:info]: Ethernet e0d: Link up.
+Jan 28 21:05:35 [localhost:snmp.link.up:info]: Interface 3 is up
+Jan 28 21:05:35 [localhost:netif.linkUp:info]: Ethernet e0c: Link up.
+Jan 28 21:05:35 [localhost:snmp.link.up:info]: Interface 2 is up
+Jan 28 21:05:35 [localhost:netif.linkUp:info]: Ethernet e0b: Link up.
+Jan 28 21:05:35 [localhost:snmp.link.up:info]: Interface 1 is up
+Jan 28 21:05:35 [localhost:netif.linkUp:info]: Ethernet e0a: Link up.
+Jan 28 21:05:36 [localhost:diskown.isEnabled:info]: software ownership has been enabled for this system
+route add: bad address: gw 127.0.20.1 equal to destination 127.0.20.1.
+add host 127.0.10.1: gateway 127.0.20.1
+WAFL CPLEDGER is enabled. Checklist = 0x7ff841ff
+Jan 28 21:05:36 [localhost:wafl.memory.status:info]: 5172MB of memory is currently available for the WAFL file system.
+Jan 28 21:05:36 [localhost:dcs.framework.enabled:info]: The DCS framework is enabled on this node.
+Jan 28 21:05:36 [localhost:raid.mirror.vote.versionZero:debug]: raid: mirror info empty
+Jan 28 21:05:36 [localhost:raid.mirror.vote.versionZero:debug]: raid: mirror info empty
+Jan 28 21:05:36 [localhost:coredump.host.spare.none:info]: No sparecore disk was found for host 0.
+
+Jan 28 21:05:36 [localhost:raid.assim.tree.foreign:error]: raidtree_verify: Aggregate aggr1_HongKong_Node2 is a foreign aggregate and is being taken offline. Use the 'aggr online' command to bring it online.
+Jan 28 21:05:36 [localhost:raid.assim.tree.foreign:error]: raidtree_verify: Aggregate aggr0_HongKong_Node2 is a foreign aggregate and is being taken offline. Use the 'aggr online' command to bring it online.
+Jan 28 21:05:36 [localhost:raid.assim.tree.noRootVol:error]: No usable root volume was found!
+Jan 28 21:05:36 [localhost:raid.assim.label.noNativeVols:warning]: No native volumes or aggregates detected, assuming NVRAM card swap. 1 NVRAM system id(s) (2147486735, 0, 0...) found among all volumes. NVRAM system id 2147486735 selected. NVRAM card swap detected by RAID.
+Jan 28 21:05:36 [localhost:raid.assim.label.makeNativeVol:warning]: Aggregate aggr0_HongKong_Node2 turned into a native aggregate.
+There appears to be a consistent set of traditional volumes or aggregates
+Jan 28 21:05:36 [localhost:raid.assim.label.makeNativeVol:warning]: Aggregate aggr1_HongKong_Node2 turned into a native aggregate.
+Jan 28 21:05:36 [localhost:raid.cksum.replay.summary:info]: Replayed 0 checksum blocks.
+Jan 28 21:05:36 [localhost:raid.stripe.replay.summary:info]: Replayed 0 stripes.
+for a system with an NVRAM board other than the one in this system.  NVRAM
+contents will be discarded and the disks will be labeled with the serial
+number of this system's NVRAM board.
+Jan 28 21:05:36 [localhost:wafl.aggr.btiddb.build:info]: Buftreeid database for aggregate 'aggr1_HongKong_Node2' UUID '4c4231ee-7167-4937-9653-cac7c39e2102' was built in 0 msec, after scanning 0 inodes and restarting -1 times with a final result of starting.
+Jan 28 21:05:36 [localhost:wafl.aggr.btiddb.build:info]: Buftreeid database for aggregate 'aggr0_HongKong_Node2' UUID 'cc495691-07fc-458d-b2ec-d0ebed58a41e' was built in 0 msec, after scanning 0 inodes and restarting -1 times with a final result of starting.
+Jan 28 21:05:36 [localhost:wafl.aggr.btiddb.build:info]: Buftreeid database for aggregate 'aggr0_HongKong_Node2' UUID 'cc495691-07fc-458d-b2ec-d0ebed58a41e' was built in 64 msec, after scanning 12 inodes and restarting 8 times with a final result of success.
+Jan 28 21:05:36 [localhost:wafl.aggr.btiddb.build:info]: Buftreeid database for aggregate 'aggr1_HongKong_Node2' UUID '4c4231ee-7167-4937-9653-cac7c39e2102' was built in 73 msec, after scanning 75 inodes and restarting 8 times with a final result of success.
+Jan 28 21:05:37 [localhost:kern.syslog.msg:notice]: The system was down for 8329 seconds
+Jan 28 21:05:37 [localhost:tar.csum.match:info]: Stored checksum matches, not extracting local://mnt/prestage/mroot.tgz.
+Jan 28 21:05:37 [localhost:tar.csum.match:info]: Stored checksum matches, not extracting local://mnt/prestage/pmroot.tgz.
+Jan 28 21:05:37 [localhost:vFiler.smb0.init.begin:info]: About to begin SMB initialization for vFiler0.
+Jan 28 21:05:37 [localhost:vFiler.basic.setting.done:info]: vFiler basic operations such as SMB and pseudo-root initialization for vFiler0 are complete.
+Jan 28 21:05:37 [localhost:dfu.firmwareUpToDate:info]: Firmware is up-to-date on all disks.
+
+Jan 28 21:05:37 [localhost:snmp.agent.msg.access.denied:warning]: Permission denied for SNMPv3 requests from root. Reason: Password is too short (SNMPv3 requires at least 8 characters).
+Jan 28 21:05:38 [localhost:mgr.boot.disk_done:info]: NetApp Release 8.2.3 Cluster-Mode boot complete. Last disk update written at Thu Jan 28 18:46:49 GMT 2016
+
+Jan 28 21:05:38 [localhost:snmp.link.up:info]: Interface 7 is up
+Jan 28 21:05:38 [localhost:snmp.link.up:info]: Interface 8 is up
+Jan 28 21:05:38 [localhost:replication.upgrade.complete:info]: Post-upgrade operations for SnapMirror and SnapVault are complete.
+Jan 28 21:05:38 [localhost:mgr.boot.reason_ok:notice]: System rebooted after a halt command.
+Jan 28 21:05:38 [localhost:callhome.reboot.halt:info]: Call home for REBOOT (halt command)
+Jan 28 21:05:38 [localhost:clam.enable:info]: CLAM functionality is enabled.
+
+
+
+
+
+  (cluster setup)
+
+
+
+
+Welcome to the cluster setup wizard.
+
+You can enter the following commands at any time:
+  "help" or "?" - if you want to have a question clarified,
+  "back" - if you want to change previously answered questions, and
+  "exit" or "quit" - if you want to quit the cluster setup wizard.
+     Any changes you made before quitting will be saved.
+
+You can return to cluster setup at any time by typing "cluster setup".
+To accept a default or omit a question, do not enter a value.
+
+
+Do you want to create a new cluster or join an existing cluster? {create, join}:
+create
+
+
+Do you intend for this node to be used as a single node cluster? {yes, no} [no]:
+yes
+
+
+Step 1 of 5: Create a Cluster
+You can type "back", "exit", or "help" at any question.
+
+Enter the cluster name: HongKong-CLU2
+
+The cluster name is invalid: The name of the cluster cannot match the name of a
+vserver.
+
+The user-defined name for the cluster. This name will also be used as the name
+of the cluster's administrative Vserver. The cluster name must begin with an
+alphabetic ASCII character and it must be no more than 44 characters in length.
+
+You can type "back", "exit", or "help" at any question.
+
+Enter the cluster name: HongKong-CLU002
+Enter the cluster base license key: 5F05-YZDH-0MJ0-54G8-J7FC
+
+the value "5F05-YZDH-0MJ0-54G8-J7FC" is invalid for type <License Code V2>
+
+The base license key for the cluster can be obtained from your sales or support
+representative.
+
+You can type "back", "exit", or "help" at any question.
+
+Enter the cluster base license key: 5F05-YZDH-0MJ0-54G8-J7FC
+
+the value "5F05-YZDH-0MJ0-54G8-J7FC" is invalid for type <License Code V2>
+
+The base license key for the cluster can be obtained from your sales or support
+representative.
+
+You can type "back", "exit", or "help" at any question.
+
+Enter the cluster base license key: 5F05-YZDH-0MJ0-54G8-J7FC
+
+the value "5F05-YZDH-0MJ0-54G8-J7FC" is invalid for type <License Code V2>
+
+The base license key for the cluster can be obtained from your sales or support
+representative.
+
+You can type "back", "exit", or "help" at any question.
+
+Enter the cluster base license key:
+Enter the cluster base license key: exit
+Exiting the cluster setup wizard. Any changes you made have been saved.
+
+
+The cluster administrator's account (username "admin") password is set to the system default.
+
+
+Warning: You have exited the cluster setup wizard before completing all
+of the tasks. The cluster is not configured. You can complete cluster setup by typing
+"cluster setup" in the command line interface.
+
+
+
+
+Thu Jan 28 21:15:50 UTC 2016
+login: admin
+HongKong-CLU2::> vserver show
+
+Error: "show" is not a recognized command
+
+HongKong-CLU2::> v
+    volume  vserver
+
+HongKong-CLU2::> vserver
+
+HongKong-CLU2::vserver> show
+Error: Ambiguous command.  Possible matches include:
+       vserver active-directory discovered-servers show
+       vserver cifs domain discovered-servers show
+       vserver cifs domain trusts show
+
+HongKong-CLU2::vserver> ..
+
+HongKong-CLU2::> set d
+
+Warning: These diagnostic commands are for use by NetApp personnel only.
+Do you want to continue? {y|n}: y
+
+HongKong-CLU2::*> system configuration bak
+
+Error: "bak" is not a recognized command
+HongKong-CLU2::*> system configuration backup download -node 062cb931-894d-11e5-85f4-23979eaec1e4
+
+Error: "062cb931-894d-11e5-85f4-23979eaec1e4" is an invalid value for field
+       "-node <nodename>"
+HongKong-CLU2::*> system configuration backup download -node 062cb931-894d-11e5-85f4-23979eaec1e4
+
+Error: "062cb931-894d-11e5-85f4-23979eaec1e4" is an invalid value for field
+       "-node <nodename>"
+HongKong-CLU2::*> system configuration backup download -node ?
+  062cb931-894d-11e5-85f4-23979eaec1e4
+
+HongKong-CLU2::*> system configuration backup download -node 062cb931-894d-11e5-85f4-23979eaec1e4 -?
+
+Error: "062cb931-894d-11e5-85f4-23979eaec1e4" is an invalid value for field
+       "-node <nodename>"
+
+HongKong-CLU2::*> system configuration backup download -node HongKong-CLU2
+
+Error: "HongKong-CLU2" is an invalid value for field "-node <nodename>"
+HongKong-CLU2::*> system configuration backup download -node HongKong-CLU2 ?
+
+Error: "HongKong-CLU2" is an invalid value for field "-node <nodename>"
+
+HongKong-CLU2::*> system configuration backup download -node HongKong-CLU2
+
+Error: "HongKong-CLU2" is an invalid value for field "-node <nodename>"
+HongKong-CLU2::*> node show
+Node      Health Eligibility Uptime        Model       Owner    Location
+--------- ------ ----------- ------------- ----------- -------- ---------------
+localhost -      -            00:13:57.060 FDvM200
+
+HongKong-CLU2::*> system
+    configuration health        license       node          script
+    services      timeout
+
+HongKong-CLU2::*> system configuration backup download -node locahost
+
+Error: the value "locahost" is invalid for type <nodename>
+HongKong-CLU2::*> system configuration backup download -node locahost ?
+
+Error: "locahost" is an invalid value for field "-node <nodename>"
+
+HongKong-CLU2::*> system configuration backup download -node localhost
+
+Error: command failed: "source" is a required field
+
+HongKong-CLU2::*> system configuration backup download -node localhost ?
+   [-source] <text>           *Source URL
+  [[-backup-name] <text>]     *Backup Name
+
+HongKong-CLU2::*> system configuration backup download -node localhost -source
+  <text>                      Source URL
+HongKong-CLU2::*> system configuration backup download -node localhost -source ftp://172.22.45.71 -backup-name Before_HeadSwap.7z
+
+Error: command failed: Invalid URL: ftp://172.22.45.71
+
+HongKong-CLU2::*> system configuration backup download -node localhost -source ftp://172.22.45.71/home/netapp/cluster-configs/Before_HeadSwap.7z -backup-name Before_HeadSwap.7z
+
+Error: command failed: duplicate entry
+
+HongKong-CLU2::*> system configuration backup download -node localhost -source ftp://172.22.45.71/home/netapp/cluster-configs/Before_HeadSwap.7z -backup-name Before_HeadSwap
+
+Error: command failed: duplicate entry
+
+HongKong-CLU2::*> system configuration backup show                                                                                                          Node       Backup Name                               Time               Size
+---------  ----------------------------------------- ------------------ -----
+localhost  Before_HeadSwap.7z                        01/29 02:35:37     18.21MB
+localhost  HongKong-CLU2.8hour.2016-01-28.18_15_00.7z
+                                                     01/28 18:15:00     17.95MB
+localhost  HongKong-CLU2.8hour.2016-01-29.02_15_00.7z
+                                                     01/29 02:15:00     18.20MB
+localhost  HongKong-CLU2.daily.2016-01-28.00_10_00.7z
+                                                     01/28 00:10:00     18.36MB
+localhost  HongKong-CLU2.daily.2016-01-29.00_10_07.7z
+                                                     01/29 00:10:07     18.13MB
+localhost  HongKong-CLU2.weekly.2016-01-17.00_15_00.7z
+                                                     01/17 00:15:00     15.94MB
+localhost  HongKong-CLU2.weekly.2016-01-24.00_15_00.7z
+                                                     01/24 00:15:00     17.20MB
+localhost  test.7z                                   01/27 20:54:34     17.85MB
+8 entries were displayed.
+
+HongKong-CLU2::*> system configuration recovery cluster recreate                                                                                            Usage:
+   [-from] {node|backup}      *From Node or Backup
+  [[-backup] <text>]          *Backup Name
+
+HongKong-CLU2::*> system configuration recovery cluster recreate -from backup -backup Before_HeadSwap.7z
+
+Error: command failed: This command is supported in pre-cluster mode for a
+       single-node cluster configuration only.
+
+HongKong-CLU2::*> system configuration backup ?
+  copy                        *Copy a configuration backup
+  create                      *Create a configuration backup
+  delete                      *Delete a configuration backup
+  download                    *Download a configuration backup
+  rename                      *Rename a configuration backup
+  show                        *Show configuration backup information
+  upload                      *Upload a configuration backup
+
+HongKong-CLU2::*> system configuration recovery
+
+HongKong-CLU2::system configuration recovery*> ?
+  cluster>                    *The cluster directory
+  node>                       *The node directory
+
+HongKong-CLU2::system configuration recovery*> node
+
+HongKong-CLU2::system configuration recovery node*> ?
+  restore                     *Restore node configuration from a backup
+
+HongKong-CLU2::system configuration recovery node*> restore ?
+   [-backup] <text>               *Backup Name
+  [[-nodename-in-backup] <text>]  *Use Backup Identified by this Nodename
+  [ -force [true] ]               *Force Restore Operation
+
+HongKong-CLU2::system configuration recovery node*> restore -backup Before_HeadSwap.7z
+
+Warning: This command overwrites local configuration files with files contained
+         in the specified backup file. Use this command only to recover from a
+         disaster that resulted in the loss of the local configuration files.
+         The node will reboot after restoring the local configuration.
+Do you want to continue? {y|n}: y
+Verifying that the node is offline in the cluster.
+Verifying that the backup tarball exists.
+Extracting the backup tarball.
+
+
+Error: command failed: Restoring the local configuration failed. Reason: File
+       /mroot/etc/backups/.tmp/.tmp.restorelocal/localhost/localhost*.7z not
+       found in backup file .
+
+HongKong-CLU2::system configuration recovery node*> -backup ?
+
+Error: "-backup" is not a recognized command
+
+HongKong-CLU2::system configuration recovery node*> -backup Before_HeadSwap.7z ?
+
+Error: "-backup" is not a recognized command
+
+HongKong-CLU2::system configuration recovery node*> restore -backup  Before_HeadSwap.7z -nodename-in-backup HongKong_Node2
+
+Warning: This command overwrites local configuration files with files contained
+         in the specified backup file. Use this command only to recover from a
+         disaster that resulted in the loss of the local configuration files.
+         The node will reboot after restoring the local configuration.
+Do you want to continue? {y|n}: y
+
+Warning: Current node name "localhost" is different from the
+         -nodename-in-backup "HongKong_Node2". The restore operation will
+         rename the node with the name in the backup file: "HongKong_Node2".
+         After the restore is complete, the node will reboot. When the node
+         comes back online, the node must be manually renamed to the current
+         node name: "localhost". The node will not be fully operational in the
+         cluster until this is done. To rename the node, use the command
+         "system node rename".
+Do you want to continue? {y|n}: y
+Verifying that the node is offline in the cluster.
+Verifying that the backup tarball exists.
+Extracting the backup tarball.
+Verifying that software and hardware of the node match with the backup.
+Stopping cluster applications.
+
+The management gateway server restarted. Waiting to see if the connection can be reestablished...                                                           
+
+The management gateway server restarted. Waiting to see if the connection can be reestablished
+Waiting for PIDS: /usr/sbin/rpcbind 685.
+Abandoned in-memory /var file system.
+Terminated
+.
+Top Shutdown Times (ms): {if_reset=640, shutdown_wafl=64(multivol=0, sfsr=0, abort_scan=0, snapshot=0, start=9, sync1=0, sync2=0, mark_fs=55)}
+Shutdown duration (ms): {CIFS=1712, NFS=1712, ISCSI=1712, FCP=1712}
+Uptime: 23m2s
+System rebooting...
+/
+Hit [Enter] to boot immediately, or any other key for command prompt.
+Booting...
+x86_64/freebsd/image1/kernel data=0x921710+0x3db888 syms=[0x8+0x45300+0x8+0x2e834]
+x86_64/freebsd/image1/platform.ko size 0x2b0a48 at 0xe71000
+NetApp Data ONTAP 8.2.3 Cluster-Mode
+Copyright (C) 1992-2015 NetApp.
+All rights reserved.
+md1.uzip: 39168 x 16384 blocks
+md2.uzip: 5760 x 16384 blocks
+*******************************
+*                             *
+* Press Ctrl-C for Boot Menu. *
+*                             *
+*******************************
+
+WARNING: System id mismatch. This usually occurs when replacing CF or NVRAM cards!
+Override system id? {y|n} y
+usage: route [-dnqtv] command [[modifiers] args]
+Invalid netmask (0.0.0.0) entered. Please try again with a valid netmask.
+Jan 29 05:29:03 [HongKong_Node2:snmp.link.up:info]: Interface 6 is up
+Jan 29 05:29:03 [HongKong_Node2:netif.linkUp:info]: Ethernet e0f: Link up.
+Jan 29 05:29:03 [HongKong_Node2:snmp.link.up:info]: Interface 5 is up
+Jan 29 05:29:03 [HongKong_Node2:netif.linkUp:info]: Ethernet e0e: Link up.
+Jan 29 05:29:03 [HongKong_Node2:snmp.link.up:info]: Interface 4 is up
+Jan 29 05:29:03 [HongKong_Node2:netif.linkUp:info]: Ethernet e0d: Link up.
+Jan 29 05:29:03 [HongKong_Node2:diskown.isEnabled:info]: software ownership has been enabled for this system
+Jan 29 05:29:03 [HongKong_Node2:snmp.link.up:info]: Interface 3 is up
+Jan 29 05:29:03 [HongKong_Node2:netif.linkUp:info]: Ethernet e0c: Link up.
+Jan 29 05:29:03 [HongKong_Node2:snmp.link.up:info]: Interface 2 is up
+Jan 29 05:29:03 [HongKong_Node2:netif.linkUp:info]: Ethernet e0b: Link up.
+Jan 29 05:29:03 [HongKong_Node2:snmp.link.up:info]: Interface 1 is up
+Jan 29 05:29:03 [HongKong_Node2:netif.linkUp:info]: Ethernet e0a: Link up.
+route add: bad address: gw 127.0.20.1 equal to destination 127.0.20.1.
+add host 127.0.10.1: gateway 127.0.20.1
+WAFL CPLEDGER is enabled. Checklist = 0x7ff841ff
+Jan 29 05:29:03 [HongKong_Node2:wafl.memory.status:info]: 5170MB of memory is currently available for the WAFL file system.
+Jan 29 05:29:03 [HongKong_Node2:dcs.framework.enabled:info]: The DCS framework is enabled on this node.
+WARNING: 0 disks found!
+
+Storage Adapters found:
+0 Fibre Channel Storage Adapters found!
+4 SAS Adapters found!
+0 Parallel SCSI Storage Adapters found!
+0 ATA Adapters found!
+
+Target Adapters found:
+0 Fibre Channel Target Adapters found!
+1 iSCSI Target Adapters found!
+1 Unknown Target Adapters found!
+
+Check that disks have been assigned ownership to this system (ID 2147486735) using the 'disk show' and 'disk assign'
+commands from maintenance mode.
+
+WARNING: there do not appear to be any disks attached to the system.
+No root volume found.
+Rebooting... (press ctrl-c during boot to break reboot loop)
+Uptime: 35s
+System rebooting...
+/
+Hit [Enter] to boot immediately, or any other key for command prompt.
+Booting...
+x86_64/freebsd/image1/kernel data=0x921710+0x3db888 syms=[0x8+0x45300+0x8+0x2e834]
+x86_64/freebsd/image1/platform.ko size 0x2b0a48 at 0xe71000
+NetApp Data ONTAP 8.2.3 Cluster-Mode
+Copyright (C) 1992-2015 NetApp.
+All rights reserved.
+Checking boot device filesystem
+** /dev/ad0s2
+** Phase 1 - Read and Compare FATs
+** Phase 2 - Check Cluster Chains
+** Phase 3 - Checking Directories
+** Phase 4 - Checking for Lost Files
+39 files, 511648 free (31978 clusters)
+MARK FILE SYSTEM CLEAN? yes
+MARKING FILE SYSTEM CLEAN
+Retry #1 of 5: /sbin/fsck_msdosfs /dev/ad0s2
+Retry #2 of 5: /sbin/fsck_msdosfs /dev/ad0s2
+Repaired boot device filesystem
+md1.uzip: 39168 x 16384 blocks
+md2.uzip: 5760 x 16384 blocks
+*******************************
+*                             *
+* Press Ctrl-C for Boot Menu. *
+*                             *
+*******************************
+^CBoot Menu will be available.
+usage: route [-dnqtv] command [[modifiers] args]
+Invalid netmask (0.0.0.0) entered. Please try again with a valid netmask.
+
+Please choose one of the following:
+
+(1) Normal Boot.
+(2) Boot without /etc/rc.
+(3) Change password.
+(4) Clean configuration and initialize all disks.
+(5) Maintenance mode boot.
+(6) Update flash from backup config.
+(7) Install new software first.
+(8) Reboot node.
+Selection (1-8)? 5
+Jan 29 05:29:55 [HongKong_Node2:diskown.isEnabled:info]: software ownership has been enabled for this system
+route add: bad address: gw 127.0.20.1 equal to destination 127.0.20.1.
+add host 127.0.10.1: gateway 127.0.20.1
+Jan 29 05:29:55 [HongKong_Node2:snmp.link.up:info]: Interface 6 is up
+Jan 29 05:29:55 [HongKong_Node2:netif.linkUp:info]: Ethernet e0f: Link up.
+Jan 29 05:29:55 [HongKong_Node2:snmp.link.up:info]: Interface 5 is up
+Jan 29 05:29:55 [HongKong_Node2:netif.linkUp:info]: Ethernet e0e: Link up.
+Jan 29 05:29:55 [HongKong_Node2:snmp.link.up:info]: Interface 4 is up
+Jan 29 05:29:55 [HongKong_Node2:netif.linkUp:info]: Ethernet e0d: Link up.
+Jan 29 05:29:55 [HongKong_Node2:snmp.link.up:info]: Interface 3 is up
+Jan 29 05:29:55 [HongKong_Node2:netif.linkUp:info]: Ethernet e0c: Link up.
+Jan 29 05:29:55 [HongKong_Node2:snmp.link.up:info]: Interface 2 is up
+Jan 29 05:29:55 [HongKong_Node2:netif.linkUp:info]: Ethernet e0b: Link up.
+Jan 29 05:29:55 [HongKong_Node2:snmp.link.up:info]: Interface 1 is up
+Jan 29 05:29:55 [HongKong_Node2:netif.linkUp:info]: Ethernet e0a: Link up.
+WAFL CPLEDGER is enabled. Checklist = 0x7ff841ff
+Jan 29 05:29:55 [HongKong_Node2:wafl.memory.status:info]: 5190MB of memory is currently available for the WAFL file system.
+Jan 29 05:29:55 [HongKong_Node2:dcs.framework.enabled:info]: The DCS framework is enabled on this node.
+5
+
+
+
+        You have selected the maintenance boot option:
+        the system has booted in maintenance mode allowing the
+Jan 29 05:29:56 [HongKong_Node2:snmp.link.up:info]: Interface 7 is up
+Jan 29 05:29:56 [HongKong_Node2:snmp.link.up:info]: Interface 8 is up
+Jan 29 05:29:56 [HongKong_Node2:mgr.boot.reason_ok:notice]: System rebooted after a reboot command.
+Jan 29 05:29:56 [HongKong_Node2:callhome.reboot.reboot:info]: Call home for REBOOT (reboot command)
+        following operations to be performed:
+
+        ?                       acorn
+        acpadmin                aggr
+        cna_flash               disk
+        disk_list               disk_mung
+        disk_qual               disk_shelf
+        diskcopy                disktest
+        dumpblock               environment
+        fcadmin                 fcstat
+        fctest                  fru_led
+        ha-config               halt
+        help                    ifconfig
+        key_manager             led_off
+        led_on                  nv8
+        raid_config             sasadmin
+        sasstat                 scsi
+        sesdiag                 sldiag
+        storage                 stsb
+        sysconfig               systemshell
+        ucadmin                 version
+        vmservices              vol
+        vol_db                  vsa
+        xortest
+
+        Type "help <command>" for more details.
+Jan 29 05:30:03 [HongKong_Node2:acp.configWarn:debug]: Could not configure ACP administrator due to invalid Ethernet port in maintenance mode.
+WARNING: Giving up waiting for mroot
+
+
+
+
+
+
+Fri Jan 29 05:30:13 HKT 2016
+*> disk show -a
+Local System ID: 2147486735
+
+  DISK       OWNER                    POOL   SERIAL NUMBER         HOME                    DR HOME
+------------ -------------            -----  -------------         -------------           -------------
+0b.1         HongKong_Node2(2147486734)    Pool0  6000c29aae992f12978e8d65a83f9129  HongKong_Node2(2147486734)
+0b.0         HongKong_Node2(2147486734)    Pool0  6000c290ca337fed7affca5e618808ee  HongKong_Node2(2147486734)
+*> sysconfig
+Jan 29 05:30:37 [HongKong_Node2:shelf.config.single:info]: System is using single path attached storage only.
+        NetApp Release 8.2.3 Cluster-Mode: Thu Jan 15 21:30:45 PST 2015
+        System ID: 2147486735 (HongKong_Node2)
+        System Serial Number: 2010000000192 (HongKong_Node2)
+        System Storage Configuration: Single Path
+        System ACP Connectivity: NA
+        slot 0: System Board
+                Model Name:         FDvM200
+                Processors:         2
+                Memory Size:        8192 MB
+                Memory Attributes:  None
+        slot 0: 10/100/1000 Ethernet Controller V
+                e0a MAC Address:    00:50:56:88:4e:6a (auto-1000t-fd-up)
+                e0b MAC Address:    00:50:56:88:33:89 (auto-1000t-fd-up)
+                e0c MAC Address:    00:50:56:88:0e:ff (auto-1000t-fd-up)
+                e0d MAC Address:    00:50:56:88:0f:78 (auto-1000t-fd-up)
+                e0e MAC Address:    00:50:56:88:75:2f (auto-1000t-fd-up)
+                e0f MAC Address:    00:50:56:88:4c:7e (auto-1000t-fd-up)
+        slot 0: ATA/IDE Adapter 0a (0x000001f0)
+                0a.2 VMware Virtual IDE Hard Drive   00000001 5121MB  512B/sect (10000000000000000001)
+                0a.1 VMware Virtual IDE Hard Drive   00000001 1542MB  512B/sect (01000000000000000001)
+                0a.0 VMware Virtual IDE Hard Drive   00000001 1057MB  512B/sect (00000000000000000001)
+        slot 0: SAS Host Adapter 0b
+                2 Disks:             2152.4GB
+        slot 0: SAS Host Adapter 0c
+        slot 0: SAS Host Adapter 0d
+        slot 0: SAS Host Adapter 0e
+*> disk reassign -s 2147486734 -d 2147486735
+Disk ownership will be updated on all disks previously belonging to Filer with sysid 2147486734.
+Do you want to continue (y/n)? y
+Jan 29 05:31:18 [HongKong_Node2:sas.device.resetting:debug]: Resetting Disk device 0b.1 from adapter 0b.
+Jan 29 05:31:18 [HongKong_Node2:sas.device.resetting:debug]: Resetting Disk device 0b.0 from adapter 0b.
+Jan 29 05:31:18 [HongKong_Node2:diskown.changingOwner:info]: changing ownership for disk 0b.1 (S/N 6000c29aae992f12978e8d65a83f9129) from HongKong_Node2 (ID 2147486734) to HongKong_Node2 (ID 2147486735)
+Jan 29 05:31:18 [HongKong_Node2:diskown.changingOwner:info]: changing ownership for disk 0b.0 (S/N 6000c290ca337fed7affca5e618808ee) from HongKong_Node2 (ID 2147486734) to HongKong_Node2 (ID 2147486735)
+*>
+*> disk show -a
+Local System ID: 2147486735
+
+  DISK       OWNER                    POOL   SERIAL NUMBER         HOME                    DR HOME
+------------ -------------            -----  -------------         -------------           -------------
+0b.1         HongKong_Node2(2147486735)    Pool0  6000c29aae992f12978e8d65a83f9129  HongKong_Node2(2147486735)
+0b.0         HongKong_Node2(2147486735)    Pool0  6000c290ca337fed7affca5e618808ee  HongKong_Node2(2147486735)
+*> halt
+
+Here are the permissions on /mroot directory:
+drwxr-xr-x  3 root  wheel  512 Jan 16  2015 /mroot
+/mroot directory doesn't exist or is it not writeable... aborting coverage dump
+
+
+Terminated
+.
+Uptime: 2m30s
+
+The operating system has halted.
+Please press any key to reboot.
+
+System halting...
+/
+Hit [Enter] to boot immediately, or any other key for command prompt.
+Booting...
+x86_64/freebsd/image1/kernel data=0x921710+0x3db888 syms=[0x8+0x45300+0x8+0x2e834]
+x86_64/freebsd/image1/platform.ko size 0x2b0a48 at 0xe71000
+NetApp Data ONTAP 8.2.3 Cluster-Mode
+Copyright (C) 1992-2015 NetApp.
+All rights reserved.
+md1.uzip: 39168 x 16384 blocks
+md2.uzip: 5760 x 16384 blocks
+*******************************
+*                             *
+* Press Ctrl-C for Boot Menu. *
+*                             *
+*******************************
+usage: route [-dnqtv] command [[modifiers] args]
+Invalid netmask (0.0.0.0) entered. Please try again with a valid netmask.
+Jan 29 05:32:40 [HongKong_Node2:snmp.link.up:info]: Interface 6 is up
+Jan 29 05:32:40 [HongKong_Node2:netif.linkUp:info]: Ethernet e0f: Link up.
+Jan 29 05:32:40 [HongKong_Node2:snmp.link.up:info]: Interface 5 is up
+Jan 29 05:32:40 [HongKong_Node2:netif.linkUp:info]: Ethernet e0e: Link up.
+Jan 29 05:32:40 [HongKong_Node2:snmp.link.up:info]: Interface 4 is up
+Jan 29 05:32:40 [HongKong_Node2:netif.linkUp:info]: Ethernet e0d: Link up.
+Jan 29 05:32:40 [HongKong_Node2:snmp.link.up:info]: Interface 3 is up
+Jan 29 05:32:40 [HongKong_Node2:netif.linkUp:info]: Ethernet e0c: Link up.
+Jan 29 05:32:40 [HongKong_Node2:snmp.link.up:info]: Interface 2 is up
+Jan 29 05:32:40 [HongKong_Node2:netif.linkUp:info]: Ethernet e0b: Link up.
+Jan 29 05:32:40 [HongKong_Node2:snmp.link.up:info]: Interface 1 is up
+Jan 29 05:32:40 [HongKong_Node2:netif.linkUp:info]: Ethernet e0a: Link up.
+Jan 29 05:32:41 [HongKong_Node2:diskown.isEnabled:info]: software ownership has been enabled for this system
+route add: bad address: gw 127.0.20.1 equal to destination 127.0.20.1.
+add host 127.0.10.1: gateway 127.0.20.1
+WAFL CPLEDGER is enabled. Checklist = 0x7ff841ff
+Jan 29 05:32:41 [HongKong_Node2:wafl.memory.status:info]: 5170MB of memory is currently available for the WAFL file system.
+Jan 29 05:32:41 [HongKong_Node2:dcs.framework.enabled:info]: The DCS framework is enabled on this node.
+Jan 29 05:32:41 [HongKong_Node2:raid.mirror.vote.versionZero:debug]: raid: mirror info empty
+Jan 29 05:32:41 [HongKong_Node2:raid.mirror.vote.versionZero:debug]: raid: mirror info empty
+Jan 29 05:32:41 [HongKong_Node2:coredump.host.spare.none:info]: No sparecore disk was found for host 0.
+
+Jan 29 05:32:41 [HongKong_Node2:raid.assim.tree.foreign:error]: raidtree_verify: Aggregate aggr1_HongKong_Node2 is a foreign aggregate and is being taken offline. Use the 'aggr online' command to bring it online.
+Jan 29 05:32:41 [HongKong_Node2:raid.assim.tree.foreign:error]: raidtree_verify: Aggregate aggr0_HongKong_Node2 is a foreign aggregate and is being taken offline. Use the 'aggr online' command to bring it online.
+Jan 29 05:32:41 [HongKong_Node2:raid.assim.tree.noRootVol:error]: No usable root volume was found!
+Jan 29 05:32:41 [HongKong_Node2:raid.assim.label.noNativeVols:warning]: No native volumes or aggregates detected, assuming NVRAM card swap. 1 NVRAM system id(s) (2147486734, 0, 0...) found among all volumes. NVRAM system id 2147486734 selected. NVRAM card swap detected by RAID.
+Jan 29 05:32:41 [HongKong_Node2:raid.assim.label.makeNativeVol:warning]: Aggregate aggr0_HongKong_Node2 turned into a native aggregate.
+Jan 29 05:32:41 [HongKong_Node2:raid.assim.label.makeNativeVol:warning]: Aggregate aggr1_HongKong_Node2 turned into a native aggregate.
+There appears to be a consistent set of traditional volumes or aggregates
+Jan 29 05:32:41 [HongKong_Node2:raid.cksum.replay.summary:info]: Replayed 0 checksum blocks.
+Jan 29 05:32:41 [HongKong_Node2:raid.stripe.replay.summary:info]: Replayed 0 stripes.
+Jan 29 05:32:41 [HongKong_Node2:wafl.aggr.btiddb.build:info]: Buftreeid database for aggregate 'aggr1_HongKong_Node2' UUID '4c4231ee-7167-4937-9653-cac7c39e2102' was built in 0 msec, after scanning 0 inodes and restarting -1 times with a final result of starting.
+Jan 29 05:32:41 [HongKong_Node2:wafl.aggr.btiddb.build:info]: Buftreeid database for aggregate 'aggr0_HongKong_Node2' UUID 'cc495691-07fc-458d-b2ec-d0ebed58a41e' was built in 0 msec, after scanning 0 inodes and restarting -1 times with a final result of starting.
+for a system with an NVRAM board other than the one in this system.  NVRAM
+contents will be discarded and the disks will be labeled with the serial
+number of this system's NVRAM board.
+Jan 29 05:32:41 [HongKong_Node2:wafl.aggr.btiddb.build:info]: Buftreeid database for aggregate 'aggr1_HongKong_Node2' UUID '4c4231ee-7167-4937-9653-cac7c39e2102' was built in 45 msec, after scanning 74 inodes and restarting 11 times with a final result of success.
+Jan 29 05:32:41 [HongKong_Node2:wafl.aggr.btiddb.build:info]: Buftreeid database for aggregate 'aggr0_HongKong_Node2' UUID 'cc495691-07fc-458d-b2ec-d0ebed58a41e' was built in 63 msec, after scanning 12 inodes and restarting 7 times with a final result of success.
+Jan 29 05:32:42 [HongKong_Node2:kern.syslog.msg:notice]: The system was down for 10622 seconds
+Jan 29 05:32:42 [HongKong_Node2:tar.csum.match:info]: Stored checksum matches, not extracting local://mnt/prestage/mroot.tgz.
+Jan 29 05:32:42 [HongKong_Node2:tar.csum.match:info]: Stored checksum matches, not extracting local://mnt/prestage/pmroot.tgz.
+Jan 29 05:32:42 [HongKong_Node2:vFiler.smb0.init.begin:info]: About to begin SMB initialization for vFiler0.
+Jan 29 05:32:42 [HongKong_Node2:vFiler.basic.setting.done:info]: vFiler basic operations such as SMB and pseudo-root initialization for vFiler0 are complete.
+Jan 29 05:32:42 [HongKong_Node2:dfu.firmwareUpToDate:info]: Firmware is up-to-date on all disks.
+HongKong_Node2
+Jan 29 05:32:42 [HongKong_Node2:snmp.agent.msg.access.denied:warning]: Permission denied for SNMPv3 requests from root. Reason: Password is too short (SNMPv3 requires at least 8 characters).
+Jan 29 05:32:43 [HongKong_Node2:mgr.boot.disk_done:info]: NetApp Release 8.2.3 Cluster-Mode boot complete. Last disk update written at Thu Jan 28 21:28:10 GMT 2016
+
+Jan 29 05:32:43 [HongKong_Node2:snmp.link.up:info]: Interface 7 is up
+Jan 29 05:32:43 [HongKong_Node2:snmp.link.up:info]: Interface 8 is up
+Jan 29 05:32:43 [HongKong_Node2:mgr.boot.reason_ok:notice]: System rebooted after a reboot command.
+Jan 29 05:32:43 [HongKong_Node2:callhome.reboot.reboot:info]: Call home for REBOOT (reboot command)
+Jan 29 05:32:43 [HongKong_Node2:replication.upgrade.complete:info]: Post-upgrade operations for SnapMirror and SnapVault are complete.
+Jan 29 05:32:43 [HongKong_Node2:clam.enable:info]: CLAM functionality is enabled.
+
+
+
+
+
+
+Fri Jan 29 05:33:13 HKT 2016
+login: admin
+Password:
+HongKong-CLU2::> vserver show
+                    Admin     Root                  Name    Name
+Vserver     Type    State     Volume     Aggregate  Service Mapping
+----------- ------- --------- ---------- ---------- ------- -------
+HongKong-CLU2
+            admin   -         -          -          -       -
+HongKong_Node2
+            node    -         -          -          -       -
+WFWHKFI2    data    running   WFWHKFI2_  aggr1_     file,   file
+                              root       HongKong_  nis
+                                         Node2
+3 entries were displayed.
+
+HongKong-CLU2::> system license show
+
+Serial Number: 1-80-000023
+Owner: HongKong-CLU2
+Package           Type    Description           Expiration
+----------------- ------- --------------------- --------------------
+Base              license Cluster Base License  -
+
+Serial Number: 1-81-0000000000000000000000023
+Owner: none
+Package           Type    Description           Expiration
+----------------- ------- --------------------- --------------------
+NFS               license NFS License           -
+CIFS              license CIFS License          -
+iSCSI             license iSCSI License         -
+SnapRestore       license SnapRestore License   -
+SnapMirror        license SnapMirror License    -
+FlexClone         license FlexClone License     -
+SnapVault         license SnapVault License     -
+8 entries were displayed.
+
+HongKong-CLU2::> vol show
+  (volume show)
+Vserver   Volume       Aggregate    State      Type       Size  Available Used%
+--------- ------------ ------------ ---------- ---- ---------- ---------- -----
+HongKong_Node2
+          vol0         aggr0_HongKong_Node2
+                                    online     RW      44.91GB    37.35GB   16%
+WFWHKFI2  NEWWFWHKFI1_HONGKONG_DATA2_mirror
+                       aggr1_HongKong_Node2
+                                    online     DP        500GB    361.7GB   27%
+WFWHKFI2  VM_C         aggr1_HongKong_Node2
+                                    online     RW        300GB    275.1GB    8%
+WFWHKFI2  VM_D         aggr1_HongKong_Node2
+                                    online     RW        150GB    142.5GB    5%
+WFWHKFI2  VM_E         aggr1_HongKong_Node2
+                                    online     RW        300GB    285.0GB    5%
+WFWHKFI2  WFWHKFI2_root
+                       aggr1_HongKong_Node2
+                                    online     RW          1GB    972.5MB    5%
+6 entries were displayed.
+
+HongKong-CLU2::> net int show
+  (network interface show)
+            Logical    Status     Network            Current       Current Is
+Vserver     Interface  Admin/Oper Address/Mask       Node          Port    Home
+----------- ---------- ---------- ------------------ ------------- ------- ----
+HongKong-CLU2
+            cluster_mgmt up/up    172.22.47.23/24    HongKong_Node2
+                                                                   e0a     true
+HongKong_Node2
+            HongKong_Node2_LIF_SNAPMIRROR
+                         up/up    172.22.47.28/24    HongKong_Node2
+                                                                   e0d     true
+            HongKong_Node2_mgmt1
+                         up/up    172.22.47.24/24    HongKong_Node2
+                                                                   e0a     true
+WFWHKFI2
+            WFWHKFI2_admin_lif1
+                         up/up    172.22.47.27/24    HongKong_Node2
+                                                                   e0b     true
+            WFWHKFI2_cifs_nfs_lif1
+                         up/up    172.22.47.21/24    HongKong_Node2
+                                                                   e0c     true
+5 entries were displayed.
+
+HongKong-CLU2::> snapmirror show
+                                                                       Progress
+Source            Destination  Mirror  Relationship  Total             Last
+Path        Type  Path         State   Status        Progress  Healthy Updated
+----------- ---- ------------ ------- -------------- --------- ------- --------
+NEWWFWHKFI1:HONGKONG_DATA2
+            DP   WFWHKFI2:NEWWFWHKFI1_HONGKONG_DATA2_mirror
+                              Snapmirrored
+                                      Idle           -         true    -
+
+HongKong-CLU2::> cluster peer show
+Peer Cluster Name          Cluster Serial Number Availability
+-------------------------- --------------------- ---------------
+HongKong-CLU1              1-80-000023           Available
+
+HongKong-CLU2::> snapmirror resync
+Usage:
+  { [ -source-path|-S {<[vserver:]volume>|<[cluster:][//vserver/]volume>} ]
+                                             Source Path
+  | [ -source-cluster <cluster_name> ]       Source Cluster
+    [ -source-vserver <vserver name> ]       Source Vserver
+    [ -source-volume <volume name> ] }       Source Volume
+   { [-destination-path] {<[vserver:]volume>|<[cluster:][//vserver/]volume>}
+                                             Destination Path
+  | [ -destination-cluster <cluster_name> ]  Destination Cluster
+     [-destination-vserver] <vserver name>   Destination Vserver
+     [-destination-volume] <volume name> }   Destination Volume
+  [[-source-snapshot|-s] <text>]             Source Snapshot
+  [ -type {DP|LS|XDP|RST|TDP} ]              Snapmirror Relationship Type
+  [ -force|-f [true] ]                       Force
+  [ -throttle|-k {<integer>|unlimited} ]     Throttle (KB/sec)
+  [ -transfer-priority {low|normal} ]        Transfer Priority
+  [ -preserve [true] ]                       Preserve
+  [ -foreground|-w [true] ]                  Foreground Process
+
+HongKong-CLU2::> snapmirror resync ?
+  { [ -source-path|-S {<[vserver:]volume>|<[cluster:][//vserver/]volume>} ]
+                                             Source Path
+  | [ -source-cluster <cluster_name> ]       Source Cluster
+    [ -source-vserver <vserver name> ]       Source Vserver
+    [ -source-volume <volume name> ] }       Source Volume
+   { [-destination-path] {<[vserver:]volume>|<[cluster:][//vserver/]volume>}
+                                             Destination Path
+  | [ -destination-cluster <cluster_name> ]  Destination Cluster
+     [-destination-vserver] <vserver name>   Destination Vserver
+     [-destination-volume] <volume name> }   Destination Volume
+  [[-source-snapshot|-s] <text>]             Source Snapshot
+  [ -type {DP|LS|XDP|RST|TDP} ]              Snapmirror Relationship Type
+  [ -force|-f [true] ]                       Force
+  [ -throttle|-k {<integer>|unlimited} ]     Throttle (KB/sec)
+  [ -transfer-priority {low|normal} ]        Transfer Priority
+  [ -preserve [true] ]                       Preserve
+  [ -foreground|-w [true] ]                  Foreground Process
+
+HongKong-CLU2::> snapmirror resync -source-
+    -source-path     -source-cluster  -source-vserver  -source-volume
+    -source-snapshot
+HongKong-CLU2::> snapmirror resync -source-v
+    -source-vserver -source-volume
+
+HongKong-CLU2::> snapmirror resync -source-vserver @?
+  <vserver name>              Source Vserver
+
+HongKong-CLU2::> snapmirror resync -source-vserver ?
+  WFWHKFI2
+
+HongKong-CLU2::> snapmirror resync -source-vserver NEWWFWHKFI1 ?
+  [ -source-cluster <cluster_name> ]         Source Cluster
+  [ -source-volume <volume name> ]           Source Volume
+   { [-destination-path] {<[vserver:]volume>|<[cluster:][//vserver/]volume>}
+                                             Destination Path
+  | [ -destination-cluster <cluster_name> ]  Destination Cluster
+     [-destination-vserver] <vserver name>   Destination Vserver
+     [-destination-volume] <volume name> }   Destination Volume
+  [[-source-snapshot|-s] <text>]             Source Snapshot
+  [ -type {DP|LS|XDP|RST|TDP} ]              Snapmirror Relationship Type
+  [ -force|-f [true] ]                       Force
+  [ -throttle|-k {<integer>|unlimited} ]     Throttle (KB/sec)
+  [ -transfer-priority {low|normal} ]        Transfer Priority
+  [ -preserve [true] ]                       Preserve
+  [ -foreground|-w [true] ]                  Foreground Process
+
+HongKong-CLU2::> snapmirror resync -source-vserver NEWWFWHKFI1 -source-
+    -source-cluster  -source-volume   -source-snapshot
+HongKong-CLU2::> snapmirror resync -source-vserver NEWWFWHKFI1 -source-volume HONGKONG_DATA2 -destination-
+    -destination-path    -destination-cluster -destination-vserver
+    -destination-volume
+HongKong-CLU2::> snapmirror resync -source-vserver NEWWFWHKFI1 -source-volume HONGKONG_DATA2 -destination-v
+    -destination-vserver -destination-volume
+
+HongKong-CLU2::> snapmirror resync -source-vserver NEWWFWHKFI1 -source-volume HONGKONG_DATA2 -destination-vserver WFWHKFI2 -destination-
+    -destination-cluster -destination-volume
+HongKong-CLU2::> snapmirror resync -source-vserver NEWWFWHKFI1 -source-volume HONGKONG_DATA2 -destination-vserver WFWHKFI2 -destination-volume NEWWFWHKFI1_HONGKONG_DATA2_mirror
+
+Warning: All data newer than Snapshot copy
+         snapmirror.e3165bc0-89b3-11e5-b7c3-005056881580_2147484678.2016-01-29_0
+         20500 on volume WFWHKFI2:NEWWFWHKFI1_HONGKONG_DATA2_mirror will be
+         deleted.
+Do you want to continue? {y|n}: y
+[Job 369] Job succeeded: SnapMirror Resync Transfer Queued
+
+HongKong-CLU2::> snapmirror show                                                                                                                                                                                                   Progress
+Source            Destination  Mirror  Relationship  Total             Last
+Path        Type  Path         State   Status        Progress  Healthy Updated
+----------- ---- ------------ ------- -------------- --------- ------- --------
+NEWWFWHKFI1:HONGKONG_DATA2
+            DP   WFWHKFI2:NEWWFWHKFI1_HONGKONG_DATA2_mirror
+                              Snapmirrored
+                                      Idle           -         true    -
+
+HongKong-CLU2::> snapmirror update -destination-path WFWHKFI2:
+    WFWHKFI2:NEWWFWHKFI1_HONGKONG_DATA2_mirror
+    WFWHKFI2:VM_C
+    WFWHKFI2:VM_D
+    WFWHKFI2:VM_E
+    WFWHKFI2:WFWHKFI2_root
+HongKong-CLU2::> snapmirror update -destination-path WFWHKFI2:NEWWFWHKFI1_HONGKONG_DATA2_mirror -
+    -source-path       -source-cluster    -source-vserver
+    -source-volume     -source-snapshot   -throttle
+    -transfer-priority -foreground
+HongKong-CLU2::> snapmirror update -destination-path WFWHKFI2:NEWWFWHKFI1_HONGKONG_DATA2_mirror -source-
+    -source-path     -source-cluster  -source-vserver  -source-volume
+    -source-snapshot
+HongKong-CLU2::> snapmirror update -destination-path WFWHKFI2:NEWWFWHKFI1_HONGKONG_DATA2_mirror -source-path ?
+  WFWHKFI2:NEWWFWHKFI1_HONGKONG_DATA2_mirror
+  WFWHKFI2:VM_C
+  WFWHKFI2:VM_D
+  WFWHKFI2:VM_E
+  WFWHKFI2:WFWHKFI2_root
+
+HongKong-CLU2::> snapmirror update -destination-path WFWHKFI2:NEWWFWHKFI1_HONGKONG_DATA2_mirror -source-path NEWWFWHKFI1:HONGKONG_DATA2
+Operation is queued: snapmirror update of destination "WFWHKFI2:NEWWFWHKFI1_HONGKONG_DATA2_mirror".
+
+#Changing the IP Address on ONTAP-v
+You can start the bash shell in the vSphere Client Console tab or an SSH session. You must restart
+the Data ONTAP-v Installer virtual machine for the changes to take effect.
+Managing the Data ONTAP-v administration tool | 23
+Steps
+1. In the ESX host setup shell, press Ctrl-C to start the bash shell.
+2. At the bash shell prompt, type reset-networking and press Enter. The following prompt is
+displayed:
+Would you like to reset network settings to the factory default? [y]:
+3. Type y and press Enter. The following prompt is displayed:
+You need to restart the system to apply changes.
+Would you like to restart now? [y]:
+4. Type y to restart the Data ONTAP-v Installer virtual machine and apply the changes.
+Result
+The virtual machine network interface is reset to the factory defaults. If you are not using DHCP to
+assign an IP address to the installer virtual machine automatically, you will need to configure the
+virtual machine network interface with a static IP address.

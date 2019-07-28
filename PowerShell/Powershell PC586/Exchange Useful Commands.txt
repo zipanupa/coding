@@ -1,0 +1,287 @@
+#Server Health
+#Check services are running on an Exchange Server
+Test-ServiceHealth WFWDC1EXCH01
+
+#Check DB status on all servers
+Get-MailBoxDatabase
+
+#Check MAPI access to a server
+Test-MapiConnectivity -server WFWDC1EXCH01
+
+#Test mail flow between servers
+Test-Mailflow -Identity WFWDC1EXCH01 -TargetMailboxServer WFWDC1EXCH02
+
+#Show database status
+Get-MailboxDatabaseCopyStatus -server WFWDC1EXCH01
+
+#Check where mailboxes are active
+Get-MailboxDatabase 
+#Check for specific servers active databases
+Get-MailboxDatabase | where {$_.Server -eq "WF"}
+
+#Checking Activation Preference
+Get-MailboxDatabase | ft name, server, activationpreference -AutoSize
+
+#View CASes
+Get-ClientAccessArray
+#Set a site on a CAS
+Set-ClientAccessArray -Identity dc2cas.wfw.com -site London
+#Checking CAS settings on all mailboxes
+Get-MailboxDatabase | select name,rpcclientaccessserver | ft -auto
+#Setting CAS settings on all mailboxes
+Get-MailboxDatabase | where {$_.Servername -eq "WFWDC2EXCH03"} | Set-MailboxDatabase -RPCClientAccessServer londoncas.wfw.com
+ 
+#See on all databases where mailboxes are held
+Get-Mailbox | select Name,alias,servername,database
+#See all mailboxes on a particular database
+Get-Mailbox | select Name,alias,servername,database |  where {$_.Database -eq "DC1DB1"}
+#see where a users mailbox is based on wildcard name selection
+Get-Mailbox | select Name,alias,servername,database |  where {$_.Name -like '*mcc*'}
+#See where the arbitration databases are stored
+Get-Mailbox -Arbitration | select Name,alias,servername,database
+#Move arbitration databases to a specific database, in this case from DC2DB1 (found from command above) to DC2DB2
+Get-Mailbox -Arbitration | New-MoveRequest -TargetDatabase DC2DB2 -BatchName "DC2DB1 To DC2DB2"
+#Check active databases and servers
+Get-MailboxDatabase | select name, server | ft -auto
+
+#Setting Activation Preferences
+#DC1 DAG Activation Preference
+
+#WFWDC1EXCH01 - Normally Odd DB Numbers Pref 1 Even DB Numbers Pref 2
+Set-MailboxDatabaseCopy -Identity DC1DB1\WFWDC1EXCH01 -ActivationPreference 1
+Set-MailboxDatabaseCopy -Identity DC1DB3\WFWDC1EXCH01 -ActivationPreference 1
+Set-MailboxDatabaseCopy -Identity DC1DB5\WFWDC1EXCH01 -ActivationPreference 1
+Set-MailboxDatabaseCopy -Identity DC1DB7\WFWDC1EXCH01 -ActivationPreference 1
+Set-MailboxDatabaseCopy -Identity DC1DB9\WFWDC1EXCH01 -ActivationPreference 1
+Set-MailboxDatabaseCopy -Identity DC1DB2\WFWDC1EXCH01 -ActivationPreference 2
+Set-MailboxDatabaseCopy -Identity DC1DB4\WFWDC1EXCH01 -ActivationPreference 2
+Set-MailboxDatabaseCopy -Identity DC1DB6\WFWDC1EXCH01 -ActivationPreference 2
+Set-MailboxDatabaseCopy -Identity DC1DB8\WFWDC1EXCH01 -ActivationPreference 2
+Set-MailboxDatabaseCopy -Identity DC1DB10\WFWDC1EXCH01 -ActivationPreference 2
+
+#WFWDC1EXCH02 - Normally Even DB Numbers Pref 1 Odd DB Numbers Pref 2
+Set-MailboxDatabaseCopy -Identity DC1DB1\WFWDC1EXCH02 -ActivationPreference 2
+Set-MailboxDatabaseCopy -Identity DC1DB3\WFWDC1EXCH02 -ActivationPreference 2
+Set-MailboxDatabaseCopy -Identity DC1DB5\WFWDC1EXCH02 -ActivationPreference 2
+Set-MailboxDatabaseCopy -Identity DC1DB7\WFWDC1EXCH02 -ActivationPreference 2
+Set-MailboxDatabaseCopy -Identity DC1DB9\WFWDC1EXCH02 -ActivationPreference 2
+Set-MailboxDatabaseCopy -Identity DC1DB2\WFWDC1EXCH02 -ActivationPreference 1
+Set-MailboxDatabaseCopy -Identity DC1DB4\WFWDC1EXCH02 -ActivationPreference 1
+Set-MailboxDatabaseCopy -Identity DC1DB6\WFWDC1EXCH02 -ActivationPreference 1
+Set-MailboxDatabaseCopy -Identity DC1DB8\WFWDC1EXCH02 -ActivationPreference 1
+Set-MailboxDatabaseCopy -Identity DC1DB10\WFWDC1EXCH02 -ActivationPreference 1
+
+#WFWDC2EXCH03 - Backup - Normally All DB Numbers Pref 3
+Set-MailboxDatabaseCopy -Identity DC1DB1\WFWDC2EXCH03 -ActivationPreference 3
+Set-MailboxDatabaseCopy -Identity DC1DB3\WFWDC2EXCH03 -ActivationPreference 3
+Set-MailboxDatabaseCopy -Identity DC1DB5\WFWDC2EXCH03 -ActivationPreference 3
+Set-MailboxDatabaseCopy -Identity DC1DB7\WFWDC2EXCH03 -ActivationPreference 3
+Set-MailboxDatabaseCopy -Identity DC1DB9\WFWDC2EXCH03 -ActivationPreference 3
+Set-MailboxDatabaseCopy -Identity DC1DB2\WFWDC2EXCH03 -ActivationPreference 3
+Set-MailboxDatabaseCopy -Identity DC1DB4\WFWDC2EXCH03 -ActivationPreference 3
+Set-MailboxDatabaseCopy -Identity DC1DB6\WFWDC2EXCH03 -ActivationPreference 3
+Set-MailboxDatabaseCopy -Identity DC1DB8\WFWDC2EXCH03 -ActivationPreference 3
+Set-MailboxDatabaseCopy -Identity DC1DB10\WFWDC2EXCH03 -ActivationPreference 3
+
+#DC2 DAG Activation Preference
+
+#WFWDC2EXCH01 - Normally Odd DB Numbers Pref 1 Even DB Numbers Pref 2
+Set-MailboxDatabaseCopy -Identity DC2DB1\WFWDC2EXCH01 -ActivationPreference 1
+Set-MailboxDatabaseCopy -Identity DC2DB3\WFWDC2EXCH01 -ActivationPreference 1
+Set-MailboxDatabaseCopy -Identity DC2DB5\WFWDC2EXCH01 -ActivationPreference 1
+Set-MailboxDatabaseCopy -Identity DC2DB7\WFWDC2EXCH01 -ActivationPreference 1
+Set-MailboxDatabaseCopy -Identity DC2DB9\WFWDC2EXCH01 -ActivationPreference 1
+Set-MailboxDatabaseCopy -Identity DC2DB2\WFWDC2EXCH01 -ActivationPreference 2
+Set-MailboxDatabaseCopy -Identity DC2DB4\WFWDC2EXCH01 -ActivationPreference 2
+Set-MailboxDatabaseCopy -Identity DC2DB6\WFWDC2EXCH01 -ActivationPreference 2
+Set-MailboxDatabaseCopy -Identity DC2DB8\WFWDC2EXCH01 -ActivationPreference 2
+Set-MailboxDatabaseCopy -Identity DC2DB10\WFWDC2EXCH01 -ActivationPreference 2
+
+#WFWDC2EXCH02 - Normally Even DB Numbers Pref 1 Odd DB Numbers Pref 2
+Set-MailboxDatabaseCopy -Identity DC2DB1\WFWDC2EXCH02 -ActivationPreference 2
+Set-MailboxDatabaseCopy -Identity DC2DB3\WFWDC2EXCH02 -ActivationPreference 2
+Set-MailboxDatabaseCopy -Identity DC2DB5\WFWDC2EXCH02 -ActivationPreference 2
+Set-MailboxDatabaseCopy -Identity DC2DB7\WFWDC2EXCH02 -ActivationPreference 2
+Set-MailboxDatabaseCopy -Identity DC2DB9\WFWDC2EXCH02 -ActivationPreference 2
+Set-MailboxDatabaseCopy -Identity DC2DB2\WFWDC2EXCH02 -ActivationPreference 1
+Set-MailboxDatabaseCopy -Identity DC2DB4\WFWDC2EXCH02 -ActivationPreference 1
+Set-MailboxDatabaseCopy -Identity DC2DB6\WFWDC2EXCH02 -ActivationPreference 1
+Set-MailboxDatabaseCopy -Identity DC2DB8\WFWDC2EXCH02 -ActivationPreference 1
+Set-MailboxDatabaseCopy -Identity DC2DB10\WFWDC2EXCH02 -ActivationPreference 1
+
+#WFWDC1EXCH03 - Backup - Normally All DB Numbers Pref 3
+Set-MailboxDatabaseCopy -Identity DC2DB1\WFWDC1EXCH03 -ActivationPreference 3
+Set-MailboxDatabaseCopy -Identity DC2DB3\WFWDC1EXCH03 -ActivationPreference 3
+Set-MailboxDatabaseCopy -Identity DC2DB5\WFWDC1EXCH03 -ActivationPreference 3
+Set-MailboxDatabaseCopy -Identity DC2DB7\WFWDC1EXCH03 -ActivationPreference 3
+Set-MailboxDatabaseCopy -Identity DC2DB9\WFWDC1EXCH03 -ActivationPreference 3
+Set-MailboxDatabaseCopy -Identity DC2DB2\WFWDC1EXCH03 -ActivationPreference 3
+Set-MailboxDatabaseCopy -Identity DC2DB4\WFWDC1EXCH03 -ActivationPreference 3
+Set-MailboxDatabaseCopy -Identity DC2DB6\WFWDC1EXCH03 -ActivationPreference 3
+Set-MailboxDatabaseCopy -Identity DC2DB8\WFWDC1EXCH03 -ActivationPreference 3
+Set-MailboxDatabaseCopy -Identity DC2DB10\WFWDC1EXCH03 -ActivationPreference 3
+
+#Checking activation policy
+Get-MailboxServer WFWDC1EXCH01
+#Set activation policy to 'Blocked'
+Set-MailboxServer WFWDC1EXCH01 -DatabaseCopyAutoActivationPolicy Blocked
+#Set activation policy to 'Unrestricted'
+Set-MailboxServer WFWDC1EXCH01 -DatabaseCopyAutoActivationPolicy Unrestricted
+
+#Remove a copy of a database from a server
+#Remove-MailBoxDataBaseCopy '(DBNAME\(SERVER)'
+#e.g
+Remove-MailBoxDataBaseCopy 'DC2DB1\WFWDC2EXCH02' -Confirm:$false
+Remove-MailBoxDataBaseCopy 'DC2DB2\WFWDC2EXCH02' -Confirm:$false
+Remove-MailBoxDataBaseCopy 'DC2DB3\WFWDC2EXCH02' -Confirm:$false
+Remove-MailBoxDataBaseCopy 'DC2DB4\WFWDC2EXCH02' -Confirm:$false
+Remove-MailBoxDataBaseCopy 'DC2DB5\WFWDC2EXCH02' -Confirm:$false
+Remove-MailBoxDataBaseCopy 'DC2DB6\WFWDC2EXCH02' -Confirm:$false
+Remove-MailBoxDataBaseCopy 'DC2DB7\WFWDC2EXCH02' -Confirm:$false
+Remove-MailBoxDataBaseCopy 'DC2DB8\WFWDC2EXCH02' -Confirm:$false
+Remove-MailBoxDataBaseCopy 'DC2DB9\WFWDC2EXCH02' -Confirm:$false
+Remove-MailBoxDataBaseCopy 'DC2DB10\WFWDC2EXCH02' -Confirm:$false
+
+#Remove a server from a DAG (you must remove all DBs in the DAG from the target server first)
+#Remove-DatabaseAvailabilityGroupServer -id (DAGNAME) -MailboxServer (SERVER)
+#e.g 
+Remove-DatabaseAvailabilityGroupServer -id DC2 -MailboxServer WFWDC2EXCH02
+
+#Remove a server from the configuration of a DAG (you must remove all DBs in the DAG from the target server first)
+#Remove-DatabaseAvailabilityGroupServer -id (DAGNAME) -MailboxServer (SERVER) -ConfigurationOnly
+#e.g 
+Remove-DatabaseAvailabilityGroupServer -id DC2 -MailboxServer WFWDC2EXCH02 -ConfigurationOnly
+
+#Update DB on a broken DB (warning: deletes existing data)
+Update-MailboxDatabaseCopy -Identity '(DBNAME\(SERVER)' -DeleteExistingFiles
+
+#Add a server to a DAG
+Add-DatabaseAvailabilityGroupServer -id (DAGNAME) -MailboxServer (SERVER)
+
+#create a database
+#Set default AD Server to stop AD error
+Set-ADServerSettings -ConfigurationDomainController WFWLODC01.wfw.com
+New-MailboxDatabase -Server WFWHA2EXCH01 -Name "DC2DB4" -EdbFilePath E:\Mountpoints\DC2DB4\DC2DB4.edb -LogFolderPath E:\Mountpoints\DC2Logs\DC2DB4
+New-MailboxDatabase -Server WFWDC2EXCH03 -Name "DC1DB2_T" -EdbFilePath E:\Mountpoints\DC1DB2\DC1DB2_T.edb -LogFolderPath E:\Mountpoints\DC1Logs\DC1DB2_T
+New-MailboxDatabase -Server WFWDC2EXCH03 -Name "DC1DB3_T" -EdbFilePath E:\Mountpoints\DC1DB3\DC1DB3_T.edb -LogFolderPath E:\Mountpoints\DC1Logs\DC1DB3_T
+New-MailboxDatabase -Server WFWDC2EXCH03 -Name "DC1DB4_T" -EdbFilePath E:\Mountpoints\DC1DB4\DC1DB4_T.edb -LogFolderPath E:\Mountpoints\DC1Logs\DC1DB4_T
+New-MailboxDatabase -Server WFWDC2EXCH03 -Name "DC1DB5_T" -EdbFilePath E:\Mountpoints\DC1DB5\DC1DB5_T.edb -LogFolderPath E:\Mountpoints\DC1Logs\DC1DB5_T
+New-MailboxDatabase -Server WFWDC2EXCH03 -Name "DC1DB6_T" -EdbFilePath E:\Mountpoints\DC1DB6\DC1DB6_T.edb -LogFolderPath E:\Mountpoints\DC1Logs\DC1DB6_T
+New-MailboxDatabase -Server WFWDC2EXCH03 -Name "DC1DB7_T" -EdbFilePath E:\Mountpoints\DC1DB7\DC1DB7_T.edb -LogFolderPath E:\Mountpoints\DC1Logs\DC1DB7_T
+New-MailboxDatabase -Server WFWDC2EXCH03 -Name "DC1DB8_T" -EdbFilePath E:\Mountpoints\DC1DB8\DC1DB8_T.edb -LogFolderPath E:\Mountpoints\DC1Logs\DC1DB8_T
+New-MailboxDatabase -Server WFWDC2EXCH03 -Name "DC1DB9_T" -EdbFilePath E:\Mountpoints\DC1DB9\DC1DB9_T.edb -LogFolderPath E:\Mountpoints\DC1Logs\DC1DB9_T
+New-MailboxDatabase -Server WFWDC2EXCH03 -Name "DC1DB10_T" -EdbFilePath E:\Mountpoints\DC1DB10\DC1DB10_T.edb -LogFolderPath E:\Mountpoints\DC1Logs\DC1DB10_T
+#Mount the databases
+Mount-Database DC1DB1
+Mount-Database DC1DB2
+Mount-Database DC1DB3
+Mount-Database DC1DB4
+Mount-Database DC1DB5
+Mount-Database DC1DB6
+Mount-Database DC1DB7
+Mount-Database DC1DB8
+Mount-Database DC1DB9
+Mount-Database DC1DB10
+
+#Add a copy of a database to a server in a DAG (NOTE: See command below this one for a 'specific source' method)
+Add-MailboxDatabaseCopy -id (DBNAME) -MailboxServer (SERVER)
+
+#Add a copy of a database to a server in a DAG from a specific source
+#Create copy
+Add-MailboxDatabaseCopy -Identity DC1DB1 -MailboxServer WFWDC1EXCH01 -SeedingPostponed
+#Optional command to let people know the database is seeding
+Suspend-MailboxDatabaseCopy -Identity DC1DB1\WFWDC1EXCH01 -SuspendComment "Seeding DC1DB1 from WFWDC1EXCH02"
+#This final command updates the database from the specific source via the 'SourceServer' specified
+Update-MailboxDatabaseCopy -Identity DC2DB2\WFWDC1EXCH03 -SourceServer WFWDC2EXCH02 -DeleteExistingFiles
+
+#Redistribution of Databases
+#Moving an active DB to another server in a DAG
+Move-ActiveMailboxDatabase -Identity '(DBNAME)' -ActivateOnServer '(SERVER)' -MountDialOverride 'None'
+
+#Show current settings
+.\RedistributeActiveDatabases.ps1 -DagName DC2 -ShowDatabaseDistributionByServer | ft
+
+#Balance by activation preference
+.\RedistributeActiveDatabases.ps1 -DagName DC2 -BalanceDbsByActivationPreference
+
+#Check activation preference
+Get-MailBoxDatabase -Identity DBNAME* | fl name,server,activationpreference
+
+#Cleanup Cluster
+Import-Module FailoverClusters
+Clear-ClusterNode
+
+#Review Mailboxes and Databases
+
+#View Database status for every DB
+Get-MailboxDatabase -Status | Format-Table Name, Server, Mounted
+#View Database status for a servers DBs
+Get-MailboxDatabase -Server WFWDC1EXCH01 | Get-Mailbox
+#View Mailboxes inside a database
+#View Mailboxes for every DB and server
+Get-MailboxDatabase -status | Get-Mailbox | Format-Table name,alias,servername,database
+#View Mailboxes in a particular DB
+Get-MailboxDatabase "DC1DB1" | Get-Mailbox
+#View Mailboxes on a particular server
+Get-MailboxDatabase -server wfwdc1exch01 | Get-Mailbox
+
+#Add pemissions to a mailbox database
+Add-MailboxPermission -Identity ttrng6@wfw.com -User mccm1 -AccessRights FullAccess
+#Once the above is done, the 'user' specified should be able to access the account via owa at the owa URL like this...
+https://mail1.wfw.com/owa/ttrng6@wfw.com
+
+#View index state of a database
+Get-MailboxDatabaseCopyStatus DC1DB3
+#Update index state of a database
+Update-MailboxDatabaseCopy "DC1DB3\WFWDC1EXCH01" -CatalogOnly
+
+#Check size of databases
+Get-MailboxDatabase -Status | ft servername,name,databasesize -autosize
+#Check sizes of mailboxes on a server
+Get-MailboxStatistics -Server WFWDC1EXCH02 | ft displayname,totalitemsize,totaldeleteditemsize -autosize
+#Check sizes of individuals mailbox
+Get-MailboxStatistics -id mccm1 | ft displayname,totalitemsize,totaldeleteditemsize -autosize
+#Another way...
+Get-MailboxStatistics -database DC1DB1 | where{$_.DisplayName -eq 'Mark McCullough'} | ft displayname,totalitemsize,totaldeleteditemsize -autosize
+#Mailboxes over 1GB in size
+Get-MailboxStatistics -database DC1DB1 | where{$_.Totalitemsize -gt 1000000000} | ft displayname,totalitemsize,totaldeleteditemsize -autosize
+
+#Soft deleted databases purge
+Get-MailboxStatistics -Database DC1DB1 | Where-Object{$_.DisconnectReason -eq "SoftDeleted"}| ForEach-Object {Remove-StoreMailbox -Database $_.Database -Identity $_.MailBoxGuid -MailboxState SoftDeleted}
+#Other hidden mailboxes may be found with the following
+Get-MailboxStatistics -Database "DC1DB2" | Where-Object{$_.DisconnectReason -eq "SoftDeleted"}
+Get-MailboxStatistics -Database "DC1DB2" | Where-Object{$_.DisconnectReason -eq "Disconnected"}
+Get-MailboxStatistics -Database "DC1DB2" | Where-Object{$_.DisconnectReason -eq "Disabled"}
+
+
+#Move requests
+#Move all databases to new mailbox DBexit
+Get-Mailbox | New-MoveRequest -TargetDatabase "DC1DB1_T"
+#Move arbitration databases to new mailbox DB
+Get-Mailbox -Arbitration | New-MoveRequest -TargetDatabase "DC1DB1_T"
+
+#Remove mailbox move requests
+Get-MoveRequest | where {$_.Status -eq "Completed"} | Remove-MoveRequest -Confirm:$False
+
+#Notes
+ndmpcopy /vol/SINGAPORE_DATA/USERS /vol/SINGAPORE_USERS/users
+
+Provisioning layer initialization failed: '"Scripting Agent initialization failed: "File is not found: 'C:\Program Files\Microsoft\Exchange Server\V14\Bin\CmdletExtensionAgents\ScriptingAgentConfig.xml'
+
+Set-WebServicesVirtualDirectory -Identity \EWS(Default Web site)-ExternalUrl https://mail2.wfw.com/EWS/exchange.asmx -ExternalAuthenticationMethods Basic -InternalUrl https://dc2cas.wfw.com/EWS/exchange.asmx
+
+Set-Mailbox "nikd1" -ThrottlingPolicy DefaultThrottlingPolicy_81c4c8e5-6837-4aec-bb91-bcb18b7ac254
+
+For the whole mailbox
+
+Get-MailboxStatistics galp1
+
+Per folder
+
+Get-MailboxFolderStatistics galp1 –FolderScope galp1
+
+Or to export to CSV to look at all folders individually just add;
+
+Get-MailboxFolderStatistics galp1 –FolderScope galp1 | Export-CSV c:\Export.csv
+
+

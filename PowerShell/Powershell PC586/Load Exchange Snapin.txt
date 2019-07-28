@@ -1,0 +1,1 @@
+Add-PSSNapin -Name Microsoft.Exchange.Management.PowerShell.E2010

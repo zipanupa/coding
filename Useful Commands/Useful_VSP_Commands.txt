@@ -1,0 +1,106 @@
+
+vsp@wfwdc2mivsp01.wfw.com#devshell shell
+
+bash-3.2$ sudo -i
+[root@wfwdc2mivsp01.wfw.com 2015-03-11--11-21-03 ~ #] service tomcat2 stop
+Stopping tomcat2:                                          [  OK  ]
+[root@wfwdc2mivsp01.wfw.com 2015-03-11--11-21-20 ~ #] cd /mi/pki/mics/
+[root@wfwdc2mivsp01.wfw.com 2015-03-11--11-21-35 mics #] cp keystore.jks.ACTIVE keystore.jks.ACTIVE.bkp
+[root@wfwdc2mivsp01.wfw.com 2015-03-11--11-22-58 mics #] rm keystore.jks.ACTIVE
+[root@wfwdc2mivsp01.wfw.com 2015-03-11--11-23-41 mics #] ls
+keystore.jks.ACTIVE.bkp  keystore.jks.BACKUP.2015-03-05_10:52:39_UTC
+[root@wfwdc2mivsp01.wfw.com 2015-03-11--11-23-57 mics #] mv keystore.jks.BACKUP.2015-03-05_10\:52\:39_UTC keystore.jks.ACTI
+[root@wfwdc2mivsp01.wfw.com 2015-03-11--11-24-45 mics #] service tomcat2 start
+Starting tomcat2:                                          [  OK  ]
+[root@wfwdc2mivsp01.wfw.com 2015-03-11--11-25-06 mics #] exit
+logout
+bash-3.2$ exit
+exit
+vsp@wfwdc2mivsp01.wfw.com#
+vsp@wfwdc2mivsp01.wfw.com#
+
+
+Second Session
+
+login as: administrator
+administrator@wfwdc1mivsp01's password:
+Last login: Wed May 13 09:07:10 2015 from 172.22.13.203
+Unable to contact MICS service - retrying in 2 seconds (timeout in 120 seconds).                                                                           ..
+Unable to contact MICS service - retrying in 4 seconds (timeout in 118 seconds).                                                                           ..
+Unable to contact MICS service - retrying in 8 seconds (timeout in 114 seconds)...
+Unable to contact MICS service - retrying in 16 seconds (timeout in 106 seconds)...
+Unable to contact MICS service - retrying in 16 seconds (timeout in 90 seconds)...
+Unable to contact MICS service - retrying in 16 seconds (timeout in 74 seconds)...
+Unable to contact MICS service - retrying in 16 seconds (timeout in 58 seconds)...
+Unable to contact MICS service - retrying in 16 seconds (timeout in 42 seconds)...
+Unable to contact MICS service - retrying in 16 seconds (timeout in 26 seconds)...
+Unable to contact MICS service - retrying in 10 seconds (timeout in 10 seconds)...
+ERROR: Unable to connect to MICS.
+
+************************************************************
+*                    MobileIron VSP CLI                    *
+*                                                          *
+*                                                          *
+************************************************************
+Welcome administrator it is Wed May 13 09:10:19 UTC 2015
+
+vsp@wfwdc1mivsp01.wfw.com>
+vsp@wfwdc1mivsp01.wfw.com> enable
+Password:
+config_service_send: Unable to contact config service
+get_defaultpasswd: Unable to send config service request
+vsp@wfwdc1mivsp01.wfw.com#
+vsp@wfwdc1mivsp01.wfw.com#
+vsp@wfwdc1mivsp01.wfw.com#service tomncat2
+                                          ^
+  name  Name of the service  (iptables/tomcat)
+
+vsp@wfwdc1mivsp01.wfw.com#service tomcat status
+
+/var/tmp/tomcat shows PID 9286
+
+  PID TTY      STAT   TIME COMMAND
+ 9286 ?        Sl    44:41 /usr/java/default/bin/java -Djava.util.logging.config.file=/mi/tomcat/conf/logging.properties -Djava.util.logging.manager=org   e=wfwdc1mivsp01.wfw.com -Dfile.encoding=utf-8 -Djavax.net.ssl.keyStore=/usr/java/default/jre/lib/security/cacerts -Djava.security.auth.login.config=/mi/   XX:-HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/mi/files -verbose:gc -XX:+PrintGCDateStamps -XX:+PrintGCTimeStamps -XX:+PrintGCDetails -Xloggc:/mi/tomc   curity.krb5.conf=/mi/files/ldap/krb5.conf -Djava.endorsed.dirs=/mi/tomcat/endorsed -classpath :/mi/tomcat-properties:/mi/tomcat/bin/bootstrap.jar:/mi/to
+vsp@wfwdc1mivsp01.wfw.com#service tomcat2 status
+Syntax error: Illegal parameter
+vsp@wfwdc1mivsp01.wfw.com#devshell shell
+
+bash-3.2$ sudo -i
+[root@wfwdc1mivsp01.wfw.com 2015-05-13--09-11-21 ~ #] service tomcat2 stop
+Stopping tomcat2:                                          [  OK  ]
+[root@wfwdc1mivsp01.wfw.com 2015-05-13--09-11-41 ~ #] cd /mi/pki/mics/
+[root@wfwdc1mivsp01.wfw.com 2015-05-13--09-11-56 mics #] ls
+keystore.jks.ACTIVE  keystore.jks.BACKUP.2015-04-22_12:53:02_UTC
+[root@wfwdc1mivsp01.wfw.com 2015-05-13--09-11-59 mics #] cp keystore.jks.ACTIVE keystore.jks.ACTIVE.bkp
+[root@wfwdc1mivsp01.wfw.com 2015-05-13--09-12-44 mics #] rm keystore.jks.ACTIVE
+[root@wfwdc1mivsp01.wfw.com 2015-05-13--09-12-53 mics #] mv keystore.jks.BACKUP.2015-04-22_12\:53\:02_UTC keystore.jks.ACTIVE.bkp
+[root@wfwdc1mivsp01.wfw.com 2015-05-13--09-13-20 mics #] cp keystore.jks.ACTIVE keystore.jks.ACTIVE.bkp
+cp: cannot stat `keystore.jks.ACTIVE': No such file or directory
+[root@wfwdc1mivsp01.wfw.com 2015-05-13--09-13-39 mics #] pwd
+/mi/pki/mics
+[root@wfwdc1mivsp01.wfw.com 2015-05-13--09-14-53 mics #] ls
+keystore.jks.ACTIVE.bkp
+[root@wfwdc1mivsp01.wfw.com 2015-05-13--09-14-56 mics #] cd keystore.jk
+-bash: cd: keystore.jk: No such file or directory
+[root@wfwdc1mivsp01.wfw.com 2015-05-13--09-15-26 mics #]
+[root@wfwdc1mivsp01.wfw.com 2015-05-13--09-15-35 mics #] cd keystore.jks.ACTIVE.
+-bash: cd: keystore.jks.ACTIVE.bkp: Not a directory
+[root@wfwdc1mivsp01.wfw.com 2015-05-13--09-15-44 mics #] cd ..
+[root@wfwdc1mivsp01.wfw.com 2015-05-13--09-17-39 pki #] ls
+AppleiPhoneDeviceCA.pem  AppleiPhoneDeviceCA.pem.DEPRECATED  mics  mifs  pkcs11
+[root@wfwdc1mivsp01.wfw.com 2015-05-13--09-17-42 pki #] ls
+AppleiPhoneDeviceCA.pem  AppleiPhoneDeviceCA.pem.DEPRECATED  mics  mifs  pkcs11
+[root@wfwdc1mivsp01.wfw.com 2015-05-13--09-19-49 pki #] cd mics
+[root@wfwdc1mivsp01.wfw.com 2015-05-13--09-19-59 mics #] ls
+keystore.jks.ACTIVE.bkp
+[root@wfwdc1mivsp01.wfw.com 2015-05-13--09-20-02 mics #] cp keystore.jks.ACTIVE.
+[root@wfwdc1mivsp01.wfw.com 2015-05-13--09-20-29 mics #] service tomcat2 start
+Starting tomcat2:                                          [  OK  ]
+[root@wfwdc1mivsp01.wfw.com 2015-05-13--09-21-24 mics #] exit
+logout
+bash-3.2$ xit
+bash: xit: command not found
+bash-3.2$ exit
+exit
+vsp@wfwdc1mivsp01.wfw.com#
+

@@ -1,0 +1,14 @@
+Exchange 2013 CU Build Numbers - http://social.technet.microsoft.com/wiki/contents/articles/15776.exchange-server-2013-and-cumulative-updates-cus-build-numbers.aspx
+Exchange Server Update Rollups and Build Numbers - http://social.technet.microsoft.com/wiki/contents/articles/240.exchange-server-and-update-rollups-build-numbers.aspx
+ 
+Server Name,Rollup Update Description,Installed Date,ExSetup File Version
+WFWDC1EXCH01,Update Rollup 4 for Exchange Server 2010 Service Pack 3 (KB2905616) 14.3.174.1,2013/12/22,14.03.0174.001
+WFWDC1EXCH02,Update Rollup 4 for Exchange Server 2010 Service Pack 3 (KB2905616) 14.3.174.1,2013/12/22,14.03.0174.001
+WFWDC2EXCH01,Update Rollup 4 for Exchange Server 2010 Service Pack 3 (KB2905616) 14.3.174.1,2013/12/22,14.03.0174.001
+WFWDC2EXCH02,Update Rollup 4 for Exchange Server 2010 Service Pack 3 (KB2905616) 14.3.174.1,2013/12/22,14.03.0174.001
+WFWDC1EXCH03,Update Rollup 4 for Exchange Server 2010 Service Pack 3 (KB2905616) 14.3.174.1,2013/12/22,14.03.0174.001
+WFWDC2EXCH03,Update Rollup 4 for Exchange Server 2010 Service Pack 3 (KB2905616) 14.3.174.1,2014/01/05,14.03.0174.001
+WFWDC3EXCH01,Update Rollup 4 for Exchange Server 2010 Service Pack 3 (KB2905616) 14.3.174.1,2013/12/20,14.03.0174.001
+WFWDC3EXCH02,Update Rollup 4 for Exchange Server 2010 Service Pack 3 (KB2905616) 14.3.174.1,2013/12/20,14.03.0174.001
+WFWDC1EXCH04,Update Rollup 4 for Exchange Server 2010 Service Pack 3 (KB2905616) 14.3.174.1,2013/12/22,14.03.0174.001
+WFWDC1EXCH06,Update Rollup 4 for Exchange Server 2010 Service Pack 3 (KB2905616) 14.3.174.1,2014/03/28,14.03.0174.001

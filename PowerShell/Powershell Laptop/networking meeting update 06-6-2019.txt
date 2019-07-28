@@ -1,0 +1,19 @@
+1.	Brief overview of the Watson Farley Williams strategy
+	Improved networks and telephony.
+	Skype transformation.
+	SD-WAN realisation and fulfilment including the Talari stay or go question.
+	DR capability, DC or Cloud adoption.
+2.	Overview of the current challenges experienced by WFW
+	Poor video and network quality.
+	Un-uniform AV solutions.
+	Over complexity.
+3.	AS-IS review (Where you are now)
+	Halfway through and review of QoS - we still think Talari plays a part in the systems problems.
+	Currently have a new network design - awaiting costings from various suppliers.
+	Cisco Telephony - still much to do but much improved with Mila's help and getting better.
+	SIP transformation done in NY and Paris but we want to bring in more services.
+4.	TO-BE Vision (Where you want to be) – We can provide some insight into what ANS are seeing in the industry/technology
+	All of the above.
+5.	Transformation Plan – High Level Review (How do we get from the AS-IS to the TO-BE)
+6.	Provide top 5 Initiatives/priorities
+7.	AoB

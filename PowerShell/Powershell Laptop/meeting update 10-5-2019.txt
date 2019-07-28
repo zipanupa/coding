@@ -1,0 +1,49 @@
+Mark
+• Citrix work - Vietnam image can be finalised once we have all the detail - Cetus rubbish support still.
+• Preparing diagram and spreadsheet for new layer 2 WAN design to send to the suppliers.
+• Sent information for the new pen test David Robinson @ SwiftSec.
+• Re-checking DSCP markings (again).
+
+Anish
+• New York Trio Set-ups - Completed
+• NY AV Proposal - Still WIP, Dan Rogers comments received and will be taken into account.
+• Further Talari works regarding Video Quality. Captures show deeper works needed on Skype servers.
+• Ivanti Device Control Project work - WIP
+• Hamburg Round room AV install Done.
+• Florian will speak to Diversified about the HDMI matrix switcher not working 
+• Skype for Business Patching/OS and SBA Patching schedule and RFC setups for Modality 
+
+Mila
+• RFC 02477 (upgraded Paris SRST router & updated configuration)
+• RFC 2482 - Installed patch file to free up log partition space on EMEA CUCM cluster
+• Global: QoS - bandwidth requirements
+• Global: Meeting with Teneo to look at video markings, and Riverbed and Talari video QoS config
+• Paris: CUAC project - Prepared SRST config for reception hunt pilot
+• Athens: Discussed CUAC design / recetion & office call flows with Panos
+• Global: Single Service Desk Number meeting with Nina
+• EMEA: Looking at additional ways to free up CUCM logging disk space
+• BAU
+
+Anoop
+• Cert Restore for London OU
+• DC3 IBM Server Patching for IMM, BIOS - all up to date
+• Dubai Windows Restarts
+• Investigating Varonis Delay alerts - Support Call
+• Reconfiguring VM config for VDI Datacentres in VMWare
+• Dubai NetApp 9.3 Upgrade
+• Cloning of Checkpoint Log Server drives
+• Restore of PST of Hong Kong User
+• VM Disk Resizing
+• 2008 Server Upgrade Testing
+• Tape Backup checks
+
+James
+• Monday - Bank Holiday
+• Update Citrix images
+• Exchange reporting and balancing
+• Confidential management task
+• Subject access request investigative work
+• Assisting with trainee rotation mailbox moves and Groupmaker changes
+• Editing Varonis rules
+• Varonis Exchange module discussion (Friday)
+• BAU

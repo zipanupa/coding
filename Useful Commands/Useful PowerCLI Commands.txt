@@ -1,0 +1,64 @@
+#Get MAC Address for an IP address 
+Get-Cluster "London Cluster" | Get-VM | Select Name, Host, @{N="IP Address";E={@($_.guest.IPAddress)}},@{N="MAC Address";E={@($_.NetworkAdapters.MacAddress)}} | where {$_."IP Address" -like "172.22.10.205"}
+
+#Get VM with a particular IP Address
+Get-Cluster "London Cluster" | Get-VM | Select Name, Host, @{N="IP Address";E={@($_.guest.IPAddress)}} | where {$_."IP Address" -like "172.22.10.205"}
+#...or...
+Get-VM | Where-Object -FilterScript { $_.Guest.Nics.IPAddress -contains "172.22.117.1" }
+
+#To count some resources. The first counts CPU, the second Memory. Yes there are pretty reports for this, but when you need the answer, you need it now. 
+get-datacenter "SomeDC" | get-cluster "clustername" |get-vm | select numcpu | %{ $cpus += $_.numcpu } 
+get-datacenter "SomeDC" | get-vm | select memorymb | %{ $memorymb += $_.memorymb } 
+
+#Need to rapidly identify what Datastore is associated with a VM or VMs. This is helpful to get a handle on the spaghetti that an poorly maintained environment can become over time.
+get-datacenter | get-vm | %{ $_.Name; ($_ | get-datastore | select Name).Name } 
+
+#Need to rapidly identify what the condition is in. Because perusing the entire VI for one server, and then clicking “Configuration > Server Health” is too much work.
+get-vmhost -name "servername" | get-view | %{$_.Runtime.HealthSystemRuntime}  | %{ $_.HardwareStatusInfo.StorageStatusInfo } | where { $_.Name -like "Battery*" } | %{ $_.Status} 
+
+#Cold migrating A LOT of VMs. Note: This could be changed in a few ways that would allow much cooler things, but this is what I needed at the time and how I got there.
+import-csv c:\maint.csv | %{ get-vm -name $_.ServerName -Location (get-datacenter "SomeDatacenter") | move-vm -Datastore (get-datastore -name "SomeDataStore") -RunAsync -Confirm:$false } 
+
+#Get Host Details for all Clusters
+Get-VMHost | Select @{N="Cluster";E={Get-Cluster -VMHost $_}}, Name, @{N="NumVM";E={($_ | Get-VM).Count}} | Sort Cluster, Name
+
+#Get Number of VMs per Cluster
+Get-Cluster | Select @{N="Cluster";E={Get-Cluster -VMHost $_}}, Name, @{N="NumVM";E={($_ | Get-VM).Count}} | Sort Cluster, Name | ft -AutoSize
+
+#Get list of VM details seperated by Cluster
+#Note this is the code you need in Get-VMReport2.ps1
+param (
+    [parameter(ValueFromPipeline = $true )]
+    [alias("InputObject", "VirtualMachine")]
+    [VMware.VimAutomation.Client20.VirtualMachineImpl[]]$VM
+    )
+
+process {
+    $VM | ForEach-Object {
+        $vmview = $_ | Get-View
+        $vmcluster = $_ | Get-Cluster
+        #$snapshot = $_ | Get-Snapshot
+        $VMProp = @{
+            Cluster       = $vmcluster.Name
+            Host          = $_.Host
+            Name          = $_.Name
+            OSName        = $vmview.Config.GuestFullName
+            MemoryGB      = $_.MemoryGB
+            NumCPU        = $_.NumCpu
+            NumDisks      = $_.HardDisks.Count
+            DisksGB       = ( $_.HardDisks | Measure-Object -Sum CapacityGB).Sum
+            
+        }
+        New-Object PSObject -Property $VMProp
+    }
+}
+#Save that code and run the following...
+$Report = Get-Cluster | Get-VM | .\Get-VMReport2.ps1 | Sort-Object Cluster,Host,Name | select Cluster, Name, OSName, MemoryGB, NumCPU, NumDisks, DisksGB
+#Finally, export to a CSV
+$report | Export-Csv -NoTypeInformation -Path c:\powershell\report.csv
+
+#Find VMs on a DataStore
+(Get-Datastore -Name 'WFWDC1USX01').Extensiondata.Vm|%{(Get-View -Id $_.toString()).name} | sort
+
+#Lovely example of an inline one shot command to find group of machines within a DRS group.
+(get-cluster "New York Cluster").ExtensionData.ConfigurationEx.group|?{$_.vm}|%{" GROUP $($_.name) found in this cluster"; foreach($currentvm in $_.vm) { (get-view -id $currentvm).name } }

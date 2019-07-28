@@ -1,0 +1,20 @@
+#Create certificate signing request
+openssl req -newkey rsa:2048 -keyout wfwdc1tintri01.prvkey.pem -nodes -out wfwdc1tintri01.req -subj /CN=wfwdc1tintri01.wfw.com/O=WFW/C=UK/ST=UK/L=London
+
+#Submit request to the Windows certificate authority
+certreq -submit -binary -attrib "CertificateTemplate:WebServer" -config WFWLOCA2\WFW-London-CA wfwdc1tintri01.req wfwdc1tintri01.cer
+
+#Convert to a PEM certificate for import
+openssl x509 -inform der -in wfwdc1tintri01.cer -out wfwdc1tintri01.pem
+
+#Merge the certificate and private key into pkcs12 format
+openssl pkcs12 -export -inkey wfwdc1tintri01.prvkey.pem -in wfwdc1tintri01.pem -out wfwdc1tintri01.pfx -passout pass:A4dm1n456!
+
+#Convert the pkcs12 key pair into a PEM keypair for import
+openssl pkcs12 -in wfwdc1tintri01.pfx -out wfwdc1tintri01_keypair.pem -nodes -password pass:A4dm1n456!
+
+
+
+
+
+

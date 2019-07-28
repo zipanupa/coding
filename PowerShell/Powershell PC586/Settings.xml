@@ -1,0 +1,17 @@
+﻿<?xml version="1.0"?>
+<Settings>
+  <EmailSettings>
+    <SMTPServer>dc1smtp.wfw.com</SMTPServer>
+    <SMTPPort>25</SMTPPort>
+    <MailFrom>ExchangeBackupCheck@wfw.com</MailFrom>
+    <MailTo>ITTechnicalServices@wfw.com</MailTo>
+  </EmailSettings>
+  <Exclusions>
+    <DBName></DBName>
+    <DBName></DBName>
+  </Exclusions>
+  <OtherSettings>
+    <ThresholdMonday>24</ThresholdMonday>
+    <ThresholdOther>24</ThresholdOther>
+  </OtherSettings>
+</Settings>

@@ -1,0 +1,13 @@
+#TYPE System.Management.Automation.ScriptBlock
+"Attributes","File","IsFilter","IsConfiguration","Module","StartPosition","DebuggerHidden","Id","Ast"
+"System.Collections.Generic.List`1[System.Attribute]","C:\Powershell\Get-CPU_Count_Per_Host.ps1","False","False",,"System.Management.Automation.PSToken","False","50ff3f43-1cdf-4062-b4da-6b97437707b0","{ 
+    if ((Get-annotation -Entity $_ -CustomAttribute ""DC SPLA"" | select -ExpandProperty value ) -ne ""No"")
+        {
+        New-Object -TypeName PSobject -Property
+            @{
+            HostName = $_.name 
+            CpuCount = (Get-View $_.ID).Hardware.CpuInfo.NumCpuPackages
+            } | Select-Object Parent,Hostname,CpuCount,ConnectionState,Powerstate | ft
+        }
+
+    }"

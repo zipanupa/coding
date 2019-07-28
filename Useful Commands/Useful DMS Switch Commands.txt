@@ -1,0 +1,108 @@
+#MOVE THE DMS
+#FIRST STAGE (wfwdc1fi2)
+#Convert the DMS qtree to a writable form
+#Check SnapVaults
+snapvault status
+
+#Expected output
+Source Volume			Destination Volume
+wfwlofi1:/vol/DATA_Flex_64/DMS  WFWDC1FI2:/vol/London_SV_DATA_Flex_64/DMS
+ 
+#Run commands on secondary filer: i.e. wfwdc1fi2
+Disable SnapVault and Snapmirror
+Options snapvault.enable off
+snapmirror off
+priv set diag
+snapmirror convert /vol/London_SV_DATA_Flex_64/DMS
+
+#Expected output
+Qtree /vol/London_SV_DATA_Flex_64/DMS has been successfully converted
+ 
+#Run commands on secondary filer:
+priv set admin
+options snapvault.enable on
+snapmirror on
+snapmirror quiesce /vol/London_SV_DATA_Flex_64/DMS
+
+#Expected output
+snapmirror quiesce: in progress
+This can be a long-running operation. Use Control - C (^C) to interrupt.
+snapmirror quiesce: /vol/London_SV_DATA_Flex_64/DMS :  Successfully quiesced
+ 
+#Run snapmirror break
+snapmirror break /vol/London_SV_DATA_Flex_64/DMS
+
+#Expected output
+snapmirror break: Destination /vol/London_SV_DATA_Flex_64/DMS is now writable.
+ 
+#Run snapmirror status
+snapmirror status
+
+#Expected output
+Snapmirror is on.
+Source                         	Destination                               	State          Lag        Status
+wfwlofi1:/vol/DATA_Flex_64/DMS  WFWDC1FI2:/vol/London_SV_DATA_Flex_64/DMS  	Broken-off     12:05:04   Idle
+ 
+#END OF FIRST STAGE
+
+#SECOND STAGE (wfwlofi1)
+#Snapmirror resync to base Snapshot (this will take a long time)
+snapmirror resync -S WFWDC1FI2:/vol/London_SV_DATA_Flex_64/DMS wfwlofi1:/vol/DATA_Flex_64/DMS
+
+#Expected output
+The resync base snapshot will be: WFWDC1FI2(2014570096)_London_SV_DATA_Flex_64_IT-src.0
+Resync may alter the data in this qtree.
+Are you sure you want to resync the qtree? y
+Thu Apr 16 12:35:57 BST [wfwlofi1:replication.dst.resync.success:notice]: SnapMirror resync of /vol/DATA_Flex_64/DMS to WFWDC1FI2:/vol/London_SV_DATA_Flex_64/DMS was successful.
+ 
+#Run snapmirror status
+snapmirror status
+
+#Expected output
+Snapmirror is on.
+Source                                    Destination                    State          Lag        Status
+WFWDC1FI2:/vol/London_SV_DATA_Flex_64/DMS wfwlofi1:/vol/DATA_Flex_64/IT  Snapmirrored   00:00:06   Idle
+ 
+#After snapmirror resync has updated volume
+snapmirror quiesce DATA_Flex_64/DMS
+ 
+#Expected output
+snapmirror quiesce: in progress
+This can be a long-running operation. Use Control - C (^C) to interrupt.
+snapmirror quiesce: /vol/DATA_Flex_64/IT :  Successfully quiesced
+ 
+#Break the mirror
+snapmirror break DATA_Flex_64/DMS
+
+#Expected output
+snapmirror break: Destination /vol/DATA_Flex_64/DMS is now writable.
+ 
+On destination filer wfwlofi1:
+ 
+snapvault start -r -S WFWDC1FI2:/vol/London_SV_DATA_Flex_64/DMS wfwlofi1:/vol/DATA_Flex_64/DMS
+
+#Expected output
+The resync base snapshot will be: wfwlofi1(2017886431)_DATA_Flex_64_IT-src.0
+Resync may alter the data in this qtree.
+Are you sure you want to resync the qtree? y
+Thu Apr 16 12:42:09 BST [WFWDC1FI2:replication.dst.resync.success:notice]: SnapVault resync of /vol//London_SV_DATA_Flex_64/DMS to wfwlofi1:/vol/DATA_Flex_64/IT was successful.
+SnapVault configuration for the qtree has been set.
+ 
+#Check Snapmirror
+snapmirror status -l
+
+#Expected output
+Source:                 WFWDC1FI2:/vol/London_SV_DATA_Flex_64/DMS
+Destination:            wfwlofi1:/vol/DATA_Flex_64/DMS
+Status:                 Idle
+Progress:               -
+State:                  Broken-off
+Lag:                    00:07:54
+Mirror Timestamp:       Thu Apr 16 12:37:22 BST 2015
+Base Snapshot:          wfwlofi1(2017886431)_DATA_Flex_64_IT-dst.7
+Current Transfer Type:  -
+
+#Delete old Snapshots 
+snap delete (snapshot no longer needed) i.e. wfwlofi1(2017886431)_DATA_Flex_64_DMS-dst.7
+
+#END OF SECOND STAGE

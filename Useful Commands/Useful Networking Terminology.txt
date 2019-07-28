@@ -1,0 +1,5 @@
+Useful Networking Terms
+
+LEC - Local Exchange Carrier
+CPE - Customer Presence Equipment
+MPLS - Multiprotocol Label Switching

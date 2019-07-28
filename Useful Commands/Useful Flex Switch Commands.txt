@@ -1,0 +1,14 @@
+#Useful IBM Flex Switch EN4093R Commands
+
+#basics
+#set the switch telnet idle timeout
+system idle 60
+
+#show summary of interfaces
+sh int status
+
+#show ufp (unified fabric port or virtual nics) status
+show ufp info
+
+
+

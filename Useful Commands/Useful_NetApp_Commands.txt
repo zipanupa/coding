@@ -1,0 +1,785 @@
+priv set advanced
+statit -b
+statit -e
+sysconfig -r
+options rsh
+rdfile /etc/hosts.equiv
+wrfile /etc/hosts.equiv
+aggr show_space -h
+df -Ah
+df -hr
+df -h
+netstat -rn
+ifconfig -a
+vif status
+snapvault status
+snapmirror status
+sysstat -x 1
+snap list
+sysconfig -av
+sysconfig -r
+vol status
+reallocate status
+aggr status
+aggr status -v
+reallocate measure -o /vol/VM_C
+reallocate start -f /vol/VM_C
+reallocate stop /vol/VM_C
+reallocate -a aggr3
+ndmpd status
+options ndmp
+ndmp debug screen
+ndmp debug status
+ndmp debug
+options ndmpd.connectlog.enabled off
+#Adding a new aggregate 'aggr2' as 64bit aggregate with 10000 RPM disks and...
+#...raid group size 22 with disk size at least 560g (600g disks will be added).
+aggr create aggr2 -B 64 -R 10000 -r 22 22@560g
+
+
+#Tape Drive Reset
+sysconfig -t
+
+    Tape drive (x1.63)  Hewlett-Packard LTO-4
+    rst0l  -  rewind device,        format is: LTO-2(ro)/3 2/400GB
+    nrst0l -  no rewind device,     format is: LTO-2(ro)/3 2/400GB
+    urst0l -  unload/reload device, format is: LTO-2(ro)/3 2/400GB
+    rst0m  -  rewind device,        format is: LTO-2(ro)/3 4/800GB cmp
+    nrst0m -  no rewind device,     format is: LTO-2(ro)/3 4/800GB cmp
+    urst0m -  unload/reload device, format is: LTO-2(ro)/3 4/800GB cmp
+    rst0h  -  rewind device,        format is: LTO-4 800GB
+    nrst0h -  no rewind device,     format is: LTO-4 800GB
+    urst0h -  unload/reload device, format is: LTO-4 800GB
+    rst0a  -  rewind device,        format is: LTO-4 1600GB cmp
+    nrst0a -  no rewind device,     format is: LTO-4 1600GB cmp
+    urst0a -  unload/reload device, format is: LTO-4 1600GB cmp
+
+    Tape drive (x2.61)  Hewlett-Packard LTO-4
+    rst1l  -  rewind device,        format is: LTO-2(ro)/3 2/400GB
+    nrst1l -  no rewind device,     format is: LTO-2(ro)/3 2/400GB
+    urst1l -  unload/reload device, format is: LTO-2(ro)/3 2/400GB
+    rst1m  -  rewind device,        format is: LTO-2(ro)/3 4/800GB cmp
+    nrst1m -  no rewind device,     format is: LTO-2(ro)/3 4/800GB cmp
+    urst1m -  unload/reload device, format is: LTO-2(ro)/3 4/800GB cmp
+    rst1h  -  rewind device,        format is: LTO-4 800GB
+    nrst1h -  no rewind device,     format is: LTO-4 800GB
+    urst1h -  unload/reload device, format is: LTO-4 800GB
+    rst1a  -  rewind device,        format is: LTO-4 1600GB cmp
+    nrst1a -  no rewind device,     format is: LTO-4 1600GB cmp
+    urst1a -  unload/reload device, format is: LTO-4 1600GB cmp
+#Make an initiator
+priv set advanced
+fcp config x1 down
+fcp config x2 down
+fcadmin offline x1
+fcadmin offline x2
+fcadmin config -t initiator 0c
+fcadmin config -t initiator 0d
+fcadmin online x1
+fcadmin online x2
+
+
+aggr create aggr0_64 -d 0a.10.0 0a.10.1
+
+aggr status -v aggr1
+aggr add aggr0_64 -g -n rg0 2@600
+aggr add aggr0_64 10@600
+aggr create aggr1 -r 22 22@600
+
+
+aggr add test -n 18@1600
+
+
+passwd
+
+#Notes
+vol create DC1_EXCH02_LOG1 -l en -s volume aggr1 500g
+
+ndmpcopy /vol/SINGAPORE_DATA/USERS /vol/SINGAPORE_USERS/users
+
+#EXCHANGE
+#Readying volumes for Exchange
+#create volume
+vol create DC3_EXCH01_ARC1  -l en -s volume aggr0 1t
+
+#switch off fractional reserve on volume
+vol options DC3_EXCH01_ARC1  fractional_reserve 0
+
+#switch on volume autosize
+vol autosize DC3_EXCH01_ARC1  on
+
+#turn off fs_size_fixed!
+vol options DC3_EXCH01_ARC1  fs_size_fixed off
+
+#change volume autosize settings
+vol autosize DC3_EXCH01_ARC1  -m 2t -i 100g
+
+#turn off snapshot reserve
+snap reserve DC3_EXCH01_ARC1  0
+
+#turn on autodelete
+snap autodelete DC3_EXCH01_ARC1  on
+
+#check autodelete settings
+snap autodelete DC3_EXCH01_ARC1  
+#(should produce something like)...
+#snapshot autodelete settings for DC3_EXCH01_ARC1  :
+#state                           : on
+#commitment                      : try
+#trigger                         : volume
+#target_free_space               : 20%
+#delete_order                    : oldest_first
+#defer_delete                    : user_created
+#prefix                          : (not specified)
+#destroy_list                    : none
+
+#switch on deduplication (data volumes only not logs)
+sis on /vol/DC3_EXCH01_ARC1  
+
+#configure date and time deduplication happens
+sis config -s sun-sat@7 /vol/DC3_EXCH01_ARC1  
+
+#enable compression
+sis config -C true -I true /vol/DC3_EXCH01_ARC1  
+
+#show which volumes have deduplication enabled
+sis status
+
+#show the configuration of each deduplicated volume
+sis config
+
+#create a qtree
+qtree create /vol/DC3_EXCH01_ARC1  /QT_EXCH01_ARC1 
+
+#set qtree security to ntfs
+qtree security /vol/DC3_EXCH01_ARC1  /QT_EXCH01_ARC1 ntfs
+
+#create a 500g windows 2008 LUN
+lun create -s 600g -t windows_2008 -o noreserve /vol/DC3_EXCH01_ARC1  /QT_EXCH01_ARC1/LUN_EXCH01_ARC
+
+#LUN MAINTENANCE
+#resize a LUN
+lun resize /vol/RDM_MAPPINGS_DC3/QT_MAPPINGS_DC3/LUN_MAPPINGS_DC3 50g
+
+#map LUN to initiator group (igroup)
+lun map /vol/RDM_MAPPINGS_DC3/QT_MAPPINGS_DC3/LUN_MAPPINGS_DC3 HA_VMHosts_iSCSI
+
+#show LUN mappings
+lun show -m
+
+#show LUN serial number in hex format (naa number shown in VMware)
+lun serial -x
+
+#show occupied size inside LUN (actual size and un-released blocks)
+lun show -v (LUN PATH)
+
+#Scratch Area
+#Take LUNS offline
+lun offline /vol/DC2_EXCH01_DB1/QT_EXCH01_DB1/LUN_EXCH01_DB1
+lun offline /vol/DC2_EXCH01_DB2/QT_EXCH01_DB2/LUN_EXCH01_DB2
+lun offline /vol/DC2_EXCH01_DB3/QT_EXCH01_DB3/LUN_EXCH01_DB3
+lun offline /vol/DC2_EXCH01_DB4/QT_EXCH01_DB4/LUN_EXCH01_DB4
+lun offline /vol/DC2_EXCH01_DB5/QT_EXCH01_DB5/LUN_EXCH01_DB5
+lun offline /vol/DC2_EXCH01_DB6/QT_EXCH01_DB6/LUN_EXCH01_DB6
+lun offline /vol/DC2_EXCH01_DB7/QT_EXCH01_DB7/LUN_EXCH01_DB7
+lun offline /vol/DC2_EXCH01_DB8/QT_EXCH01_DB8/LUN_EXCH01_DB8
+lun offline /vol/DC2_EXCH01_DB9/QT_EXCH01_DB9/LUN_EXCH01_DB9
+lun offline /vol/DC2_EXCH01_DB_10/QT_EXCH01_DB_10/LUN_EXCH01_DB_10
+lun offline /vol/DC2_EXCH02_LOG1/QT_EXCH01_LOG1/LUN_EXCH01_LOG1
+
+lun offline /vol/DC2_EXCH02_DB1/QT_EXCH02_DB1/LUN_EXCH02_DB1
+lun offline /vol/DC2_EXCH02_DB2/QT_EXCH02_DB2/LUN_EXCH02_DB2
+lun offline /vol/DC2_EXCH02_DB3/QT_EXCH02_DB3/LUN_EXCH02_DB3
+lun offline /vol/DC2_EXCH02_DB4/QT_EXCH02_DB4/LUN_EXCH02_DB4
+lun offline /vol/DC2_EXCH02_DB5/QT_EXCH02_DB5/LUN_EXCH02_DB5
+lun offline /vol/DC2_EXCH02_DB6/QT_EXCH02_DB6/LUN_EXCH02_DB6
+lun offline /vol/DC2_EXCH02_DB7/QT_EXCH02_DB7/LUN_EXCH02_DB7
+lun offline /vol/DC2_EXCH02_DB8/QT_EXCH02_DB8/LUN_EXCH02_DB8
+lun offline /vol/DC2_EXCH02_DB9/QT_EXCH02_DB9/LUN_EXCH02_DB9
+lun offline /vol/DC2_EXCH02_DB_10/QT_EXCH02_DB_10/LUN_EXCH02_DB_10
+lun offline /vol/DC2_EXCH02_LOG1/QT_EXCH02_LOG1/LUN_EXCH02_LOG1
+
+lun offline /vol/DC1_EXCH03_DB1/QT_EXCH03_DB1/LUN_EXCH03_DB1
+lun offline /vol/DC1_EXCH03_DB2/QT_EXCH03_DB2/LUN_EXCH03_DB2
+lun offline /vol/DC1_EXCH03_DB3/QT_EXCH03_DB3/LUN_EXCH03_DB3
+lun offline /vol/DC1_EXCH03_DB4/QT_EXCH03_DB4/LUN_EXCH03_DB4
+lun offline /vol/DC1_EXCH03_DB5/QT_EXCH03_DB5/LUN_EXCH03_DB5
+lun offline /vol/DC1_EXCH03_DB6/QT_EXCH03_DB6/LUN_EXCH03_DB6
+lun offline /vol/DC1_EXCH03_DB7/QT_EXCH03_DB7/LUN_EXCH03_DB7
+lun offline /vol/DC1_EXCH03_DB8/QT_EXCH03_DB8/LUN_EXCH03_DB8
+lun offline /vol/DC1_EXCH03_DB9/QT_EXCH03_DB9/LUN_EXCH03_DB9
+lun offline /vol/DC1_EXCH03_DB_10/QT_EXCH03_DB_10/LUN_EXCH03_DB_10
+lun offline /vol/DC1_EXCH03_LOG1/QT_EXCH03_LOG1/LUN_EXCH03_LOG1
+
+lun offline /vol/DC2_EXCH01_SME/QT_EXCH01_SME/LUN_EXCH01_SME DC2_VMHosts_FCoE
+lun offline /vol/DC2_EXCH02_SME/QT_EXCH02_SME/LUN_EXCH02_SME DC2_VMHosts_FCoE
+lun offline /vol/DC1_EXCH03_SME/QT_EXCH03_SME/LUN_EXCH03_SME DC2_VMHosts_FCoE
+
+
+#Unmap LUNS
+
+lun unmap /vol/DC2_EXCH01_DB1/QT_EXCH01_DB1/LUN_EXCH01_DB1 DC2_VMHosts_FCoE
+lun unmap /vol/DC2_EXCH01_DB2/QT_EXCH01_DB2/LUN_EXCH01_DB2 DC2_VMHosts_FCoE
+lun unmap /vol/DC2_EXCH01_DB3/QT_EXCH01_DB3/LUN_EXCH01_DB3 DC2_VMHosts_FCoE
+lun unmap /vol/DC2_EXCH01_DB4/QT_EXCH01_DB4/LUN_EXCH01_DB4 DC2_VMHosts_FCoE
+lun unmap /vol/DC2_EXCH01_DB5/QT_EXCH01_DB5/LUN_EXCH01_DB5 DC2_VMHosts_FCoE
+lun unmap /vol/DC2_EXCH01_DB6/QT_EXCH01_DB6/LUN_EXCH01_DB6 DC2_VMHosts_FCoE
+lun unmap /vol/DC2_EXCH01_DB7/QT_EXCH01_DB7/LUN_EXCH01_DB7 DC2_VMHosts_FCoE
+lun unmap /vol/DC2_EXCH01_DB8/QT_EXCH01_DB8/LUN_EXCH01_DB8 DC2_VMHosts_FCoE
+lun unmap /vol/DC2_EXCH01_DB9/QT_EXCH01_DB9/LUN_EXCH01_DB9 DC2_VMHosts_FCoE
+lun unmap /vol/DC2_EXCH01_DB_10/QT_EXCH01_DB_10/LUN_EXCH01_DB_10 DC2_VMHosts_FCoE
+lun unmap /vol/DC2_EXCH01_LOG1/QT_EXCH01_LOG1/LUN_EXCH01_LOG1 DC2_VMHosts_FCoE
+
+lun unmap /vol/DC2_EXCH02_DB1/QT_EXCH02_DB1/LUN_EXCH02_DB1 DC2_VMHosts_FCoE
+lun unmap /vol/DC2_EXCH02_DB2/QT_EXCH02_DB2/LUN_EXCH02_DB2 DC2_VMHosts_FCoE
+lun unmap /vol/DC2_EXCH02_DB3/QT_EXCH02_DB3/LUN_EXCH02_DB3 DC2_VMHosts_FCoE
+lun unmap /vol/DC2_EXCH02_DB4/QT_EXCH02_DB4/LUN_EXCH02_DB4 DC2_VMHosts_FCoE
+lun unmap /vol/DC2_EXCH02_DB5/QT_EXCH02_DB5/LUN_EXCH02_DB5 DC2_VMHosts_FCoE
+lun unmap /vol/DC2_EXCH02_DB6/QT_EXCH02_DB6/LUN_EXCH02_DB6 DC2_VMHosts_FCoE
+lun unmap /vol/DC2_EXCH02_DB7/QT_EXCH02_DB7/LUN_EXCH02_DB7 DC2_VMHosts_FCoE
+lun unmap /vol/DC2_EXCH02_DB8/QT_EXCH02_DB8/LUN_EXCH02_DB8 DC2_VMHosts_FCoE
+lun unmap /vol/DC2_EXCH02_DB9/QT_EXCH02_DB9/LUN_EXCH02_DB9 DC2_VMHosts_FCoE
+lun unmap /vol/DC2_EXCH02_DB_10/QT_EXCH02_DB_10/LUN_EXCH02_DB_10 DC2_VMHosts_FCoE
+lun unmap /vol/DC2_EXCH02_LOG1/QT_EXCH02_LOG1/LUN_EXCH02_LOG1 DC2_VMHosts_FCoE
+
+lun unmap /vol/DC1_EXCH03_DB1/QT_EXCH03_DB1/LUN_EXCH03_DB1 DC2_VMHosts_FCoE
+lun unmap /vol/DC1_EXCH03_DB2/QT_EXCH03_DB2/LUN_EXCH03_DB2 DC2_VMHosts_FCoE
+lun unmap /vol/DC1_EXCH03_DB3/QT_EXCH03_DB3/LUN_EXCH03_DB3 DC2_VMHosts_FCoE
+lun unmap /vol/DC1_EXCH03_DB4/QT_EXCH03_DB4/LUN_EXCH03_DB4 DC2_VMHosts_FCoE
+lun unmap /vol/DC1_EXCH03_DB5/QT_EXCH03_DB5/LUN_EXCH03_DB5 DC2_VMHosts_FCoE
+lun unmap /vol/DC1_EXCH03_DB6/QT_EXCH03_DB6/LUN_EXCH03_DB6 DC2_VMHosts_FCoE
+lun unmap /vol/DC1_EXCH03_DB7/QT_EXCH03_DB7/LUN_EXCH03_DB7 DC2_VMHosts_FCoE
+lun unmap /vol/DC1_EXCH03_DB8/QT_EXCH03_DB8/LUN_EXCH03_DB8 DC2_VMHosts_FCoE
+lun unmap /vol/DC1_EXCH03_DB9/QT_EXCH03_DB9/LUN_EXCH03_DB9 DC2_VMHosts_FCoE
+lun unmap /vol/DC1_EXCH03_DB_10/QT_EXCH03_DB_10/LUN_EXCH03_DB_10 DC2_VMHosts_FCoE
+lun unmap /vol/DC1_EXCH03_LOG1/QT_EXCH03_LOG1/LUN_EXCH03_LOG1 DC2_VMHosts_FCoE
+
+lun unmap /vol/DC2_EXCH01_SME/QT_EXCH01_SME/LUN_EXCH01_SME DC2_VMHosts_FCoE
+lun unmap /vol/DC2_EXCH02_SME/QT_EXCH02_SME/LUN_EXCH02_SME DC2_VMHosts_FCoE
+lun unmap /vol/DC1_EXCH03_SME/QT_EXCH03_SME/LUN_EXCH03_SME DC2_VMHosts_FCoE
+
+#Don't do this ever
+#lun unmap /vol/RDM_MAPPINGS_DC2/QT_MAPPINGS_DC2/LUN_MAPPINGS_DC2 DC2_VMHosts_FCoE
+
+#Destroy LUNS
+
+#lun destroy /vol/DC1_EXCH03_DB1/QT_EXCH03_DB1/LUN_EXCH03_DB1
+#lun destroy /vol/DC1_EXCH03_DB2/QT_EXCH03_DB2/LUN_EXCH03_DB2
+#lun destroy /vol/DC1_EXCH03_DB3/QT_EXCH03_DB3/LUN_EXCH03_DB3
+#lun destroy /vol/DC1_EXCH03_DB4/QT_EXCH03_DB4/LUN_EXCH03_DB4
+#lun destroy /vol/DC1_EXCH03_DB5/QT_EXCH03_DB5/LUN_EXCH03_DB5
+#lun destroy /vol/DC1_EXCH03_DB6/QT_EXCH03_DB6/LUN_EXCH03_DB6
+#lun destroy /vol/DC1_EXCH03_DB7/QT_EXCH03_DB7/LUN_EXCH03_DB7
+#lun destroy /vol/DC1_EXCH03_DB8/QT_EXCH03_DB8/LUN_EXCH03_DB8
+#lun destroy /vol/DC1_EXCH03_DB9/QT_EXCH03_DB9/LUN_EXCH03_DB9
+#lun destroy /vol/DC1_EXCH03_DB_10/QT_EXCH03_DB_10/LUN_EXCH03_DB_10
+#lun destroy /vol/DC1_EXCH03_LOG1/QT_EXCH03_LOG1/LUN_EXCH03_LOG1
+#lun destroy /vol/DC1_EXCH03_SME/QT_EXCH03_SME/LUN_EXCH03_SME
+
+lun destroy /vol/DC2_EXCH02_DB1/QT_EXCH02_DB1/LUN_EXCH02_DB1
+lun destroy /vol/DC2_EXCH02_DB2/QT_EXCH02_DB2/LUN_EXCH02_DB2
+lun destroy /vol/DC2_EXCH02_DB3/QT_EXCH02_DB3/LUN_EXCH02_DB3
+lun destroy /vol/DC2_EXCH02_DB4/QT_EXCH02_DB4/LUN_EXCH02_DB4
+lun destroy /vol/DC2_EXCH02_DB5/QT_EXCH02_DB5/LUN_EXCH02_DB5
+lun destroy /vol/DC2_EXCH02_DB6/QT_EXCH02_DB6/LUN_EXCH02_DB6
+lun destroy /vol/DC2_EXCH02_DB7/QT_EXCH02_DB7/LUN_EXCH02_DB7
+lun destroy /vol/DC2_EXCH02_DB8/QT_EXCH02_DB8/LUN_EXCH02_DB8
+lun destroy /vol/DC2_EXCH02_DB9/QT_EXCH02_DB9/LUN_EXCH02_DB9
+lun destroy /vol/DC2_EXCH02_DB_10/QT_EXCH02_DB_10/LUN_EXCH02_DB_10
+lun destroy /vol/DC2_EXCH02_LOG1/QT_EXCH02_LOG1/LUN_EXCH02_LOG1
+
+#lun destroy /vol/DC2_EXCH01_DB1/QT_EXCH01_DB1/LUN_EXCH01_DB1
+#lun destroy /vol/DC2_EXCH01_DB2/QT_EXCH01_DB2/LUN_EXCH01_DB2
+#lun destroy /vol/DC2_EXCH01_DB3/QT_EXCH01_DB3/LUN_EXCH01_DB3
+#lun destroy /vol/DC2_EXCH01_DB4/QT_EXCH01_DB4/LUN_EXCH01_DB4
+#lun destroy /vol/DC2_EXCH01_DB5/QT_EXCH01_DB5/LUN_EXCH01_DB5
+#lun destroy /vol/DC2_EXCH01_DB6/QT_EXCH01_DB6/LUN_EXCH01_DB6
+#lun destroy /vol/DC2_EXCH01_DB7/QT_EXCH01_DB7/LUN_EXCH01_DB7
+#lun destroy /vol/DC2_EXCH01_DB8/QT_EXCH01_DB8/LUN_EXCH01_DB8
+#lun destroy /vol/DC2_EXCH01_DB9/QT_EXCH01_DB9/LUN_EXCH01_DB9
+#lun destroy /vol/DC2_EXCH01_DB_10/QT_EXCH01_DB_10/LUN_EXCH01_DB_10
+#lun destroy /vol/DC2_EXCH01_LOG1/QT_EXCH01_LOG1/LUN_EXCH01_LOG1
+#lun destroy /vol/DC2_EXCH01_SME/QT_EXCH01_SME/LUN_EXCH01_SME
+
+
+#Recreate LUNS with 500g base size
+
+#lun create -s 500g -t windows_2008 -o noreserve /vol/DC2_EXCH01_DB1/QT_EXCH01_DB1/LUN_EXCH01_DB1
+#lun create -s 500g -t windows_2008 -o noreserve /vol/DC2_EXCH01_DB2/QT_EXCH01_DB2/LUN_EXCH01_DB2
+#lun create -s 500g -t windows_2008 -o noreserve /vol/DC2_EXCH01_DB3/QT_EXCH01_DB3/LUN_EXCH01_DB3
+#lun create -s 500g -t windows_2008 -o noreserve /vol/DC2_EXCH01_DB4/QT_EXCH01_DB4/LUN_EXCH01_DB4
+#lun create -s 500g -t windows_2008 -o noreserve /vol/DC2_EXCH01_DB5/QT_EXCH01_DB5/LUN_EXCH01_DB5
+#lun create -s 500g -t windows_2008 -o noreserve /vol/DC2_EXCH01_DB6/QT_EXCH01_DB6/LUN_EXCH01_DB6
+#lun create -s 500g -t windows_2008 -o noreserve /vol/DC2_EXCH01_DB7/QT_EXCH01_DB7/LUN_EXCH01_DB7
+#lun create -s 500g -t windows_2008 -o noreserve /vol/DC2_EXCH01_DB8/QT_EXCH01_DB8/LUN_EXCH01_DB8
+#lun create -s 500g -t windows_2008 -o noreserve /vol/DC2_EXCH01_DB9/QT_EXCH01_DB9/LUN_EXCH01_DB9
+#lun create -s 500g -t windows_2008 -o noreserve /vol/DC2_EXCH01_DB_10/QT_EXCH01_DB_10/LUN_EXCH01_DB_10
+#lun create -s 500g -t windows_2008 -o noreserve /vol/DC2_EXCH01_LOG1/QT_EXCH01_LOG1/LUN_EXCH01_LOG1
+#lun create -s 500g -t windows_2008 -o noreserve /vol/DC2_EXCH01_SME/QT_EXCH01_SME/LUN_EXCH01_SME
+
+lun create -s 500g -t windows_2008 -o noreserve /vol/DC2_EXCH02_DB1/QT_EXCH02_DB1/LUN_EXCH02_DB1
+lun create -s 500g -t windows_2008 -o noreserve /vol/DC2_EXCH02_DB2/QT_EXCH02_DB2/LUN_EXCH02_DB2
+lun create -s 500g -t windows_2008 -o noreserve /vol/DC2_EXCH02_DB3/QT_EXCH02_DB3/LUN_EXCH02_DB3
+lun create -s 500g -t windows_2008 -o noreserve /vol/DC2_EXCH02_DB4/QT_EXCH02_DB4/LUN_EXCH02_DB4
+lun create -s 500g -t windows_2008 -o noreserve /vol/DC2_EXCH02_DB5/QT_EXCH02_DB5/LUN_EXCH02_DB5
+lun create -s 500g -t windows_2008 -o noreserve /vol/DC2_EXCH02_DB6/QT_EXCH02_DB6/LUN_EXCH02_DB6
+lun create -s 500g -t windows_2008 -o noreserve /vol/DC2_EXCH02_DB7/QT_EXCH02_DB7/LUN_EXCH02_DB7
+lun create -s 500g -t windows_2008 -o noreserve /vol/DC2_EXCH02_DB8/QT_EXCH02_DB8/LUN_EXCH02_DB8
+lun create -s 500g -t windows_2008 -o noreserve /vol/DC2_EXCH02_DB9/QT_EXCH02_DB9/LUN_EXCH02_DB9
+lun create -s 500g -t windows_2008 -o noreserve /vol/DC2_EXCH02_DB_10/QT_EXCH02_DB_10/LUN_EXCH02_DB_10
+lun create -s 500g -t windows_2008 -o noreserve /vol/DC2_EXCH02_LOG1/QT_EXCH02_LOG1/LUN_EXCH02_LOG1
+
+#lun create -s 500g -t windows_2008 -o noreserve /vol/DC1_EXCH03_DB1/QT_EXCH03_DB1/LUN_EXCH03_DB1
+#lun create -s 500g -t windows_2008 -o noreserve /vol/DC1_EXCH03_DB2/QT_EXCH03_DB2/LUN_EXCH03_DB2
+#lun create -s 500g -t windows_2008 -o noreserve /vol/DC1_EXCH03_DB3/QT_EXCH03_DB3/LUN_EXCH03_DB3
+#lun create -s 500g -t windows_2008 -o noreserve /vol/DC1_EXCH03_DB4/QT_EXCH03_DB4/LUN_EXCH03_DB4
+#lun create -s 500g -t windows_2008 -o noreserve /vol/DC1_EXCH03_DB5/QT_EXCH03_DB5/LUN_EXCH03_DB5
+#lun create -s 500g -t windows_2008 -o noreserve /vol/DC1_EXCH03_DB6/QT_EXCH03_DB6/LUN_EXCH03_DB6
+#lun create -s 500g -t windows_2008 -o noreserve /vol/DC1_EXCH03_DB7/QT_EXCH03_DB7/LUN_EXCH03_DB7
+#lun create -s 500g -t windows_2008 -o noreserve /vol/DC1_EXCH03_DB8/QT_EXCH03_DB8/LUN_EXCH03_DB8
+#lun create -s 500g -t windows_2008 -o noreserve /vol/DC1_EXCH03_DB9/QT_EXCH03_DB9/LUN_EXCH03_DB9
+#lun create -s 500g -t windows_2008 -o noreserve /vol/DC1_EXCH03_DB_10/QT_EXCH03_DB_10/LUN_EXCH03_DB_10
+#lun create -s 500g -t windows_2008 -o noreserve /vol/DC1_EXCH03_LOG1/QT_EXCH03_LOG1/LUN_EXCH03_LOG1
+#lun create -s 500g -t windows_2008 -o noreserve /vol/DC1_EXCH03_SME/QT_EXCH03_SME/LUN_EXCH03_SME
+
+#Map LUNS to host mapping group
+
+lun map /vol/DC2_EXCH01_DB1/QT_EXCH01_DB1/LUN_EXCH01_DB1 DC2_VMHosts_FCoE
+lun map /vol/DC2_EXCH01_DB2/QT_EXCH01_DB2/LUN_EXCH01_DB2 DC2_VMHosts_FCoE
+lun map /vol/DC2_EXCH01_DB3/QT_EXCH01_DB3/LUN_EXCH01_DB3 DC2_VMHosts_FCoE
+lun map /vol/DC2_EXCH01_DB4/QT_EXCH01_DB4/LUN_EXCH01_DB4 DC2_VMHosts_FCoE
+lun map /vol/DC2_EXCH01_DB5/QT_EXCH01_DB5/LUN_EXCH01_DB5 DC2_VMHosts_FCoE
+lun map /vol/DC2_EXCH01_DB6/QT_EXCH01_DB6/LUN_EXCH01_DB6 DC2_VMHosts_FCoE
+lun map /vol/DC2_EXCH01_DB7/QT_EXCH01_DB7/LUN_EXCH01_DB7 DC2_VMHosts_FCoE
+lun map /vol/DC2_EXCH01_DB8/QT_EXCH01_DB8/LUN_EXCH01_DB8 DC2_VMHosts_FCoE
+lun map /vol/DC2_EXCH01_DB9/QT_EXCH01_DB9/LUN_EXCH01_DB9 DC2_VMHosts_FCoE
+lun map /vol/DC2_EXCH01_DB_10/QT_EXCH01_DB_10/LUN_EXCH01_DB_10 DC2_VMHosts_FCoE
+lun map /vol/DC2_EXCH01_LOG1/QT_EXCH01_LOG1/LUN_EXCH01_LOG1 DC2_VMHosts_FCoE
+
+lun map /vol/DC2_EXCH02_DB1/QT_EXCH02_DB1/LUN_EXCH02_DB1 DC2_VMHosts_FCoE
+lun map /vol/DC2_EXCH02_DB2/QT_EXCH02_DB2/LUN_EXCH02_DB2 DC2_VMHosts_FCoE
+lun map /vol/DC2_EXCH02_DB3/QT_EXCH02_DB3/LUN_EXCH02_DB3 DC2_VMHosts_FCoE
+lun map /vol/DC2_EXCH02_DB4/QT_EXCH02_DB4/LUN_EXCH02_DB4 DC2_VMHosts_FCoE
+lun map /vol/DC2_EXCH02_DB5/QT_EXCH02_DB5/LUN_EXCH02_DB5 DC2_VMHosts_FCoE
+lun map /vol/DC2_EXCH02_DB6/QT_EXCH02_DB6/LUN_EXCH02_DB6 DC2_VMHosts_FCoE
+lun map /vol/DC2_EXCH02_DB7/QT_EXCH02_DB7/LUN_EXCH02_DB7 DC2_VMHosts_FCoE
+lun map /vol/DC2_EXCH02_DB8/QT_EXCH02_DB8/LUN_EXCH02_DB8 DC2_VMHosts_FCoE
+lun map /vol/DC2_EXCH02_DB9/QT_EXCH02_DB9/LUN_EXCH02_DB9 DC2_VMHosts_FCoE
+lun map /vol/DC2_EXCH02_DB_10/QT_EXCH02_DB_10/LUN_EXCH02_DB_10 DC2_VMHosts_FCoE
+lun map /vol/DC2_EXCH02_LOG1/QT_EXCH02_LOG1/LUN_EXCH02_LOG1 DC2_VMHosts_FCoE
+
+#up to here DC2 19/07/2013
+
+lun map /vol/DC1_EXCH03_DB1/QT_EXCH03_DB1/LUN_EXCH03_DB1 DC2_VMHosts_FCoE
+lun map /vol/DC1_EXCH03_DB2/QT_EXCH03_DB2/LUN_EXCH03_DB2 DC2_VMHosts_FCoE
+lun map /vol/DC1_EXCH03_DB3/QT_EXCH03_DB3/LUN_EXCH03_DB3 DC2_VMHosts_FCoE
+lun map /vol/DC1_EXCH03_DB4/QT_EXCH03_DB4/LUN_EXCH03_DB4 DC2_VMHosts_FCoE
+lun map /vol/DC1_EXCH03_DB5/QT_EXCH03_DB5/LUN_EXCH03_DB5 DC2_VMHosts_FCoE
+lun map /vol/DC1_EXCH03_DB6/QT_EXCH03_DB6/LUN_EXCH03_DB6 DC2_VMHosts_FCoE
+lun map /vol/DC1_EXCH03_DB7/QT_EXCH03_DB7/LUN_EXCH03_DB7 DC2_VMHosts_FCoE
+lun map /vol/DC1_EXCH03_DB8/QT_EXCH03_DB8/LUN_EXCH03_DB8 DC2_VMHosts_FCoE
+lun map /vol/DC1_EXCH03_DB9/QT_EXCH03_DB9/LUN_EXCH03_DB9 DC2_VMHosts_FCoE
+lun map /vol/DC1_EXCH03_DB_10/QT_EXCH03_DB_10/LUN_EXCH03_DB_10 DC2_VMHosts_FCoE
+lun map /vol/DC1_EXCH03_LOG1/QT_EXCH03_LOG1/LUN_EXCH03_LOG1 DC2_VMHosts_FCoE
+
+lun map /vol/DC2_EXCH01_SME/QT_EXCH01_SME/LUN_EXCH01_SME DC2_VMHosts_FCoE
+lun map /vol/DC2_EXCH02_SME/QT_EXCH02_SME/LUN_EXCH02_SME DC2_VMHosts_FCoE
+lun map /vol/DC1_EXCH03_SME/QT_EXCH03_SME/LUN_EXCH03_SME DC2_VMHosts_FCoE
+
+#LUN serials
+
+lun serial -x /vol/DC2_EXCH01_DB1/QT_EXCH01_DB1/LUN_EXCH01_DB1 
+lun serial -x /vol/DC2_EXCH01_DB2/QT_EXCH01_DB2/LUN_EXCH01_DB2 
+lun serial -x /vol/DC2_EXCH01_DB3/QT_EXCH01_DB3/LUN_EXCH01_DB3 
+lun serial -x /vol/DC2_EXCH01_DB4/QT_EXCH01_DB4/LUN_EXCH01_DB4 
+lun serial -x /vol/DC2_EXCH01_DB5/QT_EXCH01_DB5/LUN_EXCH01_DB5 
+lun serial -x /vol/DC2_EXCH01_DB6/QT_EXCH01_DB6/LUN_EXCH01_DB6 
+lun serial -x /vol/DC2_EXCH01_DB7/QT_EXCH01_DB7/LUN_EXCH01_DB7 
+lun serial -x /vol/DC2_EXCH01_DB8/QT_EXCH01_DB8/LUN_EXCH01_DB8 
+lun serial -x /vol/DC2_EXCH01_DB9/QT_EXCH01_DB9/LUN_EXCH01_DB9 
+lun serial -x /vol/DC2_EXCH01_DB_10/QT_EXCH01_DB_10/LUN_EXCH01_DB_10 
+lun serial -x /vol/DC2_EXCH01_LOG1/QT_EXCH01_LOG1/LUN_EXCH01_LOG1
+
+lun serial -x /vol/DC2_EXCH02_DB1/QT_EXCH02_DB1/LUN_EXCH02_DB1
+lun serial -x /vol/DC2_EXCH02_DB2/QT_EXCH02_DB2/LUN_EXCH02_DB2
+lun serial -x /vol/DC2_EXCH02_DB3/QT_EXCH02_DB3/LUN_EXCH02_DB3
+lun serial -x /vol/DC2_EXCH02_DB4/QT_EXCH02_DB4/LUN_EXCH02_DB4
+lun serial -x /vol/DC2_EXCH02_DB5/QT_EXCH02_DB5/LUN_EXCH02_DB5
+lun serial -x /vol/DC2_EXCH02_DB6/QT_EXCH02_DB6/LUN_EXCH02_DB6
+lun serial -x /vol/DC2_EXCH02_DB7/QT_EXCH02_DB7/LUN_EXCH02_DB7
+lun serial -x /vol/DC2_EXCH02_DB8/QT_EXCH02_DB8/LUN_EXCH02_DB8
+lun serial -x /vol/DC2_EXCH02_DB9/QT_EXCH02_DB9/LUN_EXCH02_DB9
+lun serial -x /vol/DC2_EXCH02_DB_10/QT_EXCH02_DB_10/LUN_EXCH02_DB_10
+lun serial -x /vol/DC2_EXCH02_LOG1/QT_EXCH02_LOG1/LUN_EXCH02_LOG1
+
+#LUN serial results
+
+#WFWDC2EXCH01
+WFWDC2FI1> lun serial -x /vol/DC2_EXCH01_DB1/QT_EXCH01_DB1/LUN_EXCH01_DB1
+                Serial (hex)#: 0x4431455a36243339787a2d78
+WFWDC2FI1> lun serial -x /vol/DC2_EXCH01_DB2/QT_EXCH01_DB2/LUN_EXCH01_DB2
+                Serial (hex)#: 0x4431455a36243339787a2d7a
+WFWDC2FI1> lun serial -x /vol/DC2_EXCH01_DB3/QT_EXCH01_DB3/LUN_EXCH01_DB3
+                Serial (hex)#: 0x4431455a36243339787a4131
+WFWDC2FI1> lun serial -x /vol/DC2_EXCH01_DB4/QT_EXCH01_DB4/LUN_EXCH01_DB4
+                Serial (hex)#: 0x4431455a36243339787a4133
+WFWDC2FI1> lun serial -x /vol/DC2_EXCH01_DB5/QT_EXCH01_DB5/LUN_EXCH01_DB5
+                Serial (hex)#: 0x4431455a36243339787a4135
+WFWDC2FI1> lun serial -x /vol/DC2_EXCH01_DB6/QT_EXCH01_DB6/LUN_EXCH01_DB6
+                Serial (hex)#: 0x4431455a36243339787a4137
+WFWDC2FI1> lun serial -x /vol/DC2_EXCH01_DB7/QT_EXCH01_DB7/LUN_EXCH01_DB7
+                Serial (hex)#: 0x4431455a36243339787a4139
+WFWDC2FI1> lun serial -x /vol/DC2_EXCH01_DB8/QT_EXCH01_DB8/LUN_EXCH01_DB8
+                Serial (hex)#: 0x4431455a36243339787a4141
+WFWDC2FI1> lun serial -x /vol/DC2_EXCH01_DB9/QT_EXCH01_DB9/LUN_EXCH01_DB9
+                Serial (hex)#: 0x4431455a36243339787a4143
+WFWDC2FI1> lun serial -x /vol/DC2_EXCH01_DB_10/QT_EXCH01_DB_10/LUN_EXCH01_DB_10
+                Serial (hex)#: 0x4431455a36243339787a4145
+WFWDC2FI1> lun serial -x /vol/DC2_EXCH01_LOG1/QT_EXCH01_LOG1/LUN_EXCH01_LOG1
+                Serial (hex)#: 0x4431455a36243339787a4147
+
+#WFWDC2EXCH02
+WFWDC2FI1> lun serial -x /vol/DC2_EXCH02_DB1/QT_EXCH02_DB1/LUN_EXCH02_DB1
+                Serial (hex)#: 0x4431455a36243339787a414b
+WFWDC2FI1> lun serial -x /vol/DC2_EXCH02_DB2/QT_EXCH02_DB2/LUN_EXCH02_DB2
+                Serial (hex)#: 0x4431455a36243339787a414d
+WFWDC2FI1> lun serial -x /vol/DC2_EXCH02_DB3/QT_EXCH02_DB3/LUN_EXCH02_DB3
+                Serial (hex)#: 0x4431455a36243339787a414f
+WFWDC2FI1> lun serial -x /vol/DC2_EXCH02_DB4/QT_EXCH02_DB4/LUN_EXCH02_DB4
+                Serial (hex)#: 0x4431455a36243339787a4151
+WFWDC2FI1> lun serial -x /vol/DC2_EXCH02_DB5/QT_EXCH02_DB5/LUN_EXCH02_DB5
+                Serial (hex)#: 0x4431455a36243339787a4153
+WFWDC2FI1> lun serial -x /vol/DC2_EXCH02_DB6/QT_EXCH02_DB6/LUN_EXCH02_DB6
+                Serial (hex)#: 0x4431455a36243339787a4155
+WFWDC2FI1> lun serial -x /vol/DC2_EXCH02_DB7/QT_EXCH02_DB7/LUN_EXCH02_DB7
+                Serial (hex)#: 0x4431455a36243339787a4157
+WFWDC2FI1> lun serial -x /vol/DC2_EXCH02_DB8/QT_EXCH02_DB8/LUN_EXCH02_DB8
+                Serial (hex)#: 0x4431455a36243339787a4159
+WFWDC2FI1> lun serial -x /vol/DC2_EXCH02_DB9/QT_EXCH02_DB9/LUN_EXCH02_DB9
+                Serial (hex)#: 0x4431455a36243339787a412f
+WFWDC2FI1> lun serial -x /vol/DC2_EXCH02_DB_10/QT_EXCH02_DB_10/LUN_EXCH02_DB_10
+                Serial (hex)#: 0x4431455a36243339787a4162
+WFWDC2FI1> lun serial -x /vol/DC2_EXCH02_LOG1/QT_EXCH02_LOG1/LUN_EXCH02_LOG1
+                Serial (hex)#: 0x4431455a36243339787a4164
+
+#WFWDC1EXCH01
+WFWDC1FI1*> lun serial -x /vol/DC1_EXCH01_DB1/QT_EXCH01_DB1/LUN_EXCH01_DB1
+                Serial (hex)#: 0x4431452f5924436546534357
+WFWDC1FI1*> lun serial -x /vol/DC1_EXCH01_DB2/QT_EXCH01_DB2/LUN_EXCH01_DB2
+                Serial (hex)#: 0x4431452f5924436546534359
+WFWDC1FI1*> lun serial -x /vol/DC1_EXCH01_DB3/QT_EXCH01_DB3/LUN_EXCH01_DB3
+                Serial (hex)#: 0x4431452f592443654653432f
+WFWDC1FI1*> lun serial -x /vol/DC1_EXCH01_DB4/QT_EXCH01_DB4/LUN_EXCH01_DB4
+                Serial (hex)#: 0x4431452f5924436546534362
+WFWDC1FI1*> lun serial -x /vol/DC1_EXCH01_DB5/QT_EXCH01_DB5/LUN_EXCH01_DB5
+                Serial (hex)#: 0x4431452f5924436546534374
+WFWDC1FI1*> lun serial -x /vol/DC1_EXCH01_DB6/QT_EXCH01_DB6/LUN_EXCH01_DB6
+                Serial (hex)#: 0x4431452f5924436546534366
+WFWDC1FI1*> lun serial -x /vol/DC1_EXCH01_DB7/QT_EXCH01_DB7/LUN_EXCH01_DB7
+                Serial (hex)#: 0x4431452f5924436546534368
+WFWDC1FI1*> lun serial -x /vol/DC1_EXCH01_DB8/QT_EXCH01_DB8/LUN_EXCH01_DB8
+                Serial (hex)#: 0x4431452f592443654653436a
+WFWDC1FI1*> lun serial -x /vol/DC1_EXCH01_DB9/QT_EXCH01_DB9/LUN_EXCH01_DB9
+                Serial (hex)#: 0x4431452f592443654653436c
+WFWDC1FI1*> lun serial -x /vol/DC1_EXCH01_DB_10/QT_EXCH01_DB_10/LUN_EXCH01_DB_10
+                Serial (hex)#: 0x4431452f592443654653436e
+WFWDC1FI1*> lun serial -x /vol/DC1_EXCH01_LOG1/QT_EXCH01_LOG1/LUN_EXCH01_LOG1
+                Serial (hex)#: 0x4431452f5924436546534370
+WFWDC1FI1*> lun serial -x /vol/DC1_EXCH01_LOG2/QT_EXCH01_LOG2/LUN_EXCH01_LOG2
+                Serial (hex)#: 0x4431452f5924436546534372
+
+#Disk assignment
+disk assign 0a.10.0 -s unowned -f
+disk assign 0a.10.1 -s unowned -f
+disk assign 0a.10.2 -s unowned -f
+disk assign 0a.10.3 -s unowned -f
+disk assign 0a.10.4 -s unowned -f
+disk assign 0a.10.5 -s unowned -f
+disk assign 0a.10.6 -s unowned -f
+disk assign 0a.10.7 -s unowned -f
+disk assign 0a.10.8 -s unowned -f
+disk assign 0a.10.9 -s unowned -f
+disk assign 0a.10.10 -s unowned -f
+disk assign 0a.10.11 -s unowned -f
+disk assign 0a.10.12 -s unowned -f
+disk assign 0a.10.13 -s unowned -f
+disk assign 0a.10.14 -s unowned -f
+disk assign 0a.10.15 -s unowned -f
+disk assign 0a.10.16 -s unowned -f
+disk assign 0a.10.17 -s unowned -f
+disk assign 0a.10.18 -s unowned -f
+disk assign 0a.10.19 -s unowned -f
+disk assign 0a.10.20 -s unowned -f
+disk assign 0a.10.21 -s unowned -f
+disk assign 0a.10.22 -s unowned -f
+disk assign 0a.11.0 -s unowned -f
+disk assign 0a.11.1 -s unowned -f
+disk assign 0a.11.2 -s unowned -f
+disk assign 0a.11.3 -s unowned -f
+disk assign 0a.11.4 -s unowned -f
+disk assign 0a.11.5 -s unowned -f
+disk assign 0a.11.6 -s unowned -f
+disk assign 0a.11.7 -s unowned -f
+disk assign 0a.11.8 -s unowned -f
+disk assign 0a.11.9 -s unowned -f
+disk assign 0a.11.10 -s unowned -f
+disk assign 0a.11.11 -s unowned -f
+disk assign 0a.11.12 -s unowned -f
+disk assign 0a.11.13 -s unowned -f
+disk assign 0a.11.14 -s unowned -f
+disk assign 0a.11.15 -s unowned -f
+disk assign 0a.11.16 -s unowned -f
+disk assign 0a.11.17 -s unowned -f
+disk assign 0a.11.18 -s unowned -f
+disk assign 0a.11.19 -s unowned -f
+disk assign 0a.11.20 -s unowned -f
+
+#VOLUME COPY TO MOVE SNAPVAULT DESTINATION
+1. First thing is to disable any external process that might try to update the volume during the move. (i.e. Protection Manager or custom backup scripts)
+2. Create the new volume (I also assign volume options, your options may be different)
+vol create volname_new aggr size
+vol options volname_new guarantee none
+vol options volname_new nosnap on
+vol options volname_new nosnapdir on
+vol options volname_new fractional_reserve 0
+vol options volname_new try_first volume_grow
+3. Before I do anything I enable Dedup and Compression.
+sis on /vol/volname_new
+sis config -C true -I true /vol/volname_new
+sis start -s -d -f /vol/volname_new
+sis status /vol/volname_new
+4. Copy the entire contents of the volume including ALL snapshots (because having a snapvaulted volume would be useless without the snapshots)
+vol restrict volname_new
+vol copy start -S volname volname_new
+5. Swap the names of the old and new volumes
+vol online volname_new
+vol rename volname volname_old
+vol rename volname_new volname
+vol offline volname_old
+ 
+So at this point you now you have a new volume with the exact same information in it as the old volume (which is now offline).
+Because the new volume has the old name and all of the snapshots have the same name you Protection Manager will still be able to restore any information.
+Also snapshots which were "snapvaulted snapshots" are present, so any snapvaulting should proceed flawlessly.  (It is my understanding that the special snapshots "snapvault" or "snapmirror" contain extra meta data which points them back to their partner)
+Be just to be sure I normally initiate a manual snapvault update:
+snapvault update /vol/volname/qtree
+And then enable and run a manual Protection Manager Job or run whatever custom script I use for backups.
+
+"snapvault start -S -r" will reestablish the vault without rebaselining...the -r to restart updates... the vol move method should work fine but copying the volume works too since vol move is doing the same thing in the background but less commands for vol move and automates a lot of the steps.
+
+#REALLOCATE
+#Measuring
+#Done (* needs reallocating)
+reallocate measure -o -l /vol/vol0/etc/log/vol0_reallocate_log /vol/vol0 (result 5* threshhold 4)
+reallocate measure -o -l /vol0/etc/log/SQL_64_reallocate_log /vol/SQL_64 (result 7* threshhold 4)
+reallocate measure -o -l /vol/vol0/etc/log/Email_Flex2_64_reallocate_log /vol/Email_Flex2_64 (result 4 threshhold 4)
+reallocate measure -o -l /vol/vol0/etc/log/VM_C_64_reallocate_log /vol/VM_C_64 (result  threshhold 4)
+#To Do
+reallocate measure -o -l /vol/vol0/etc/log/VM_D_Temp_64_reallocate_log /vol/VM_D_Temp_64 (result  threshhold 4)
+reallocate measure -o -l /vol/vol0/etc/log/VM_E_64_reallocate_log /vol/VM_E_64 (result  threshhold 4)
+reallocate measure -o -l /vol/vol0/etc/log/LONDON_APPS_64_reallocate_log /vol/LONDON_APPS_64 (result  threshhold 4)
+reallocate measure -o -l /vol/vol0/etc/log/LONDON_SOFTWARE_64_reallocate_log /vol/LONDON_SOFTWARE_64 (result  threshhold 4)
+reallocate measure -o -l /vol/vol0/etc/log/Overseas_Email_64_reallocate_log /vol/Overseas_Email_64 (result  threshhold 4)
+reallocate measure -o -l /vol/vol0/etc/log/London_Bible_Scans_reallocate_log /vol/London_Bible_Scans (result  threshhold 4)
+reallocate measure -o -l /vol/vol0/etc/log/Restores_reallocate_log /vol/Restores (result  threshhold 4)
+
+#AUTOSUPPORT
+options autosupport.enable on
+options autosupport.from wfwdc1_Filers@wfw.com
+options autosupport.minimal.subject.id hostname
+options autosupport.noteto ittechnicalservices@wfw.com
+options autosupport.partner.to autosupport@b2net.co.uk,ittechnicalservices@wfw.com
+options autosupport.support.transport smtp
+options autosupport.to ittechnicalservices@wfw.com,autosupport@b2net.co.uk
+
+
+WFWDC1FI1> lun serial -x /vol/DC1_EXCH02_DB1/QT_EXCH02_DB1/LUN_EXCH02_DB1
+                Serial (hex)#: 0x4431452f592443654653426e
+WFWDC1FI1> lun serial -x /vol/DC1_EXCH02_DB2/QT_EXCH02_DB2/LUN_EXCH02_DB2
+                Serial (hex)#: 0x4431452f5924436546534270
+WFWDC1FI1> lun serial -x /vol/DC1_EXCH02_DB3/QT_EXCH02_DB3/LUN_EXCH02_DB3
+                Serial (hex)#: 0x4431452f5924436546534272
+WFWDC1FI1> lun serial -x /vol/DC1_EXCH02_DB4/QT_EXCH02_DB4/LUN_EXCH02_DB4
+                Serial (hex)#: 0x4431452f5924436546534274
+WFWDC1FI1> lun serial -x /vol/DC1_EXCH02_DB5/QT_EXCH02_DB5/LUN_EXCH02_DB5
+                Serial (hex)#: 0x4431452f5924436546534276
+WFWDC1FI1> lun serial -x /vol/DC1_EXCH02_DB6/QT_EXCH02_DB6/LUN_EXCH02_DB6
+                Serial (hex)#: 0x4431452f5924436546534278
+WFWDC1FI1> lun serial -x /vol/DC1_EXCH02_DB7/QT_EXCH02_DB7/LUN_EXCH02_DB7
+                Serial (hex)#: 0x4431452f592443654653427a
+WFWDC1FI1> lun serial -x /vol/DC1_EXCH02_DB8/QT_EXCH02_DB8/LUN_EXCH02_DB8
+                Serial (hex)#: 0x4431452f5924436546534331
+WFWDC1FI1> lun serial -x /vol/DC1_EXCH02_DB9/QT_EXCH02_DB9/LUN_EXCH02_DB9
+                Serial (hex)#: 0x4431452f5924436546534333
+WFWDC1FI1> lun serial -x /vol/DC1_EXCH02_DB_10/QT_EXCH02_DB_10/LUN_EXCH02_DB_10
+                Serial (hex)#: 0x4431452f5924436546534335
+WFWDC1FI1> lun serial -x /vol/DC1_EXCH02_LOG1/QT_EXCH02_LOG1/LUN_EXCH02_LOG1
+                Serial (hex)#: 0x4431452f5924436546534337
+WFWDC1FI1> lun serial -x /vol/DC1_EXCH02_LOG2/QT_EXCH02_LOG2/LUN_EXCH02_LOG2
+                Serial (hex)#: 0x4431452f5924436546534339
+
+Madrid Snap Sched
+Volume MADRID_EMAIL: 3 2 6@8,12,14,16,18,20
+Paris Snap Sched
+Volume Paris_Email_Flex: 2 2 2@12,18
+Milan Snap Sched
+Volume MILAN_EMAIL: 4 3 3@8,12,16,20
+Rome Snap Sched
+Volume ROME_EMAIL: 0 2 6@8,12,16,20
+Singapore Snap Sched
+Volume SINGAPORE_EMAIL: 1 6 2@10,14
+
+07738329419
+
+#Powershell ONTAP useful commands (I think LOL)
+Import-Module DataOntap
+Connect-NaController
+Get-NaAggrFilerInfo
+Get-NaHostDisk -Dataontap (not working)
+Get-NaHostVolume
+Get-NaLUN
+Get-NaHostVolume | where {$_.Mountpoints -like "E:\Mountpoints\DC1Logs2\"}
+Get-NaHostVolume | where {$_.Mountpoints -like "E:\Mountpoints\DC1Logs2\"} | Invoke-NaHostVolumeSpaceReclaim
+
+Moving SnapMirrors
+The volumes contained are used for Volume SnapMirror destinations and preserving this relationship is required.
+1.On the destination storage system, issue a SnapMirror update. This will update the current relationship between Orig_src and Orig_dest.
+e.g. snapmirror update SM_AP_DATA
+
+2.Perform a SnapMirror quiesce and break between the source and destination storage .
+e.g.  snapmirror quiesce SM_AP_DATA
+e.g.  snapmirror break SM_AP_DATA
+
+3.Modify the /etc/snapmirror.conf file on the destination storage system to remove the relationship.
+
+4.Create a new SnapMirror relationship between <snapmirror destination volume> and <snapmirror NEW_destination volume>. 
+For this new relationship, <snapmirror OLD_destination volume> is the source and <snapmirror NEW_destination volume> is the destination.
+ To create a relationship using Filerview, see 1010809: How to configure SnapMirror using FilerView.
+ To create a relationship using CLI, see Data Protection Using SnapMirror.
+
+5.Once the relationship has completed and is showing snapmirrored, perform a SnapMirror quiesce and break for this relationship.
+e.g.  snapmirror quiesce SM_AP_DATA_DC1
+e.g.  snapmirror break SM_AP_DATA_DC1
+
+6.Modify the /etc/snapmirror.conf file on the destination to remove this relationship. 
+
+7.On the destination storage system, perform a SnapMirror resync to establish a relationship of SnapMirror to the new destination 
+(between Orig_src and New_dest).
+e.g.  snapmirror resync -S APSIFI:AP_DATA WFWDC1FI1:SM_AP_DATA_DC1
+
+8.Update the destination storage system's /etc/snapmirror.conf file to establish scheduled updates.
+
+#Moving a root volume
+#Check space on root volume.
+vol size (root volume) e.g. vol size vol0 (this will report the volume size e.g. vol size: Flexible volume 'vol0' has size 250g).
+#Create a new volume ready to be a new boot volume.
+vol create (new root volume) -l en -s volume (destination aggr) (volume size)k/m/g/t e.g vol create vol0_new -l en -s volume aggr2 250g (for the above).
+#Check NDMP is on
+ndmpd status (this will report 'ndmpd ON' when it is - if it isn't on, enter 'ndmpd on').
+#Now copy from volume to volume...
+ndmpcopy /vol/(source vol) /vol/(destination vol) e.g. ndmpcopy /vol/vol0 /vol/vol0_new
+#When the copy is complete, make the new volume root with...
+vol options (new root volume) root e.g. vol options vol0_new root
+#Check new root volume has the status of 'root'
+vol options (new root volume) e.g. vol status vol0_new - should report 'diskroot' in the list of options
+#Now reboot the controller
+#Don't forget to delete the old root volume and aggregates to recover space
+
+#Upgrade procedure
+#Prep
+#Download the software to the relevent Filers
+
+#Moving volumes between aggregates plus retain snapshots
+#dry run indicated by -d
+vol move start <srcvol> <dstaggr> -d
+#live run if no error reported by -d
+vol move start <srcvol> <dstaggr>
+
+Restoring using NDMP at folder level.
+https://kb.netapp.com/support/index?page=content&id=1010264&pmv=print&impressions=false
+e.g.
+ndmpcopy "/vol/DC2_DATA_F1/.snapshot/hourly.1/QT_HAMBURG_DATA/Hamburg Users/kirm1" "/vol/DC2_DATA_F1/QT_HAMBURG_DATA/Hamburg Users/kirm1"
+e.g.
+ndmpcopy "/vol/DATA_Flex_64/.snapshot/weekly.1/docs/ScanDocs" "/vol/DATA_Flex_64/docs/ScanDocs"
+e.g.
+ndmpcopy "/vol/VM_E_64/.snapshot/before_cryptolocker_28th_Jan/VM_C_QT/WFWLOAP1/" "/vol/Restores/WFWLOAP1"
+e.g.
+ndmpcopy "/vol/DATA_Flex_64/.snapshot/before_cryptolocker_28th_Jan/docs/OLDO/PCDOCS" "/vol/DATA_Flex_64/docs/OLDO/PCDOCS"
+
+#Disk and shelf info
+#Map of all disk layouts
+sasadmin shelf
+#Map of disk layouts on channel 0a
+sasadmin shelf 0a
+#Show expanded disk shelf status for all shelves on channel 0a
+sasadmin expander_map 0a
+#Show targeted details of shelf 0a.1
+sasadmin expander_phy_state 0a.1 
+
+#fcp / FCoE useful commands
+#To view active adapters
+fcp show adapter
+Slot:                    1a
+Description:             Fibre Channel Target Adapter 1a (QLogic CNA 8112 (8152) rev. 2)
+Adapter Type:            Local
+Status:                  ONLINE
+FC Nodename:             50:0a:09:80:88:a3:e5:8c (500a098088a3e58c)
+FC Portname:             50:0a:09:81:98:a3:e5:8c (500a098198a3e58c)
+Standby:                 No
+
+Slot:                    1b
+Description:             Fibre Channel Target Adapter 1b (QLogic CNA 8112 (8152) rev. 2)
+Adapter Type:            Local
+Status:                  ONLINE
+FC Nodename:             50:0a:09:80:88:a3:e5:8c (500a098088a3e58c)
+FC Portname:             50:0a:09:82:98:a3:e5:8c (500a098298a3e58c)
+Standby:                 No
+#or...
+fcp show adapter -v
+#...which will show more detail
+#Also useful is...
+fcp config
+#...example
+WFWDC1FI1> fcp config
+1a:   ONLINE <ADAPTER UP>  PTP  Fabric
+        host address 010040
+        portname 50:0a:09:81:98:a3:e5:8c  nodename 50:0a:09:80:88:a3:e5:8c
+        mediatype auto speed auto
+
+1b:   ONLINE <ADAPTER UP>  PTP  Fabric
+        host address 020040
+        portname 50:0a:09:82:98:a3:e5:8c  nodename 50:0a:09:80:88:a3:e5:8c
+        mediatype auto speed auto
+
+#To see logged in FCP hosts use the following command...
+igroup show 
+#or... 
+igroup show -v command
+#In the DCs all fcp targets should be logged in on the members prefixed with the first address e.g. '10:00:6c:ae:8b:34' on '1a' and '1b' like this...
+WFWDC1FI1> igroup show -v
+    DC1_Flex_VMHosts_FCoE (FCP):
+        OS Type: vmware
+        Member: 10:00:6c:ae:8b:34:83:fd (logged in on: 1a, 1b)
+        Member: 20:00:6c:ae:8b:34:83:fd (not logged in)
+        Member: 10:00:6c:ae:8b:34:c5:55 (logged in on: 1a, 1b)
+        Member: 20:00:6c:ae:8b:34:c5:55 (not logged in)
+#...if they are 'not logged in' or only connected on one adapter like this...
+WFWDC1FI1> igroup show
+    DC1_Flex_VMHosts_FCoE (FCP) (ostype: vmware):
+        10:00:6c:ae:8b:34:83:fd (not logged in)
+        20:00:6c:ae:8b:34:83:fd (not logged in)
+        10:00:6c:ae:8b:34:c5:55 (logged in on: 1a)
+#...then you have to offline/online an adapter with the least number of connections with these commands (one at a time with a few seconds in between)...
+fcp config 1b down
+fcp config 1b up
+fcp config 1a down
+fcp config 1a up
+#...be EXTREMELY CAREFUL to ensure that any VMs connected to LUNs have a WWPN connection on a host with at least 1 logged in connection and don't offline
+#an adapter if it is only connected once and nowhere else, otherwise you will divorce the VM from the storage causing possible data loss. If you find
+#that one VM has only one connection to an adapter that needs offlining then migrate the VM to another host with a connection on the opposite card.
+
+#reallocate immediately (only works with no snapshots)
+reallocate start -f /vol/<volname>
+#reallocate immediately (with snapshots)
+reallocate start  -o -p /vol/<volname>
+
+

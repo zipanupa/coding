@@ -1,0 +1,243 @@
+vol create DC1_EXCH04_ARC2 -l en -s volume exch_new_aggr 1t
+vol options DC1_EXCH04_ARC2 fractional_reserve 0
+vol autosize DC1_EXCH04_ARC2 on
+vol options DC1_EXCH04_ARC2 fs_size_fixed off
+vol autosize DC1_EXCH04_ARC2 -m 2t -i 100g
+snap reserve DC1_EXCH04_ARC2 0
+snap autodelete DC1_EXCH04_ARC2 off
+snap autodelete DC1_EXCH04_ARC2 
+sis on /vol/DC1_EXCH04_ARC2   
+sis config -s sun-sat@10 /vol/DC1_EXCH04_ARC2   
+sis config -C true -I true /vol/DC1_EXCH04_ARC2 
+qtree create /vol/DC1_EXCH04_ARC3/DC1_EXCH04_ARC2  
+qtree security /vol/DC1_EXCH04_ARC3/DC1_EXCH04_ARC2  ntfs 
+lun create -s 600g -t windows_2008 -o noreserve /vol/DC1_EXCH04_ARC2/QT_EXCH04_ARC2/LUN_EXCH04_ARC2
+
+CLUSTERED ONTAP
+DC1
+volume create DC1_EXCH01_ARC2 -language en -space-guarantee volume -aggregate DC1_Node1_aggr1 -size 1t -autosize true -autosize-increment 200g -max-autosize 2t -vserver NEWWFWDC1FI1
+volume modify -vserver NEWWFWDC1FI1 -volume DC1_EXCH01_ARC2 -snapshot-policy  none
+
+volume modify -vserver NEWWFWDC1FI1 -volume DC1_EXCH01_ARC2 -Nvfail on
+volume modify -vserver NEWWFWDC1FI1 -volume DC1_EXCH01_ARC2 -security-style unix
+volume modify -vserver NEWWFWDC1FI1 -volume DC1_EXCH01_ARC2 -fractional-reserve 0
+volume modify -vserver NEWWFWDC1FI1 -volume DC1_EXCH01_ARC2 -percent-snapshot-space 0
+volume efficiency on -vserver NEWWFWDC1FI1 -volume DC1_EXCH01_ARC2
+volume efficiency modify -vserver NEWWFWDC1FI1 -volume DC1_EXCH01_ARC2 -schedule sun-sat@7
+volume efficiency modify -vserver NEWWFWDC1FI1 -volume DC1_EXCH01_ARC2 -compression  true -inline-compression true
+volume qtree create -vserver NEWWFWDC1FI1 -volume DC1_EXCH01_ARC2 -qtree QT_EXCH01_ARC2 -security-style ntfs
+lun create -vserver NEWWFWDC1FI1 -volume DC1_EXCH01_ARC2 -qtree QT_EXCH01_ARC2 -space-reserve disabled -t windows_2008 -lun LUN_EXCH01_ARC2 -s 700g
+
+DC2
+volume create DC1_EXCH02_ARC2 -language en -space-guarantee volume -aggregate DC1_Node1_aggr1 -size 1t -autosize true -autosize-increment 200g -max-autosize 2t -vserver NEWWFWDC1FI1
+volume modify -vserver NEWWFWDC1FI1 -volume DC1_EXCH02_ARC2 -snapshot-policy  none
+
+volume modify -vserver NEWWFWDC1FI1 -volume DC1_EXCH02_ARC2 -Nvfail on
+volume modify -vserver NEWWFWDC1FI1 -volume DC1_EXCH02_ARC2 -security-style unix
+volume modify -vserver NEWWFWDC1FI1 -volume DC1_EXCH02_ARC2 -fractional-reserve 0
+volume modify -vserver NEWWFWDC1FI1 -volume DC1_EXCH02_ARC2 -percent-snapshot-space 0
+volume efficiency on -vserver NEWWFWDC1FI1 -volume DC1_EXCH02_ARC2
+volume efficiency modify -vserver NEWWFWDC1FI1 -volume DC1_EXCH02_ARC2 -schedule sun-sat@7
+volume efficiency modify -vserver NEWWFWDC1FI1 -volume DC1_EXCH02_ARC2 -compression  true -inline-compression true
+volume qtree create -vserver NEWWFWDC1FI1 -volume DC1_EXCH02_ARC2 -qtree QT_EXCH02_ARC2 -security-style ntfs
+lun create -vserver NEWWFWDC1FI1 -volume DC1_EXCH02_ARC2 -qtree QT_EXCH02_ARC2 -space-reserve disabled -t windows_2008 -lun LUN_EXCH02_ARC2 -s 700g
+
+volume create DC1_EXCH04_DB1 -language en -space-guarantee volume -aggregate aggr2_DC2_Node2 -size 1700g -autosize true -autosize-increment 100g -max-autosize 2t -vserver NEWWFWDC2FI2
+volume modify -vserver NEWWFWDC2FI2 -volume DC1_EXCH04_DB1 -size 1700g
+volume modify -vserver NEWWFWDC2FI2 -volume DC1_EXCH04_DB1 -snapshot-policy none
+volume modify -vserver NEWWFWDC2FI2 -volume DC1_EXCH04_DB1 -Nvfail on
+volume modify -vserver NEWWFWDC2FI2 -volume DC1_EXCH04_DB1 -security-style unix
+volume modify -vserver NEWWFWDC2FI2 -volume DC1_EXCH04_DB1 -fractional-reserve 0
+volume modify -vserver NEWWFWDC2FI2 -volume DC1_EXCH04_DB1 -percent-snapshot-space 0
+volume efficiency on -vserver NEWWFWDC2FI2 -volume DC1_EXCH04_DB1
+volume efficiency modify -vserver NEWWFWDC2FI2 -volume DC1_EXCH04_DB1 -schedule sun-sat@0
+volume efficiency modify -vserver NEWWFWDC2FI2 -volume DC1_EXCH04_DB1 -compression  true -inline-compression true
+volume qtree create -vserver NEWWFWDC2FI2 -volume DC1_EXCH04_DB1 -qtree QT_EXCH04_DB1 -security-style ntfs
+lun create -vserver NEWWFWDC2FI2 -volume DC1_EXCH04_DB1 -qtree QT_EXCH04_DB1 -space-reserve disabled -t windows_2008 -lun LUN_EXCH04_DB1 -s 600g
+
+volume efficiency show -vserver NEWWFWDC2FI2 -volume /vol/DC1_EXCH04_DB1
+volume efficiency show -fields vserver,volume,schedule
+
+volume create DC1_EXCH04_DB2 -language en -space-guarantee volume -aggregate aggr2_DC2_Node2 -size 1500g -autosize true -autosize-increment 100g -max-autosize 2t -vserver NEWWFWDC2FI2
+volume modify -vserver NEWWFWDC2FI2 -volume DC1_EXCH04_DB2 -snapshot-policy  none
+volume modify -vserver NEWWFWDC2FI2 -volume DC1_EXCH04_DB2 -size 1700g
+volume modify -vserver NEWWFWDC2FI2 -volume DC1_EXCH04_DB2 -Nvfail on
+volume modify -vserver NEWWFWDC2FI2 -volume DC1_EXCH04_DB2 -security-style unix
+volume modify -vserver NEWWFWDC2FI2 -volume DC1_EXCH04_DB2 -fractional-reserve 0
+volume modify -vserver NEWWFWDC2FI2 -volume DC1_EXCH04_DB2 -percent-snapshot-space 0
+volume efficiency on -vserver NEWWFWDC2FI2 -volume DC1_EXCH04_DB2
+volume efficiency modify -vserver NEWWFWDC2FI2 -volume DC1_EXCH04_DB2 -schedule sun-sat@0
+volume efficiency modify -vserver NEWWFWDC2FI2 -volume DC1_EXCH04_DB2 -compression  true -inline-compression true
+volume qtree create -vserver NEWWFWDC2FI2 -volume DC1_EXCH04_DB2 -qtree QT_EXCH04_DB2 -security-style ntfs
+lun create -vserver NEWWFWDC2FI2 -volume DC1_EXCH04_DB2 -qtree QT_EXCH04_DB2 -space-reserve disabled -t windows_2008 -lun LUN_EXCH04_DB2 -s 600g
+
+volume create DC1_EXCH04_DB3 -language en -space-guarantee volume -aggregate aggr2_DC2_Node2 -size 1700g -autosize true -autosize-increment 100g -max-autosize 2t -vserver NEWWFWDC2FI2
+volume modify -vserver NEWWFWDC2FI2 -volume DC1_EXCH04_DB3 -snapshot-policy  none
+volume modify -vserver NEWWFWDC2FI2 -volume DC1_EXCH04_DB3 -size 1700g
+volume modify -vserver NEWWFWDC2FI2 -volume DC1_EXCH04_DB3 -Nvfail on
+volume modify -vserver NEWWFWDC2FI2 -volume DC1_EXCH04_DB3 -security-style unix
+volume modify -vserver NEWWFWDC2FI2 -volume DC1_EXCH04_DB3 -fractional-reserve 0
+volume modify -vserver NEWWFWDC2FI2 -volume DC1_EXCH04_DB3 -percent-snapshot-space 0
+volume efficiency on -vserver NEWWFWDC2FI2 -volume DC1_EXCH04_DB3
+volume efficiency modify -vserver NEWWFWDC2FI2 -volume DC1_EXCH04_DB3 -schedule sun-sat@0
+volume efficiency modify -vserver NEWWFWDC2FI2 -volume DC1_EXCH04_DB3 -compression  true -inline-compression true
+volume qtree create -vserver NEWWFWDC2FI2 -volume DC1_EXCH04_DB3 -qtree QT_EXCH04_DB3 -security-style ntfs
+lun create -vserver NEWWFWDC2FI2 -volume DC1_EXCH04_DB3 -qtree QT_EXCH04_DB3 -space-reserve disabled -t windows_2008 -lun LUN_EXCH04_DB3 -s 700g
+
+volume create DC1_EXCH04_DB4 -language en -space-guarantee volume -aggregate aggr2_DC2_Node2 -size 1600g -autosize true -autosize-increment 100g -max-autosize 2t -vserver NEWWFWDC2FI2
+volume modify -vserver NEWWFWDC2FI2 -volume DC1_EXCH04_DB4 -snapshot-policy  none
+volume modify -vserver NEWWFWDC2FI2 -volume DC1_EXCH04_DB4 -size 1600g
+volume modify -vserver NEWWFWDC2FI2 -volume DC1_EXCH04_DB4 -Nvfail on
+volume modify -vserver NEWWFWDC2FI2 -volume DC1_EXCH04_DB4 -security-style unix
+volume modify -vserver NEWWFWDC2FI2 -volume DC1_EXCH04_DB4 -fractional-reserve 0
+volume modify -vserver NEWWFWDC2FI2 -volume DC1_EXCH04_DB4 -percent-snapshot-space 0
+volume efficiency on -vserver NEWWFWDC2FI2 -volume DC1_EXCH04_DB4
+volume efficiency modify -vserver NEWWFWDC2FI2 -volume DC1_EXCH04_DB4 -schedule sun-sat@1
+volume efficiency modify -vserver NEWWFWDC2FI2 -volume DC1_EXCH04_DB4 -compression  true -inline-compression true
+volume qtree create -vserver NEWWFWDC2FI2 -volume DC1_EXCH04_DB4 -qtree QT_EXCH04_DB4 -security-style ntfs
+lun create -vserver NEWWFWDC2FI2 -volume DC1_EXCH04_DB4 -qtree QT_EXCH04_DB4 -space-reserve disabled -t windows_2008 -lun LUN_EXCH04_DB4 -s 750g
+
+volume create DC1_EXCH04_DB5 -language en -space-guarantee volume -aggregate aggr2_DC2_Node2 -size 1600g -autosize true -autosize-increment 100g -max-autosize 2t -vserver NEWWFWDC2FI2
+volume modify -vserver NEWWFWDC2FI2 -volume DC1_EXCH04_DB5 -snapshot-policy  none
+volume modify -vserver NEWWFWDC2FI2 -volume DC1_EXCH04_DB5 -size 1600g
+volume modify -vserver NEWWFWDC2FI2 -volume DC1_EXCH04_DB5 -Nvfail on
+volume modify -vserver NEWWFWDC2FI2 -volume DC1_EXCH04_DB5 -security-style unix
+volume modify -vserver NEWWFWDC2FI2 -volume DC1_EXCH04_DB5 -fractional-reserve 0
+volume modify -vserver NEWWFWDC2FI2 -volume DC1_EXCH04_DB5 -percent-snapshot-space 0
+volume efficiency on -vserver NEWWFWDC2FI2 -volume DC1_EXCH04_DB5
+volume efficiency modify -vserver NEWWFWDC2FI2 -volume DC1_EXCH04_DB5 -schedule sun-sat@1
+volume efficiency modify -vserver NEWWFWDC2FI2 -volume DC1_EXCH04_DB5 -compression  true -inline-compression true
+volume qtree create -vserver NEWWFWDC2FI2 -volume DC1_EXCH04_DB5 -qtree QT_EXCH04_DB5 -security-style ntfs
+lun create -vserver NEWWFWDC2FI2 -volume DC1_EXCH04_DB5 -qtree QT_EXCH04_DB5 -space-reserve disabled -t windows_2008 -lun LUN_EXCH04_DB5 -s 600g
+
+volume create DC1_EXCH04_DB6 -language en -space-guarantee volume -aggregate aggr2_DC2_Node2 -size 1500g -autosize true -autosize-increment 100g -max-autosize 2t -vserver NEWWFWDC2FI2
+volume modify -vserver NEWWFWDC2FI2 -volume DC1_EXCH04_DB6 -snapshot-policy  none
+volume modify -vserver NEWWFWDC2FI2 -volume DC1_EXCH04_DB6 -size 1500g
+volume modify -vserver NEWWFWDC2FI2 -volume DC1_EXCH04_DB6 -Nvfail on
+volume modify -vserver NEWWFWDC2FI2 -volume DC1_EXCH04_DB6 -security-style unix
+volume modify -vserver NEWWFWDC2FI2 -volume DC1_EXCH04_DB6 -fractional-reserve 0
+volume modify -vserver NEWWFWDC2FI2 -volume DC1_EXCH04_DB6 -percent-snapshot-space 0
+volume efficiency on -vserver NEWWFWDC2FI2 -volume DC1_EXCH04_DB6
+volume efficiency modify -vserver NEWWFWDC2FI2 -volume DC1_EXCH04_DB6 -schedule sun-sat@1
+volume efficiency modify -vserver NEWWFWDC2FI2 -volume DC1_EXCH04_DB6 -compression  true -inline-compression true
+volume qtree create -vserver NEWWFWDC2FI2 -volume DC1_EXCH04_DB6 -qtree QT_EXCH04_DB6 -security-style ntfs
+lun create -vserver NEWWFWDC2FI2 -volume DC1_EXCH04_DB6 -qtree QT_EXCH04_DB6 -space-reserve disabled -t windows_2008 -lun LUN_EXCH04_DB6 -s 650g
+
+volume create DC1_EXCH04_DB7 -language en -space-guarantee volume -aggregate aggr2_DC2_Node2 -size 1300g -autosize true -autosize-increment 100g -max-autosize 2t -vserver NEWWFWDC2FI2
+volume modify -vserver NEWWFWDC2FI2 -volume DC1_EXCH04_DB7 -snapshot-policy  none
+volume modify -vserver NEWWFWDC2FI2 -volume DC1_EXCH04_DB7 -size 1300g
+volume modify -vserver NEWWFWDC2FI2 -volume DC1_EXCH04_DB7 -Nvfail on
+volume modify -vserver NEWWFWDC2FI2 -volume DC1_EXCH04_DB7 -security-style unix
+volume modify -vserver NEWWFWDC2FI2 -volume DC1_EXCH04_DB7 -fractional-reserve 0
+volume modify -vserver NEWWFWDC2FI2 -volume DC1_EXCH04_DB7 -percent-snapshot-space 0
+volume efficiency on -vserver NEWWFWDC2FI2 -volume DC1_EXCH04_DB7
+volume efficiency modify -vserver NEWWFWDC2FI2 -volume DC1_EXCH04_DB7 -schedule sun-sat@2
+volume efficiency modify -vserver NEWWFWDC2FI2 -volume DC1_EXCH04_DB7 -compression  true -inline-compression true
+volume qtree create -vserver NEWWFWDC2FI2 -volume DC1_EXCH04_DB7 -qtree QT_EXCH04_DB7 -security-style ntfs
+lun create -vserver NEWWFWDC2FI2 -volume DC1_EXCH04_DB7 -qtree QT_EXCH04_DB7 -space-reserve disabled -t windows_2008 -lun LUN_EXCH04_DB7 -s 700g
+
+volume create DC1_EXCH04_DB8 -language en -space-guarantee volume -aggregate aggr2_DC2_Node2 -size 1t -autosize true -autosize-increment 100g -max-autosize 2t -vserver NEWWFWDC2FI2
+volume modify -vserver NEWWFWDC2FI2 -volume DC1_EXCH04_DB8 -snapshot-policy  none
+volume modify -vserver NEWWFWDC2FI2 -volume DC1_EXCH04_DB8 -size 1t
+volume modify -vserver NEWWFWDC2FI2 -volume DC1_EXCH04_DB8 -Nvfail on
+volume modify -vserver NEWWFWDC2FI2 -volume DC1_EXCH04_DB8 -security-style unix
+volume modify -vserver NEWWFWDC2FI2 -volume DC1_EXCH04_DB8 -fractional-reserve 0
+volume modify -vserver NEWWFWDC2FI2 -volume DC1_EXCH04_DB8 -percent-snapshot-space 0
+volume efficiency on -vserver NEWWFWDC2FI2 -volume DC1_EXCH04_DB8
+volume efficiency modify -vserver NEWWFWDC2FI2 -volume DC1_EXCH04_DB8 -schedule sun-sat@2
+volume efficiency modify -vserver NEWWFWDC2FI2 -volume DC1_EXCH04_DB8 -compression  true -inline-compression true
+volume qtree create -vserver NEWWFWDC2FI2 -volume DC1_EXCH04_DB8 -qtree QT_EXCH04_DB8 -security-style ntfs
+lun create -vserver NEWWFWDC2FI2 -volume DC1_EXCH04_DB8 -qtree QT_EXCH04_DB8 -space-reserve disabled -t windows_2008 -lun LUN_EXCH04_DB8 -s 600g
+
+volume create DC1_EXCH04_DB9 -language en -space-guarantee volume -aggregate aggr2_DC2_Node2 -size 1t -autosize true -autosize-increment 100g -max-autosize 2t -vserver NEWWFWDC2FI2
+volume modify -vserver NEWWFWDC2FI2 -volume DC1_EXCH04_DB9 -snapshot-policy  none
+volume modify -vserver NEWWFWDC2FI2 -volume DC1_EXCH04_DB9 -size 1t
+volume modify -vserver NEWWFWDC2FI2 -volume DC1_EXCH04_DB9 -Nvfail on
+volume modify -vserver NEWWFWDC2FI2 -volume DC1_EXCH04_DB9 -security-style unix
+volume modify -vserver NEWWFWDC2FI2 -volume DC1_EXCH04_DB9 -fractional-reserve 0
+volume modify -vserver NEWWFWDC2FI2 -volume DC1_EXCH04_DB9 -percent-snapshot-space 0
+volume efficiency on -vserver NEWWFWDC2FI2 -volume DC1_EXCH04_DB9
+volume efficiency modify -vserver NEWWFWDC2FI2 -volume DC1_EXCH04_DB9 -schedule sun-sat@2
+volume efficiency modify -vserver NEWWFWDC2FI2 -volume DC1_EXCH04_DB9 -compression  true -inline-compression true
+volume qtree create -vserver NEWWFWDC2FI2 -volume DC1_EXCH04_DB9 -qtree QT_EXCH04_DB9 -security-style ntfs
+lun create -vserver NEWWFWDC2FI2 -volume DC1_EXCH04_DB9 -qtree QT_EXCH04_DB9 -space-reserve disabled -t windows_2008 -lun LUN_EXCH04_DB9 -s 600g
+
+volume create DC1_EXCH04_DB_10 -language en -space-guarantee volume -aggregate aggr2_DC2_Node2 -size 1t -autosize true -autosize-increment 100g -max-autosize 2t -vserver NEWWFWDC2FI2
+volume modify -vserver NEWWFWDC2FI2 -volume DC1_EXCH04_DB_10 -snapshot-policy  none
+volume modify -vserver NEWWFWDC2FI2 -volume DC1_EXCH04_DB_10 -size 1t
+volume modify -vserver NEWWFWDC2FI2 -volume DC1_EXCH04_DB_10 -Nvfail on
+volume modify -vserver NEWWFWDC2FI2 -volume DC1_EXCH04_DB_10 -security-style unix
+volume modify -vserver NEWWFWDC2FI2 -volume DC1_EXCH04_DB_10 -fractional-reserve 0
+volume modify -vserver NEWWFWDC2FI2 -volume DC1_EXCH04_DB_10 -percent-snapshot-space 0
+volume efficiency on -vserver NEWWFWDC2FI2 -volume DC1_EXCH04_DB_10
+volume efficiency modify -vserver NEWWFWDC2FI2 -volume DC1_EXCH04_DB_10 -schedule sun-sat@3
+volume efficiency modify -vserver NEWWFWDC2FI2 -volume DC1_EXCH04_DB_10 -compression  true -inline-compression true
+volume qtree create -vserver NEWWFWDC2FI2 -volume DC1_EXCH04_DB_10 -qtree QT_EXCH04_DB_10 -security-style ntfs
+lun create -vserver NEWWFWDC2FI2 -volume DC1_EXCH04_DB_10 -qtree QT_EXCH04_DB_10 -space-reserve disabled -t windows_2008 -lun LUN_EXCH04_DB_10 -s 600g
+
+volume create DC1_EXCH04_LOG1 -language en -space-guarantee volume -aggregate aggr2_DC2_Node2 -size 3t -autosize true -autosize-increment 100g -max-autosize 2t -vserver NEWWFWDC2FI2
+volume modify -vserver NEWWFWDC2FI2 -volume DC1_EXCH04_LOG1 -snapshot-policy  none
+volume modify -vserver NEWWFWDC2FI2 -volume DC1_EXCH04_LOG1 -size 3t
+volume modify -vserver NEWWFWDC2FI2 -volume DC1_EXCH04_LOG1 -Nvfail on
+volume modify -vserver NEWWFWDC2FI2 -volume DC1_EXCH04_LOG1 -security-style unix
+volume modify -vserver NEWWFWDC2FI2 -volume DC1_EXCH04_LOG1 -fractional-reserve 0
+volume modify -vserver NEWWFWDC2FI2 -volume DC1_EXCH04_LOG1 -percent-snapshot-space 0
+volume qtree create -vserver NEWWFWDC2FI2 -volume DC1_EXCH04_LOG1 -qtree QT_EXCH04_LOG1 -security-style ntfs
+lun create -vserver NEWWFWDC2FI2 -volume DC1_EXCH04_LOG1 -qtree QT_EXCH04_LOG1 -space-reserve disabled -t windows_2008 -lun LUN_EXCH04_LOG1 -s 1200g
+
+
+volume qtree create -vserver NEWWFWDC2FI2 -volume RDM_MAPPINGS_DC2_F2 -qtree QT_MAPPINGS_DC2_F2 -security-style unix
+lun create -vserver NEWWFWDC2FI2 -volume RDM_MAPPINGS_DC2_F2 -qtree QT_MAPPINGS_DC2_F2 -space-reserve disabled -t vmware -lun LUN_MAPPINGS_DC2_F2 -s 10g
+
+
+#Increase autosize increment
+autosize -vserver (vserver name) -volume (volume name) -increment-size (increment in g).
+#E.G.
+autosize -vserver NEWWFWDC2FI1 -volume DC2_EXCH01_ARC1 -increment-size 400g
+
+
+
+
+1.Identify the LUNs being accessed through the partner node's FCP Target port.
+
+a. lun stats -o  (LUN STATISTICS)
+
+2.Identify the host initiators that are performing the I/O through the partner path
+
+a.lun config_check -A (LUN CONFIG CHECK) - output is only valid when viewed in AutoSupport
+b.lun show -v  (LUN CONFIGURATION)
+c.igroup show -v  (INITIATOR GROUPS)
+
+
+3.Identify the primary storage controller FCP target ports available for access to the LUN:
+
+a.fcp show cfmode  (FCP CFMODE)
+b.fcp show adapters  (FCP TARGET ADAPTERS)
+
+
+4.Verify the host initiator connectivity to primary FCP target ports and the host MPIO software configuration.
+
+5.Verify use of the partner path has ceased from both cluster nodes:
+
+sysstat -b 1
+
+The following FCP Initiators are sending Read/Write i/o over the
+FCP Partner Paths during the last 71 seconds
+WWPN                      Partner's Port       ops         bytes      ostype
+10:00:6c:ae:8b:34:c5:55               1a     14488     881784320      vmware
+10:00:6c:ae:8b:34:b1:65               1b     13167     807185408      vmware
+10:00:6c:ae:8b:34:c5:51               1b     14699     886399488      vmware
+10:00:6c:ae:8b:34:b1:61               1b     12964     792312320      vmware
+10:00:6c:ae:8b:34:c5:55               1b     14942     908234240      vmware
+10:00:6c:ae:8b:34:b1:65               1a     13160     778706944      vmware
+10:00:6c:ae:8b:34:b1:61               1a     13255     800698880      vmware
+10:00:6c:ae:8b:34:c5:51               1a     15322     902044672      vmware
+
+Offending OS: vmware
+Proxy ops exceeded 300 out of 300 times
+Proxy bytes exceed 0 out of 300 times
+No Problems Found
+
+
+FCoE 		Version 1.5.0.4-1vmw, Build: 799733, Interface: 9.2 Built on: Aug  1 2012
+Ethernet 	Version 1.4.2.15a, Build: 799733, Interface: 9.2 Built on: Aug  1 2012

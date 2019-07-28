@@ -1,0 +1,11 @@
+Set-Up Remote Share on Windows machine - Powershell
+
+$acl = Get-Acl `
+  \\WFWLON-PC586\c$\Powershell
+$permission = "wfw\mccm1","Read","Allow"
+$accessRule = New-Object `
+  System.Security.AccessControl.FileSystemAccessRule `
+  $permission
+$acl.SetAccessRule($accessRule)
+$acl |
+  Set-Acl \\WFWLON-PC586\c$\Powershell

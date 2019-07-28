@@ -1,0 +1,22 @@
+#Useful Flex System Commands
+env -T
+
+env -T <target>
+where <target> is a full or relative target path. Example full target paths are:
+ system
+ system:mm[x]
+ system:blade[x]
+ system:blade[x]:sp
+ system:switch[x]
+ system:power[x]
+ system:blower[x]
+ system:mt[x]
+ system:fanmux[x]
+Note: To see a list of all installed targets, please use the 'list' command.
+
+#Switch to management module 1...
+env -T system:mm[1]
+
+#Reset mm[1] from system:mm[1]> prompt...
+reset
+

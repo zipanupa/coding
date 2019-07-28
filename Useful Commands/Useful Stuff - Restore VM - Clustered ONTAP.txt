@@ -1,0 +1,10 @@
+Useful Stuff - Restore VM - Clustered ONTAP
+volume snapshot restore-file -vserver NEWWFWLOFI2 -snapshot keep_2 -volume VM_C -path /WFWLORP2/WFWLORP2.vmx -restore-path /WFWLORP2/WFWLORP2.vmx
+volume snapshot restore-file -vserver NEWWFWLOFI2 -snapshot keep_2 -volume VM_C -path /WFWLORP2/WFWLORP2.vmxf -restore-path /WFWLORP2/WFWLORP2.vmxf
+volume snapshot restore-file -vserver NEWWFWLOFI2 -snapshot keep_2 -volume VM_C -path /WFWLORP2/WFWLORP2_2.vmdk -restore-path /WFWLORP2/WFWLORP2_2.vmdk
+volume snapshot restore-file -vserver NEWWFWLOFI2 -snapshot keep_2 -volume VM_C -path /WFWLORP2/WFWLORP2_2-flat.vmdk -restore-path /WFWLORP2/WFWLORP2_2-flat.vmdk
+volume snapshot restore-file -vserver NEWWFWLOFI2 -snapshot keep_2 -volume VM_D_Temp -path /WFWLORP2/WFWLORP2_4.vmdk -restore-path /WFWLORP2/WFWLORP2_4.vmdk
+volume snapshot restore-file -vserver NEWWFWLOFI2 -snapshot keep_2 -volume VM_D_Temp -path /WFWLORP2/WFWLORP2_4-flat.vmdk -restore-path /WFWLORP2/WFWLORP2_4-flat.vmdk
+volume snapshot restore-file -vserver NEWWFWLOFI2 -snapshot keep_2 -volume VM_E -path /WFWLORP2/WFWLORP2_3.vmdk -restore-path /WFWLORP2/WFWLORP2_3.vmdk
+volume snapshot restore-file -vserver NEWWFWLOFI2 -snapshot keep_2 -volume VM_E -path /WFWLORP2/WFWLORP2_3-flat.vmdk -restore-path /WFWLORP2/WFWLORP2_3-flat.vmdk
+

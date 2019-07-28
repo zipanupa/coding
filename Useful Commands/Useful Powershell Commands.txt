@@ -1,0 +1,8 @@
+#Get members of an AD Group.
+Get-ADGroupMember "DC1 Citrix" -Recursive | Get-ADUser -Properties * | select surname,givenname | ft -AutoSize
+#Get members of an AD Group sorted by surname.
+Get-ADGroupMember "London_IT" -Recursive | Get-ADUser -Properties * | select surname,givenname | sort surname | ft -AutoSize
+#Get static routes set on remote machines.
+$routes = @()
+get-adcomputer -Filter {Name -like "WFWLO*"} -SearchBase "OU=Domain Member Servers,DC=WFW,DC=com" | %{$routes += gwmi win32_IP4RouteTable -computername $_.Name | ? {($_.Type -eq 4) -and ($_.Name -ne "0.0.0.0") }}
+

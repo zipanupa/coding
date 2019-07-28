@@ -1,0 +1,81 @@
+#Create Intercluster LIF
+#Command 1:
+network interface create -vserver HongKong_Node2 -lif LIF_SNAPMIRROR -role intercluster -home-node HongKong_Node2 -home-port e0d -address 172.22.47.28 -netmask 255.255.255.0
+#Command 2:
+network interface show -role intercluster
+#Command 3:
+network routing-groups route create -server HongKong_Node2 -routing-group i172.22.47.0/24 -destination 0.0.0.0/0 -gateway 172.22.47.254 -metric 40
+#After command 3, you should then be able to ping the intercluster LIF address
+#Add to snapmirror.access list on source filer (NEWWFWHKFI1) and check you can ping the intercluster LIF (172.22.47.28)
+
+#Logging into Node - when logged into the Cluster, enter this command...
+system node run -node local
+#NOTE: Whichever management LIF you connected are currently connected to this command will connect to the 'Physical' node assigned on that LIF IP address.
+
+
+#DISK FIRMWARE UPDATES
+#Enter privileged mode
+set -privilege diagnostic
+#To show firmware revision levels
+storage disk show -fields firmware-revision,model,node
+#Search and download the appropriate firmware then put the .zip file into a http file server root directory and run...
+storage firmware download -node * -package-url http://172.22.117.24:8080/(zip file)
+#e.g.
+storage firmware download -node * -package-url http://172.22.117.24:8080/X438_S1635400ATD.NA02.LOD.zip
+#...this will install the disk firmware on all disks in all nodes.
+
+#QUAL DEVICES UPDATE
+#Check which version you have with...
+node run -node (node name) -command rdfile /etc/qual_devices_v3
+#Check the reference date at the top of the Disk Drive & Firmware Matrix...
+#...if the file does not exist or isn't the one on the Disk Drive & Firmware Matrix page then..
+#Download the latest zip and then put the .zip into a http file server root directory and run...
+storage firmware download -node * -package-url http://172.22.117.24:8080/qual_devices.zip
+#...this will install the qual devices package on all nodes.
+
+#SHELF FIRMWARE
+#check current version...
+system node run -node * -command sysconfig -v
+#Review the Disk Shelf Firmware page at NetApp against lines like this...
+"Shelf 0: DS2246  Firmware rev. IOM6 A: 0181  IOM6 B: 0181"
+"Shelf 10: DS2246  Firmware rev. IOM6 A: 0181  IOM6 B: 0181"
+#...in this case 0181 is the version. Search for DS2246 (the shelf type)...
+#If you find the number is greater the download the .zip file into a http file server root directory and run...
+storage firmware download -node * -package-url http://172.22.117.24:8080/IOM6.0190.SFW.zip
+#The update should happened within 10 minutes, but you can manually force the upgrade by using...
+storage shelf firmware update
+#...this will install the shelf firmware on all nodes.
+#Finally exit privileged mode
+set -privilege admin
+
+#SHELF COMMANDS
+#Show shelf numbers, IDs, serial numbers, model, IOM type, status.
+storage shelf show
+#Show detailed information
+storage shelf show -module
+
+#Autoassign
+#Show auto-assign
+storage disk option show -fields autoassign
+#Show auto-assign policy
+storage disk option show -fields autoassign-policy (usually default)
+#Show unassigned disks
+disk show -container-type unassigned
+#Show spare disks
+disk show -container-type spare
+#Show RAID (includes container types)
+disk show -raid
+#Disk assignment
+storage disk assign
+#Example - assign spare disks to Node1 in DC1
+assign -all true -node DC1_Node1
+#Disk re-assignment
+storage disk reassign
+
+#Show failed disks
+storage disk show -broken
+#Light LED on failed disk for 2 minutes
+storage disk set-led -disk (disk_name) 2
+#Switch LED on for disk 2.3.15 and 2.4.17
+storage disk set-led -disk 2.3.15 -action on
+storage disk set-led -disk 2.4.17 -action on

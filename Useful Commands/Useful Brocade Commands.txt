@@ -1,0 +1,50 @@
+#Useful Brocade Commands
+
+
+#stack commands
+#show stacking neighbours
+show lldp neighbors
+
+#show stacking neighbours port by port
+show lldp neighbors detail
+
+
+#interface commands
+#show a brief summary of the interfaces
+show interface brief
+
+#create a routable vlan
+#create a vlan e.g.
+conf t
+vlan 40
+#create a router-interface inside the vlan (use same number) e.g.
+routing-interface ve 40
+#if you want to add an ip address, assign ports to the vlan e.g
+tagged ethe 1/3/1 to 1/3/2 ethe 2/3/1 to 2/3/2
+#...then add a default gateway ip address to the router-interface e.g.
+int ve 40
+ip address 172.22.40.254 255.255.255.0
+
+#clearing counters on ports etc.
+#Clear port counters
+clear counters interface port-channel 5
+
+
+#LACP
+#LACP counters
+clear lacp counters
+show lacp counter 5
+
+#LACP creation on an interface e.g.
+interface ethernet 1/1/1
+port-name Name_Goes_Here
+link-aggregate configure key 10001 (NOTE: must be unique!)
+link-aggregate active
+
+
+#logging
+#show logs
+show log
+
+#Saving to TFTP Server
+copy run tftp://mark:test123@172.22.117.24/wfwdc26720-1.txt

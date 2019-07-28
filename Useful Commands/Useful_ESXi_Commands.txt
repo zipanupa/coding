@@ -1,0 +1,397 @@
+#NOTE: All commands in ESXi are in the SBIN folder
+
+#Enter/Exit Maintenance Mode
+vim-cmd /hostsvc/maintenance_mode_enter
+vim-cmd /hostsvc/maintenance_mode_exit
+or
+vimsh -n -e /hostsvc/maintenance_mode_enter
+vimsh -n -e /hostsvc/maintenance_mode_exit
+
+#Check the host is in Maintenance Mode
+vim-cmd /hostsvc/hostsummary | grep inMaintenanceMode
+or
+vimsh -n -e /hostsvc/hostsummary | grep inMaintenanceMode
+
+#Reboot
+reboot -f
+
+#halt
+halt
+
+#shutdown
+shutdown
+
+#BEGIN CHECK/REMOVE/INSTALL VIBS ***
+#List VIBs
+esxcli software vib list
+#e.g. list all vibs that start with 'mega'
+esxcli software vib list | grep mega
+#Removing VIBs
+esxcli software vib remove --vibname=(name of vib)
+#Installing VIBs
+#NOTE: move VIB file to /var/logs/vmware first...
+cp (vibfile).vib /var/logs/vmware
+#Then...
+cd /var/logs/vmware
+esxcli software vib install -v ./(vibfile).vib
+#END CHECK CHECK/REMOVE/INSTALL VIBS ***
+
+#BEGIN CHECK HBA CARD DETAILS ***
+#Run this command to obtain the driver type that the Host Bus Adapter is currently using:
+esxcfg-scsidevs -a
+#Run this command to view the driver version in use:
+vmkload_mod -s HBADriver |grep Version
+#To obtain the driver version for all HBAs in the system with a single command, use:
+for a in $(esxcfg-scsidevs -a |awk '{print $2}') ;do vmkload_mod -s $a |grep -i version ;done
+#To determine the recommended driver for the card, we must obtain the Vendor ID (VID), Device ID (DID), Sub-Vendor ID (SVID), and Sub-Device ID (SDID) using the vmkchdev command:
+vmkchdev -l |grep vmhba1
+#To obtain vendor information for all HBAs in the system using a single command:
+for a in $(esxcfg-scsidevs -a |awk '{print $1}') ;do vmkchdev -l |grep $a ;done
+#END CHECK HBA CARD DETAILS ***
+
+#BEGIN CHECK NETWORK CARD DETAILS ***
+#Obtain a list of network interface cards and names
+esxcli network nic list
+#Run the ethtool -i command to display available information for one of the network interfaces, specifying its name
+ethtool -i VMNic_name
+#To obtain information from # ethtool -i for all network adapters at once, you can run this command:
+esxcli network nic get -n vmnic#
+#To determine the recommended driver for the card, we must obtain the Vendor ID (VID), Device ID (DID), Sub-Vendor ID (SVID), and Sub-Device ID (SDID) using the vmkchdev command:
+vmkchdev -l |grep vmnic0
+#Run this command to obtain vendor information for all NICs in the system using:
+for a in $(esxcfg-nics -l |awk '{print $1}' |grep [0-9]) ;do vmkchdev -l |grep $a ;done
+#END CHECK NETWORK CARD DETAILS ***
+
+#BEGIN Determine Other Driver Related Information - ESXi 5.x Only
+#Run this command in ESXi 5.x to obtain the driver version for all HBAs in the system:
+esxcli storage core adapter list|awk '{print $1}'|grep [0-9]|while read a;do vmkload_mod -s $a|grep -i version;done
+#Run this command in ESXi 5.x to obtain vendor information for all HBAs in the system:
+esxcli storage core adapter list|awk '{print $1}'|grep [0-9]|while read a;do vmkchdev -l |grep $a ;done
+#Run this command in ESXi 5.x to obtain information from ethtool -i for all network adapters:
+esxcli network nic list | awk '{print $1}'|grep [0-9]|while read a;do ethtool -i $a;done
+#Run this command in ESXi 5.x to obtain vendor information for all NICs in the system:
+esxcli network nic list | awk '{print $1}'|grep [0-9]|while read a;do vmkchdev -l|grep $a;done
+#Run these commands to see the driver VIBs (vSphere Installation Bundle) actually installed on the host:
+esxcli software vib list can be used to check the installed VIBs
+esxcli software vib list | grep xxx will list a specific driver xxx
+#END Determine Other Driver Related Information - ESXi 5.x Only
+
+#Check ESXi Version
+#You can check the ESXi/ESX host version with the command:
+vmware -v
+
+#Configure the "Management Network" with a new IP address
+esxcfg-vmknic -i 10.101.0.1 -n 255.255.255.0 "Management Network"
+#Add a "Management Network
+esxcfg-vmknic -a -i 10.101.0.1 -n 255.255.255.0 "Management Network"
+
+#vCenter - this command runs the vCenter service manually 
+vpxd -s
+
+#Create Switches and PortGroups from scratch for datacenter ESXi host...
+esxcfg-vswitch -L vmnic4 vSwitch0
+esxcfg-vswitch -M vmnic4 -p 'Management Network' vSwitch0
+esxcfg-vswitch -a vSwitch1
+esxcfg-vswitch -L vmnic9 vSwitch1
+esxcfg-vswitch -L vmnic11 vSwitch1
+esxcfg-vswitch -A 'Router Network' vSwitch1
+esxcfg-vswitch -A 'Server Network' vSwitch1
+esxcfg-vswitch -A 'VMotion Network' vSwitch1
+esxcfg-vswitch -A 'NFS Network' vSwitch1
+esxcfg-vswitch -A 'Management Network 2' vSwitch1
+esxcfg-vswitch -v 1306 -p 'Router Network' vSwitch1
+esxcfg-vswitch -v 1301 -p 'Server Network' vSwitch1
+esxcfg-vswitch -v 1304 -p 'VMotion Network' vSwitch1
+esxcfg-vswitch -v 1305 -p 'NFS Network' vSwitch1
+esxcfg-vswitch -v 1300 -p 'Management Network 2' vSwitch1
+
+#Create switches (-a) and portgroups (-A) and configure vSwitch/Portgroup Security
+esxcfg-vswitch -a vSwitch1
+esxcfg-vswitch -A S1-FW-INSIDE vSwitch1
+esxcli network vswitch standard policy security set -p=false -v=vSwitch1
+esxcli network vswitch standard portgroup policy security set -o=true p=S1-FW-INSiDE 
+
+esxcfg-vmknic -a -i 10.103.0.3 -n 255.255.255.0 'Management Network 2'
+esxcfg-vmknic -a -i 10.103.5.1 -n 255.255.255.0 'NFS Network'
+esxcfg-vmknic -a -i 10.103.4.1 -n 255.255.255.0 'VMotion Network'
+esxcfg-route 10.103.5.254
+vim-cmd hostsvc/vmotion/vnic_set vmk3
+vim-cmd hostsvc/vmotion/netconfig_get | grep VMotion
+
+#Details below...
+
+#List switches
+esxcfg-vswitch -l
+#Sample output...
+#***
+#Switch Name      Num Ports   Used Ports  Configured Ports  MTU     Uplinks
+#vSwitch0         128         4           128               1500    vmnic0
+#
+#  PortGroup Name        VLAN ID  Used Ports  Uplinks
+#  VM Network            0        0           vmnic0
+#  Management Network    0        1           vmnic0
+#***
+
+#Add switch
+esxcfg-vswitch -a vSwitch1
+
+#Add nic to switch
+esxcfg-vswitch -L vmnic9 vSwitch1
+esxcfg-vswitch -L vmnic11 vSwitch1
+esxcfg-vswitch -l
+#Sample output...
+#Switch Name      Num Ports   Used Ports  Configured Ports  MTU     Uplinks
+#vSwitch0         128         6           128               1500    vmnic0,vmnic4
+#
+#  PortGroup Name        VLAN ID  Used Ports  Uplinks
+#  Management Network    0        1           vmnic0,vmnic4
+#
+#Switch Name      Num Ports   Used Ports  Configured Ports  MTU     Uplinks
+#vSwitch1         128         5           128               1500    vmnic9,vmnic11
+#
+#  PortGroup Name        VLAN ID  Used Ports  Uplinks
+
+#Add portgroups
+esxcfg-vswitch -A 'Router Network' vSwitch1
+esxcfg-vswitch -A 'Server Network' vSwitch1
+esxcfg-vswitch -A 'VMotion Network' vSwitch1
+esxcfg-vswitch -A 'NFS Network' vSwitch1
+esxcfg-vswitch -A 'Management Network 2' vSwitch1
+esxcfg-vswitch -l
+#Sample output
+Switch Name      Num Ports   Used Ports  Configured Ports  MTU     Uplinks
+#vSwitch0         128         6           128               1500    vmnic0,vmnic4
+#
+#  PortGroup Name        VLAN ID  Used Ports  Uplinks
+#  Management Network    0        1           vmnic0,vmnic4
+#
+#Switch Name      Num Ports   Used Ports  Configured Ports  MTU     Uplinks
+#vSwitch1         128         5           128               1500    vmnic9,vmnic11
+#
+#  PortGroup Name        VLAN ID  Used Ports  Uplinks
+#  Management Network 2  0        0           vmnic9,vmnic11
+#  NFS Network           0        0           vmnic9,vmnic11
+#  VMotion Network       0        0           vmnic9,vmnic11
+#  Server Network        0        0           vmnic9,vmnic11
+#  Router Network        0        0           vmnic9,vmnic11
+
+#Add VLANs to portgroups
+esxcfg-vswitch -v 1306 -p 'Router Network' vSwitch1
+esxcfg-vswitch -v 1301 -p 'Server Network' vSwitch1
+esxcfg-vswitch -v 1304 -p 'VMotion Network' vSwitch1
+esxcfg-vswitch -v 1305 -p 'NFS Network' vSwitch1
+esxcfg-vswitch -v 1300 -p 'Management Network 2' vSwitch1
+esxcfg-vswitch -l
+#Sample output
+#Switch Name      Num Ports   Used Ports  Configured Ports  MTU     Uplinks
+#vSwitch0         128         6           128               1500    vmnic0,vmnic4
+#
+#  PortGroup Name        VLAN ID  Used Ports  Uplinks
+#  Management Network    0        1           vmnic0,vmnic4
+#
+#Switch Name      Num Ports   Used Ports  Configured Ports  MTU     Uplinks
+#vSwitch1         128         5           128               1500    vmnic9,vmnic11
+#
+#  PortGroup Name        VLAN ID  Used Ports  Uplinks
+#  Management Network 2  1300     0           vmnic9,vmnic11
+#  NFS Network           1305     0           vmnic9,vmnic11
+#  VMotion Network       1304     0           vmnic9,vmnic11
+#  Server Network        1301     0           vmnic9,vmnic11
+#  Router Network        1306     0           vmnic9,vmnic11
+
+#Add switch nic to portgroup
+esxcfg-vswitch -M vmnic4 -p 'Management Network' vSwitch0
+esxcfg-vswitch -l
+#Sample output...
+#Switch Name      Num Ports   Used Ports  Configured Ports  MTU     Uplinks
+#vSwitch0         128         6           128               1500    vmnic0,vmnic4
+#
+#  PortGroup Name        VLAN ID  Used Ports  Uplinks
+#  Management Network    0        1           vmnic0,vmnic4
+
+#Add vmknic to a portgroup
+esxcfg-vmknic -a -i 10.103.0.3 -n 255.255.255.0 'Management Network 2'
+esxcfg-vmknic -l
+#Sample output
+#Interface  Port Group/DVPort   IP Family IP Address                              Netmask         Broadcast       MAC Address       MTU     TSO MSS   Enabled Type
+#vmk0       Management Network  IPv4      10.103.0.1                              255.255.255.0   10.103.0.255    40:f2:e9:20:dd:ea 1500    65535     true    STATIC
+#vmk0       Management Network  IPv6      fe80::42f2:e9ff:fe20:ddea               64                              40:f2:e9:20:dd:ea 1500    65535     true    STATIC, PREFERRED
+#vmk1       Management Network 2IPv4      10.103.0.3                              255.255.255.0   10.103.0.255    00:50:56:6b:5a:56 1500    65535     true    STATIC
+#vmk1       Management Network 2IPv6      fe80::250:56ff:fe6b:5a56                64                              00:50:56:6b:5a:56 1500    65535     true    STATIC, PREFERRED
+
+#Adding more vmknics to a portgroup
+esxcfg-vmknic -a -i 10.103.5.1 -n 255.255.255.0 'NFS Network'
+esxcfg-vmknic -a -i 10.103.4.1 -n 255.255.255.0 'VMotion Network'
+esxcfg-vmknic -l
+#Sample output
+#Interface  Port Group/DVPort   IP Family IP Address                              Netmask         Broadcast       MAC Address       MTU     TSO MSS   Enabled Type
+#vmk0       Management Network  IPv4      10.103.0.1                              255.255.255.0   10.103.0.255    40:f2:e9:20:dd:ea 1500    65535     true    STATIC
+#vmk0       Management Network  IPv6      fe80::42f2:e9ff:fe20:ddea               64                              40:f2:e9:20:dd:ea 1500    65535     true    STATIC, PREFERRED
+#vmk1       Management Network 2IPv4      10.103.0.3                              255.255.255.0   10.103.0.255    00:50:56:6b:5a:56 1500    65535     true    STATIC
+#vmk1       Management Network 2IPv6      fe80::250:56ff:fe6b:5a56                64                              00:50:56:6b:5a:56 1500    65535     true    STATIC, PREFERRED
+#vmk2       NFS Network         IPv4      10.103.5.1                              255.255.255.0   10.103.5.255    00:50:56:6b:5d:34 1500    65535     true    STATIC
+#vmk2       NFS Network         IPv6      fe80::250:56ff:fe6b:5d34                64                              00:50:56:6b:5d:34 1500    65535     true    STATIC, PREFERRED
+#vmk3       VMotion Network     IPv4      10.103.4.1                              255.255.255.0   10.103.4.255    00:50:56:6f:82:2f 1500    65535     true    STATIC
+#vmk3       VMotion Network     IPv6      fe80::250:56ff:fe6f:822f                64                              00:50:56:6f:82:2f 1500    65535     true    STATIC, PREFERRED
+
+#Default gateway
+#View default gateway
+esxcfg-route
+#Set default gateway
+esxcfg-route x.x.x.x
+
+#Set vmotion network
+vim-cmd hostsvc/vmotion/vnic_set vmk3 
+#Disabling vMotion Port:
+vim-cmd hostsvc/vmotion/vnic_unset vmk3
+#Check vSwitch vMotion configuration:
+vim-cmd hostsvc/vmotion/netconfig_get | grep VMotion
+
+#Delete portgroup
+esxcfg-vswitch -D 'VM Network' vSwitch0
+esxcfg-vswitch -l
+#Sample output...
+#***
+#Switch Name      Num Ports   Used Ports  Configured Ports  MTU     Uplinks
+#vSwitch0         128         4           128               1500    vmnic0
+#
+#  PortGroup Name        VLAN ID  Used Ports  Uplinks
+#  Management Network    0        1           vmnic0
+#***
+
+
+ESX Support Session 1 18/07/13
+~ # vmware -lv
+~ # esxcfg-nas -l
+/vmfs/volumes/e6fe9834-09bb4275/WFWDC2DC01 # grep -i scsi.*file WFWDC2DC01.vmx
+/vmfs/volumes/e6fe9834-09bb4275/WFWDC2DC01 # cat "WFWDC2DC01.vmdk"
+cat: can't open 'WFWDC2DC01.vmdk': Permission denied
+/vmfs/volumes/e6fe9834-09bb4275/WFWDC2UAG01 # cat WFWDC2UAG01.vmx
+/vmfs/volumes/e6fe9834-09bb4275/WFWDC2DC01 # touch testfile
+touch: testfile: Permission denied
+/vmfs/volumes/ce0301ab-4e7bffdc # touch testfile
+touch: testfile: Permission denied
+/vmfs/volumes/ce0301ab-4e7bffdc # ls -lh
+drwxr-xr-x    1 root     root        4.0K Jul 17 11:37 WFWDC2EXCH01
+/vmfs/volumes/e6fe9834-09bb4275 # touch test
+/vmfs/volumes/e6fe9834-09bb4275 # rm test
+/vmfs/volumes/e6fe9834-09bb4275 # touch testfile
+/vmfs/volumes/e6fe9834-09bb4275 # vi testfile
+/vmfs/volumes/e6fe9834-09bb4275 # rm testfile
+/vmfs/volumes/e6fe9834-09bb4275/WFWDC2DC01 # cat WFWDC2DC01.vmdk
+/vmfs/volumes/e6fe9834-09bb4275/WFWDC2DC01 # services.sh restart
+/vmfs/volumes/e6fe9834-09bb4275/WFWDC2DC01 # tail -f /var/log/hostd
+/vmfs/volumes/e6fe9834-09bb4275/WFWDC2DC01 # tail -f /var/log/hostd
+/vmfs/volumes/e6fe9834-09bb4275/WFWDC2DC01 # tail -f /var/log/hostd.log
+/vmfs/volumes/e6fe9834-09bb4275/WFWDC2DC01 # tail -f vmware.log
+
+#Restart Management Agents On ESX
+service mgmt-vmware restart
+service vmware-vpxa restart
+
+#Restart Management Agents On ESXi 5.5 and higher
+/etc/init.d/hostd restart
+/etc/init.d/vpxa restart
+
+#Determine ESX Version
+vmware -v
+
+#Check installed VIBs
+esxcli software vib list
+
+#Fix Management Network
+#List vswitches
+esxcfg-vswtich -l
+#Add nic to swtich
+esxcfg-vswitch -L vmnic0 (switch name)
+#Good Article
+http://kb.vmware.com/selfservice/microsites/search.do?language=en_US&cmd=displayKC&externalId=1000258
+
+ESXi 5.x - To remove a datastore:
+1.To list the mounted datastores on the host:
+
+esxcli storage nfs list
+
+
+2.Make a note of the NFS datastore from step 1. Run this command to delete the NFS mount:
+
+esxcli storage nfs remove -v NFS_Datastore_Name
+
+Note: This operation does not delete the information on the share, it unmounts the share from the host. If the NFS datastore is being used by either a virtual machine or a third party script, you may see this error:
+
+Error performing operation: NFS Error: Unable to Unmount filesystem: Busy.
+
+
+To add the datastore:
+1.Run this command to mount the NFS datastore:
+
+# esxcli storage nfs add -H NFS_IP|NFS_HOSTNAME -s Share_mount_point_on_the_NFS -v DatastoreName
+
+
+Note: For more information, see Managing NFS/NAS Datastores in the vSphere 5 Command Line Documentation.
+
+Reset IPMI Logs
+localcli hardware ipmi sel clear
+/etc/init.d/sfcbd-watchdog restart
+
+#The below command gives the system info on ESXi
+esxcfg-info | less -I
+
+#Harith's Config
+#Create switches (-a) and portgroups (-A)
+esxcfg-vswitch -a vSwitch1
+esxcfg-vswitch -A S1-FW-INSIDE vSwitch1
+esxcfg-vswitch -a vSwitch2
+esxcfg-vswitch -A S1-LAN0 vSwitch2
+esxcfg-vswitch -a vSwitch3
+esxcfg-vswitch -A S1-LAN1 vSwitch3
+esxcfg-vswitch -a vSwitch4
+esxcfg-vswitch -A S1-RB-WAN0 vSwitch4
+esxcfg-vswitch -a vSwitch5
+esxcfg-vswitch -A S1-RB-WAN1 vSwitch5
+esxcfg-vswitch -a vSwitch6
+esxcfg-vswitch -A S1-WAN1 vSwitch6
+esxcfg-vswitch -a vSwitch7
+esxcfg-vswitch -A S1-WAN2 vSwitch7
+esxcfg-vswitch -a vSwitch8
+esxcfg-vswitch -A S1-WAN3 vSwitch8
+esxcfg-vswitch -a vSwitch9
+esxcfg-vswitch -A S1-ISP1 vSwitch9
+esxcfg-vswitch -a vSwitch10
+esxcfg-vswitch -A S1-ISP2 vSwitch10
+esxcfg-vswitch -a vSwitch11
+esxcfg-vswitch -A S1-WWW vSwitch11
+esxcfg-vswitch -a vSwitch12
+esxcfg-vswitch -A Null-Network vSwitch12
+
+#Create switches (-a) and portgroups (-A)
+esxcfg-vswitch -a vSwitch1
+esxcfg-vswitch -A S1-FW-INSIDE vSwitch1
+#Config vSwitch/Portgroup Security
+esxcli network vswitch standard policy security set -p=false -v=vSwitch1
+esxcli network vswitch standard portgroup policy security set -o=true p=S1-FW-INSiDE
+
+#USX Datastore Problem - Can't remove it.
+#1. Migrate to the other host.
+#2. Manually remove Datastore...
+#3. Commands below
+esxcli storage nfs list
+Volume Name               Host            Share                 Accessible  Mounted  Read-Only  Hardware Acceleration
+------------------------  --------------  --------------------  ----------  -------  ---------  ---------------------
+NFS_DC1_TINTRI_01_CITRIX  10.101.5.102    /tintri/Citrix              true     true      false  Not Supported
+NFS_DC1_TINTRI_01_VMS     10.101.5.102    /tintri/VMs                 true     true      false  Not Supported
+WFWDC1USX02               192.168.11.101  /exports/WFWDC1USX02       false    false      false  Unknown
+/etc/init.d/storageRM stop
+watchdog-storageRM: Terminating watchdog process with PID 37887
+storageRM stopped
+esxcli storage nfs remove -v WFWDC1USX02
+/etc/init.d/storageRM start
+#4. Shut down via Atlantis USX.
+#5. Migrate machine back to the right node.
+#6. Start up via Atlantis USX and mount on new like this...
+esxcli storage nfs add -v WFWDC1USX02 --host=192.168.11.101 --share=/exports/WFWDC1USX02
+#7. Repeat unmount.
+#8. Mount via Atlantis USX.
+
+#Register a VM on the command line
+vim-cmd solo/registervm  /vmfs/volumes/WFWDC1USX02/WFWDC1XD_Template/WFWDC1XD_Template.vmtx

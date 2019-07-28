@@ -1,0 +1,47 @@
+copy run tftp 10.102.6.44
+
+Anish
+Frankfurt - Working Frankfurt floor plan/design documents. Anish mentioned the documentation will go into FileSite (Mark will email new location of the documentation).
+Athens - Telephony 'noise and one way' problems.
+Telco are pointing the finger at us now despite nothing changing our end.
+We are going to attempt disabling silent suppresion mode as they might have changed something - we think this is a Sonus setting. 
+We will also test plugging in the line directly to the Cisco router (Mila's suggestion) and test - we will arrange downtime with Panos.
+QoS - SfB enviromental updates via modality continue.
+Blade center switch update basically worked, but egress traffic marking on the WAN still incorrect - RB may be at fault - Anish to follow up with Teneo.
+Talari uplift documentation being worked on.
+Mila/Anish is putting a spreadsheet together of potential problems + an overall document which will outline the plan to fix Sonus, Cisco gateway, SRST, CUCM and 4 to 7 digit dialling.
+Mila working on the global number 5555 involving pattern match and normalisation rules where this number goes to IT service desk or out of hours.
+Ivanti - This is with Diane, Russell and the apps team (primarily Paul) - Anish not actively working on this as there are problems with it on Windows 10 (BSOD on the Yoga model) and Paul is trying to get Bluefort to push Ivanti to get the problem fixed.
+London AV is continuing investigations - our plan will be to have a template design (that works and is easy to support) and have that model go every where.
+Hamburg - round room OK now.
+Bangkok server room - documentation and design in progress.
+
+Anoop
+Met with Alex and James - server restart work is starting again now Alex is back so will set-up RFCs starting with DC1 restart.
+Mimecast - testing - FTP to PSTs over - talk to Matt regarding journaling (and include Steve). Throttling works well (20mb).
+Tintri replication - WFWDC1SME01 (old box) scrapped - VM moves working fine from London to DC1 - WFWLOSME01 replicated over MPLS (TinTri is throttled) - will test re IPed machine and bring it up - Power it down and test in reverse. Mark suggests using a license for 25 machines from VMware which we have already got the licensing for. Will go on to test FileSite Replication DC1-DC2 10.101.x.x via the 10gig network (will need to replicate data too as currently only goes to London).
+Athens RE-IP work - Anoop to go through this with Alex/Anish - due 8th-9th June for RE-IP. Seperate meeting will be required.
+Frankfurt office move - we need to check 10gig switch license (Mo/Mark or Anish). HW Blade to be sent back from Athens and Chassis in London - will check HW licensing is good for this and build the server and farm in London ready to be shipped nearer the time of the move. 
+Varonis - The Event James and Anoop attended was very good and we have organised a free healthcheck of our environment to see where we are with security exposure and produce a report. Mark suggests involving Neeta and Nick.
+
+Mo
+To pull the report of DC1 and DC2 activity over the 10gig line or simply just watch the interface traffic to make sure the routing is working correctly after BGP changes.
+Mo needs to enable Netflow over this line also (discuss in more detail with Albert @ 365ITMS).
+Firewall - Milan done and Madrid.
+DC3 and DC1 Firewalls
+* Mo to schedule the maintenance weekend with Anoop. Should be a day next month.
+* TTH needs to help with DC3 - end of the day - 6pm - 10pm change today for next week - 5 hours - no outage due to the cluster failover ability.
+Ten gig DC1 to DC2 - needs to enable VIP - BGP needs refinement on the line possible hence to be monitored.
+Mo had to push more policies on Checkpoint to whitelist some IP addresses required from SD request.
+RDP problem is disabled last week on Firewall as per Microsoft's recommendation .
+Munich VPN - Anish has arranged to have someone over in Munich next Tuesday and initiated the test plan - Dave Munnerley - Mo to talk to David regarding the work that needs - Mo will contact Tim @ Pentesec to give Mo extra help. Mark will also ask Tim for how much time we have.
+Frankfurt - documentation - Mo is going to make a start on the HLD/LLD next week now the floor plans are pretty much there.
+
+Mark
+Mark updating dscp on uplinks where they have been missed - found a few so far - Munich recently fixed - this can be done live - non-service impacting.
+Switch renewal - meeting next week - Mark, Anish, Mo, Anoop should be there.
+I need a design of how the replication network could work moving forward on layer 2 and what switches. Bear in mind this is the design using the NEW switches which need to be in place by Sept 2019 as the support is up. Mo can you please work on that design with Anish/Anoop.
+Please all update your Time management and the Management report.
+I am redoing FileSite location for all our documentation and we will all refer to that from now (further details to be emailed).
+
+

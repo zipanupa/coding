@@ -1,0 +1,3 @@
+Get-DatabaseAvailabilityGroup : An Active Manager operation failed. Error An error occurred while attempting a cluster operation. Error:
+Cluster API 'OpenByNames('WFWDC1EXCH03.WFW.com', 'WFWDC2EXCH02.WFW.com', 'WFWDC2EXCH01.WFW.com') failed for each server. Specific
+exceptions: 'An Active Manager operation failed. Error An error occurred while attempting a cluster operation. Error: Cluster API

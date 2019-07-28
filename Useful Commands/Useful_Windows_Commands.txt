@@ -1,0 +1,51 @@
+#Query DC1 Snapmanager Service
+sc \\wfwdc1exch01 query snapmanagerservice
+sc \\wfwdc1exch02 query snapmanagerservice
+sc \\wfwdc2exch03 query snapmanagerservice
+sc \\wfwdc2exch04 query snapmanagerservice
+
+#Stop DC1 Snapmanager Service
+sc \\wfwdc1exch01 stop snapmanagerservice
+sc \\wfwdc1exch02 stop snapmanagerservice
+sc \\wfwdc2exch03 stop snapmanagerservice
+sc \\wfwdc2exch04 stop snapmanagerservice
+
+#Start DC1 Snapmanager Service
+sc \\wfwdc1exch01 start snapmanagerservice
+sc \\wfwdc1exch02 start snapmanagerservice
+sc \\wfwdc2exch03 start snapmanagerservice
+sc \\wfwdc2exch04 start snapmanagerservice
+
+#Query DC2 Snapmanager Service
+sc \\wfwdc2exch01 query snapmanagerservice
+sc \\wfwdc2exch02 query snapmanagerservice
+sc \\wfwdc1exch03 query snapmanagerservice
+
+#Stop DC2 Snapmanager Service
+sc \\wfwdc2exch01 stop snapmanagerservice
+sc \\wfwdc2exch02 stop snapmanagerservice
+sc \\wfwdc1exch03 stop snapmanagerservice
+
+#Start DC2 Snapmanager Service
+sc \\wfwdc2exch01 start snapmanagerservice
+sc \\wfwdc2exch02 start snapmanagerservice
+sc \\wfwdc1exch03 start snapmanagerservice
+
+
+#Query DC3 Snapmanager Service
+sc \\wfwdc3exch01 query snapmanagerservice
+sc \\wfwdc3exch02 query snapmanagerservice
+sc \\wfwdc1exch04 query snapmanagerservice
+
+#Stop DC3 Snapmanager Service
+sc \\wfwdc3exch01 stop snapmanagerservice
+sc \\wfwdc3exch02 stop snapmanagerservice
+sc \\wfwdc1exch04 stop snapmanagerservice
+
+#Start DC3 Snapmanager Service
+sc \\wfwdc3exch01 start snapmanagerservice
+sc \\wfwdc3exch02 start snapmanagerservice
+sc \\wfwdc1exch04 start snapmanagerservice
+
+#Remotely open the local user management on a remote PC.
+lusrmgr.msc /computer="wfwlon-pc586"

@@ -1,0 +1,86 @@
+Exchange 2016 Upgrade
+#Upgrade Task #1 - Check we can co-exist/migrate/upgrade to Exchange 2016.
+
+#Migration Check #1 - Functional forest level is 2008 or higher.
+
+Get-ADForest
+
+ApplicationPartitions : {DC=ForestDnsZones,DC=WFW,DC=com, 
+                        DC=DomainDnsZones,DC=WFW,DC=com}
+CrossForestReferences : {}
+DomainNamingMaster    : WFWDC1DC01.WFW.COM
+Domains               : {WFW.COM}
+ForestMode            : Windows2003Forest
+GlobalCatalogs        : {WFWLODC01.WFW.COM, WFWLODC02.WFW.COM, 
+                        WFWHKDC01.WFW.COM, WFWGRDC01.WFW.COM...}
+Name                  : WFW.COM
+PartitionsContainer   : CN=Partitions,CN=Configuration,DC=WFW,DC=com
+RootDomain            : WFW.COM
+SchemaMaster          : WFWDC1DC01.WFW.COM
+Sites                 : {London, Paris, NewYork, Singapore...}
+SPNSuffixes           : {}
+UPNSuffixes           : {}
+
+# Therefore...
+#Upgrade Task #2 - WFW.COM Forest functional level must be raised to upgrade to Exchange 2016.
+
+#Migration Check #2 - Domain Controllers are all at least Windows 2008 Server (as a minimum).
+
+Get-ADGroupMember 'Domain Controllers' | Get-ADDomainController | select name, operatingsystem | sort name | ft -AutoSize
+
+name       operatingsystem                  
+----       ---------------                  
+WFWBADC01  Windows Server 2008 R2 Enterprise
+WFWDC1DC01 Windows Server 2008 R2 Enterprise
+WFWDC1DC02 Windows Server 2008 R2 Standard  
+WFWDC2DC01 Windows Server 2008 R2 Enterprise
+WFWDC3DC01 Windows Server 2008 R2 Enterprise
+WFWDUDC01  Windows Server 2008 R2 Enterprise
+WFWDUDC02  Windows Server 2008 R2 Standard  
+WFWFRDC01  Windows Server 2008 R2 Standard  
+WFWGRDC01  Windows Server 2008 R2 Enterprise
+WFWHADC01  Windows Server 2008 R2 Enterprise
+WFWHADC02  Windows Server 2008 R2 Enterprise
+WFWHKDC01  Windows Server 2008 R2 Enterprise
+WFWLODC01  Windows Server 2008 R2 Enterprise
+WFWLODC02  Windows Server 2008 R2 Enterprise
+WFWMADC01  Windows Server 2008 R2 Enterprise
+WFWMIDC01  Windows Server 2008 R2 Standard  
+WFWMUDC01  Windows Server 2008 R2 Enterprise
+WFWMUDC02  Windows Server 2008 R2 Standard  
+WFWNYDC01  Windows Server 2008 R2 Enterprise
+WFWNYDC02  Windows Server 2008 R2 Standard  
+WFWPADC01  Windows Server 2008 R2 Enterprise
+WFWRODC01  Windows Server 2008 R2 Enterprise
+WFWSIDC01  Windows Server 2008 R2 Enterprise
+
+#Therefore, all Domain Controllers have the correct OS to support Exchange 2016.
+
+#Migration Check #3 - All Exchange 2010 Servers must have 'Service pack 3 Update Rollup 11' or higher.
+
+WFWDC1EXCH01 Has 'Exchange 2010 Service Pack 3 Update Rollup 4'.
+
+#Upgrade Task #3 - All Exchange Servers will need at least 'Service Pack 3 Update Rollup 11' on them (Rollup 13 is the latest one release on the 14th of March 2016).
+
+#Used the following articles to find the details
+#Exchange 2013 CU Build Numbers - http://social.technet.microsoft.com/wiki/contents/articles/15776.exchange-server-2013-and-cumulative-updates-cus-build-numbers.aspx
+#Exchange Server Update Rollups and Build Numbers - http://social.technet.microsoft.com/wiki/contents/articles/240.exchange-server-and-update-rollups-build-numbers.aspx
+#Here are the results...
+
+Server Name	Rollup Update Description	Installed Date	ExSetup File Version
+WFWDC1EXCH01	Update Rollup 4 for Exchange Server 2010 Service Pack 3 (KB2905616) 14.3.174.1	22/12/2013	14.03.0174.001
+WFWDC1EXCH02	Update Rollup 4 for Exchange Server 2010 Service Pack 3 (KB2905616) 14.3.174.1	22/12/2013	14.03.0174.001
+WFWDC1EXCH03	Update Rollup 4 for Exchange Server 2010 Service Pack 3 (KB2905616) 14.3.174.1	22/12/2013	14.03.0174.001
+WFWDC1EXCH04	Update Rollup 4 for Exchange Server 2010 Service Pack 3 (KB2905616) 14.3.174.1	22/12/2013	14.03.0174.001
+WFWDC1EXCH06	Update Rollup 4 for Exchange Server 2010 Service Pack 3 (KB2905616) 14.3.174.1	28/03/2014	14.03.0174.001
+WFWDC2EXCH01	Update Rollup 4 for Exchange Server 2010 Service Pack 3 (KB2905616) 14.3.174.1	22/12/2013	14.03.0174.001
+WFWDC2EXCH02	Update Rollup 4 for Exchange Server 2010 Service Pack 3 (KB2905616) 14.3.174.1	22/12/2013	14.03.0174.001
+WFWDC2EXCH03	Update Rollup 4 for Exchange Server 2010 Service Pack 3 (KB2905616) 14.3.174.1	05/01/2014	14.03.0174.001
+WFWDC3EXCH01	Update Rollup 4 for Exchange Server 2010 Service Pack 3 (KB2905616) 14.3.174.1	20/12/2013	14.03.0174.001
+WFWDC3EXCH02	Update Rollup 4 for Exchange Server 2010 Service Pack 3 (KB2905616) 14.3.174.1	20/12/2013	14.03.0174.001
+
+
+               
+
+
+

@@ -1,0 +1,55 @@
+Do notes about building the ISO (with screen shots).
+
+
+
+
+
+
+Change the compute node boot order.
+Go into 'boot manager' / add boot option and add 'Embedded Hypervisor'. Commit Changes then press ESC.
+Go into 'boot manager' / remove boot option and remove 'PXE Network'. Commit Changes the press ESC.
+Go into 'boot manager' / change boot order with + and - keys and press enter. Put CD/DVD Rom at the top, Embedded Hypervisor in the middle, and hard disk 0 at the bottom. Then press enter, arrow down and commit changes.
+Attach ISO created from update express by clicking on the 'Virtual Media' option, then select 'Activate'. The choose 'Virtual Media' and 'select devices to mount'. Click the 'Add Image' button and browse to the iso and click 'open'. Then select the added drive by clicking the check box 'mapped' next to it and then click the 'Mount Selected' button.
+NOTE: Make sure the ISO image is on a share or machine in the same network as the target machine otherwise the loading of the image will be quite slow.
+
+
+To Boot from the iso, reboot the machine and after and few minutes
+
+Updating the machine firmware.
+When the machine boots it will have a menu which has the options 'updates' and 'diagnostics' - select updates.
+Select after a few minutes, select 'click here to start update'.
+Accept the license agreement and the machine will be scanned for differences.
+After the 'update comparision' has finished you will be in the 'update option' screen. Select 'Target the secondary firmware bank' and then click 'Next'.
+
+Download the FoD Keys.
+Log into Flex - select the node you wish to target and then choose the hardware tab. Look for the serial number and save this into notepad
+Now select 'Launch Compute Node Console' and then click 'Launch'.
+When the security screen comes up select 'continue to this website).
+In the IMM page for the server, select 'Server Management' and then 'Adapters'.
+Select the properties of the 'IBM Flex System 2-port 10Gb LOM Virtual Fabric Adapter' and cut and paste the FoD UID into notepad under the serial number.
+Go to the ibm web site http://www.ibm.com/system/x/fod
+Click 'Request activation key' from the left navigation pane.
+Enter the authorization code D4ALDAAAAAAA6226327869
+Cut and paste the serial number and FoD number into the web page and click continue.
+Select 'Download' and 'Email' the key. Save the keys to a safe place in your email and local machine (belt and braces).
+Unzip the file and then follow the steps to 'Install the FoD Keys'.
+
+Install the FoD Keys
+Log into Flex and click 'Launch Compute Node Console' and then click 'Launch'.
+When the security screen comes up select 'continue to this website).
+In the compute node IMM select 'IMM Management' and then 'Activation Keys'.
+Click the 'Add' button and then 'Select FIle' and choose the unzipped file.
+You will probably need to restart the server before the key will be recognised by the server!
+
+
+
+
+
+
+
+
+
+
+
+
+

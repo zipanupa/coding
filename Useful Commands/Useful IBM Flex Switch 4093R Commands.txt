@@ -1,0 +1,8 @@
+#Useful IBM Flex Switch 4093R Commands
+
+#Configuration Mode
+
+
+#Set system idle time to 60 minutes
+#system idle 60
+
